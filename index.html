@@ -18,7 +18,6 @@
     --light-gray: #E9ECEF;
     --success: #28A745;
     --radius: 16px;
-    --shadow: 0 8px 32px rgba(0,0,0,0.12);
   }
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -26,7 +25,7 @@
 
   body {
     font-family: 'Cairo', sans-serif;
-    background: var(--off-white);
+    background: var(--navy);
     color: var(--navy);
     direction: rtl;
   }
@@ -60,93 +59,19 @@
   }
 
   /* ── FULL SCREEN IMAGE SECTIONS ── */
-  .fullscreen-section {
-    width: 100%;
-    min-height: 100vh;
-    position: relative;
-    overflow: hidden;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  .fullscreen-section img {
+  .fullscreen-img {
     width: 100%;
     height: 100vh;
+    display: block;
     object-fit: cover;
     object-position: center;
-    display: block;
   }
-  /* For 9:16 images on desktop - contain to show full image */
   @media (min-width: 769px) {
-    .fullscreen-section img {
+    .fullscreen-img {
       object-fit: contain;
       background: var(--navy);
     }
   }
-  /* On mobile, cover is fine for 9:16 */
-  @media (max-width: 768px) {
-    .fullscreen-section img {
-      object-fit: cover;
-      height: 100vh;
-      width: 100%;
-    }
-  }
-
-  /* ── HERO OVERLAY ── */
-  .hero-overlay {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    padding: 40px 20px 120px;
-    background: linear-gradient(to top, rgba(10,22,40,0.95) 0%, rgba(10,22,40,0.7) 50%, transparent 100%);
-    text-align: center;
-  }
-  .hero-badge {
-    display: inline-block;
-    background: var(--gold);
-    color: var(--navy);
-    font-size: 0.8rem;
-    font-weight: 900;
-    padding: 6px 18px;
-    border-radius: 50px;
-    margin-bottom: 16px;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-  }
-  .hero-overlay h1 {
-    font-size: clamp(1.8rem, 5vw, 3rem);
-    font-weight: 900;
-    color: var(--white);
-    line-height: 1.3;
-    margin-bottom: 12px;
-  }
-  .hero-overlay h1 span { color: var(--gold); }
-  .hero-overlay p {
-    color: rgba(255,255,255,0.85);
-    font-size: 1rem;
-    line-height: 1.7;
-    margin-bottom: 20px;
-    max-width: 500px;
-    margin-left: auto;
-    margin-right: auto;
-  }
-  .hero-cta {
-    display: inline-block;
-    background: linear-gradient(135deg, var(--red), #c0001f);
-    color: white;
-    border: none;
-    padding: 16px 40px;
-    border-radius: 50px;
-    font-family: 'Cairo', sans-serif;
-    font-size: 1.1rem;
-    font-weight: 900;
-    cursor: pointer;
-    text-decoration: none;
-    box-shadow: 0 8px 30px rgba(232,19,42,0.4);
-    transition: all 0.3s;
-  }
-  .hero-cta:hover { transform: translateY(-3px); box-shadow: 0 12px 40px rgba(232,19,42,0.6); }
 
   /* ── FB HIDDEN PRICE ── */
   .fb-price {
@@ -161,121 +86,6 @@
     font-size: 0.001px;
     pointer-events: none;
   }
-
-  /* ── BENEFITS SECTION ── */
-  .benefits-section {
-    width: 100%;
-    min-height: 100vh;
-    position: relative;
-    overflow: hidden;
-  }
-  .benefits-section img {
-    width: 100%;
-    height: 100vh;
-    object-fit: cover;
-    object-position: center;
-    display: block;
-  }
-  @media (min-width: 769px) {
-    .benefits-section img {
-      object-fit: contain;
-      background: linear-gradient(135deg, #fafbff 0%, #f0f4ff 100%);
-    }
-  }
-  @media (max-width: 768px) {
-    .benefits-section img {
-      object-fit: cover;
-      height: 100vh;
-      width: 100%;
-    }
-  }
-
-  /* ── OFFER SECTION ── */
-  .offer-section {
-    width: 100%;
-    min-height: 100vh;
-    position: relative;
-    overflow: hidden;
-  }
-  .offer-section img {
-    width: 100%;
-    height: 100vh;
-    object-fit: cover;
-    object-position: center;
-    display: block;
-  }
-  @media (min-width: 769px) {
-    .offer-section img {
-      object-fit: contain;
-      background: var(--navy);
-    }
-  }
-  @media (max-width: 768px) {
-    .offer-section img {
-      object-fit: cover;
-      height: 100vh;
-      width: 100%;
-    }
-  }
-
-  /* ── PROBLEM SOLUTION SECTION ── */
-  .problemsolution-section {
-    width: 100%;
-    min-height: 100vh;
-    position: relative;
-    overflow: hidden;
-  }
-  .problemsolution-section img {
-    width: 100%;
-    height: 100vh;
-    object-fit: cover;
-    object-position: center;
-    display: block;
-  }
-  @media (min-width: 769px) {
-    .problemsolution-section img {
-      object-fit: contain;
-      background: var(--navy);
-    }
-  }
-  @media (max-width: 768px) {
-    .problemsolution-section img {
-      object-fit: cover;
-      height: 100vh;
-      width: 100%;
-    }
-  }
-
-  /* ── CTA BAR ON IMAGES ── */
-  .image-cta-bar {
-    position: absolute;
-    bottom: 80px;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 10;
-    text-align: center;
-  }
-  .image-cta-btn {
-    display: inline-block;
-    background: linear-gradient(135deg, var(--red), #c0001f);
-    color: white;
-    border: none;
-    padding: 16px 40px;
-    border-radius: 50px;
-    font-family: 'Cairo', sans-serif;
-    font-size: 1.1rem;
-    font-weight: 900;
-    cursor: pointer;
-    text-decoration: none;
-    box-shadow: 0 8px 30px rgba(232,19,42,0.5);
-    transition: all 0.3s;
-    white-space: nowrap;
-  }
-  .image-cta-btn:hover { transform: scale(1.05); }
-
-  /* ── SECTION BASE ── */
-  section { padding: 0; }
-  .container { max-width: 1100px; margin: 0 auto; }
 
   /* ── COD FORM ── */
   .cod-section {
@@ -361,7 +171,6 @@
     padding-left: 40px;
   }
 
-  /* Quantity */
   .qty-control {
     display: flex;
     align-items: center;
@@ -393,7 +202,6 @@
     min-width: 60px;
   }
 
-  /* Submit */
   .submit-btn {
     width: 100%;
     padding: 18px;
@@ -429,7 +237,6 @@
     font-size: 0.82rem;
     color: rgba(255,255,255,0.7);
   }
-  .trust-item span:first-child { font-size: 1rem; }
 
   /* ── POPUP ── */
   .popup-overlay {
@@ -528,23 +335,18 @@
 
   /* ── RESPONSIVE ── */
   @media (max-width: 768px) {
-    .hero-overlay { padding: 30px 16px 100px; }
-    .hero-overlay h1 { font-size: 1.6rem; }
-    .image-cta-bar { bottom: 70px; }
-    .image-cta-btn { padding: 14px 28px; font-size: 1rem; }
-    .cod-form { padding: 32px 24px; }
     .float-btn { padding: 14px 28px; font-size: 1rem; width: calc(100% - 40px); text-align: center; }
+    .cod-form { padding: 32px 24px; }
     .trust-badges { gap: 12px; }
   }
   @media (max-width: 480px) {
     .cod-section { padding: 60px 16px 100px; }
     .cod-form { padding: 28px 18px; border-radius: 18px; }
     .popup-box { padding: 36px 24px; }
-    .hero-overlay { padding: 20px 12px 90px; }
   }
 </style>
 
-<!-- Facebook Pixel Price Meta Tags - 2500 DZD for Facebook -->
+<!-- Facebook Pixel Price Meta Tags -->
 <meta property="product:price:amount" content="2500">
 <meta property="product:price:currency" content="DZD">
 <meta property="product:availability" content="in stock">
@@ -565,54 +367,39 @@
 </head>
 <body>
 
-<!-- Floating CTA -->
+<!-- Floating CTA (follows scroll) -->
 <a class="float-btn" onclick="scrollToForm(event)" href="#cod-form">🛒 اطلب الآن - الدفع عند الاستلام</a>
 
 <!-- ═══════════════════════════════════════
      HERO - hero.jpeg (9:16 FULL SCREEN)
 ═══════════════════════════════════════ -->
-<section class="fullscreen-section" id="hero">
-  <img src="hero.jpeg" alt="Champions League" onerror="this.style.display='none'; this.parentElement.style.background='linear-gradient(135deg, var(--navy) 0%, var(--navy-mid) 60%, #1a3060 100%)'">
-  <div class="hero-overlay">
-    <span class="hero-badge">⚽ Champions League</span>
-    <h1>المنتج الذي كنت <span>تبحث عنه</span> طوال هذا الوقت</h1>
-    <p>جودة استثنائية، سعر لا يُقاوَم، وتوصيل لجميع ولايات الجزائر 🇩🇿</p>
-    <!-- Hidden price for Facebook Pixel (2500 DA) -->
-    <span class="fb-price" aria-label="2500 DZD" data-price="2500">2500 دج</span>
-    <a class="hero-cta" onclick="scrollToForm(event)" href="#cod-form">🛒 اطلب الآن - الدفع عند الاستلام</a>
-  </div>
+<section>
+  <img class="fullscreen-img" src="hero.jpeg" alt="Champions League" onerror="this.style.background='linear-gradient(135deg, #0A1628, #122040)'">
+  <!-- Hidden price for Facebook Pixel -->
+  <span class="fb-price" aria-label="2500 DZD" data-price="2500">2500 دج</span>
 </section>
 
 <!-- ═══════════════════════════════════════
-     PROBLEM + SOLUTION - ProblemSolution.jpeg (9:16 FULL SCREEN)
+     PROBLEM + SOLUTION - ProblemSolution.jpeg
 ═══════════════════════════════════════ -->
-<section class="problemsolution-section">
-  <img src="ProblemSolution.jpeg" alt="المشكلة والحل" onerror="this.style.display='none'; this.parentElement.style.background='var(--navy)'">
-  <div class="image-cta-bar">
-    <a class="image-cta-btn" onclick="scrollToForm(event)" href="#cod-form">🛒 اطلب الآن</a>
-  </div>
+<section>
+  <img class="fullscreen-img" src="ProblemSolution.jpeg" alt="المشكلة والحل" onerror="this.style.background='#0A1628'">
 </section>
 
 <!-- ═══════════════════════════════════════
-     BENEFITS - Benefits.jpeg (9:16 FULL SCREEN)
+     BENEFITS - Benefits.jpeg
 ═══════════════════════════════════════ -->
-<section class="benefits-section">
-  <img src="Benefits.jpeg" alt="المميزات" onerror="this.style.display='none'; this.parentElement.style.background='linear-gradient(135deg, #fafbff 0%, #f0f4ff 100%)'">
-  <div class="image-cta-bar">
-    <a class="image-cta-btn" onclick="scrollToForm(event)" href="#cod-form">🛒 اطلب الآن</a>
-  </div>
+<section>
+  <img class="fullscreen-img" src="Benefits.jpeg" alt="المميزات" onerror="this.style.background='linear-gradient(135deg, #fafbff, #f0f4ff)'">
 </section>
 
 <!-- ═══════════════════════════════════════
-     OFFER - offer.jpeg (9:16 FULL SCREEN)
+     OFFER - offer.jpeg
 ═══════════════════════════════════════ -->
-<section class="offer-section">
-  <img src="offer.jpeg" alt="العرض" onerror="this.style.display='none'; this.parentElement.style.background='var(--navy)'">
-  <div class="image-cta-bar">
-    <!-- Hidden price for Facebook -->
-    <span class="fb-price" aria-label="2500 DZD" data-price="2500">2500 دج</span>
-    <a class="image-cta-btn" onclick="scrollToForm(event)" href="#cod-form">🛒 اطلب الآن - الدفع عند الاستلام</a>
-  </div>
+<section>
+  <img class="fullscreen-img" src="offer.jpeg" alt="العرض" onerror="this.style.background='#0A1628'">
+  <!-- Hidden price for Facebook Pixel -->
+  <span class="fb-price" aria-label="2500 DZD" data-price="2500">2500 دج</span>
 </section>
 
 <!-- ═══════════════════════════════════════
@@ -626,7 +413,6 @@
     </div>
 
     <form class="cod-form" id="orderForm" novalidate>
-      <!-- Full Name -->
       <div class="form-group">
         <label class="form-label" for="fullName">
           <span class="lbl-icon">👤</span>
@@ -636,7 +422,6 @@
         <div class="field-error" id="nameErr">يرجى إدخال الاسم الكامل</div>
       </div>
 
-      <!-- Phone -->
       <div class="form-group">
         <label class="form-label" for="phone">
           <span class="lbl-icon">📱</span>
@@ -646,7 +431,6 @@
         <div class="field-error" id="phoneErr">يجب أن يبدأ الرقم بـ 05 أو 06 أو 07 ويتكون من 10 أرقام</div>
       </div>
 
-      <!-- Wilaya -->
       <div class="form-group">
         <label class="form-label" for="wilaya">
           <span class="lbl-icon">🗺️</span>
@@ -716,7 +500,6 @@
         <div class="field-error" id="wilayaErr">يرجى اختيار الولاية</div>
       </div>
 
-      <!-- Baladiya -->
       <div class="form-group">
         <label class="form-label" for="baladiya">
           <span class="lbl-icon">🏘️</span>
@@ -728,7 +511,6 @@
         <div class="field-error" id="baladiyaErr">يرجى اختيار البلدية</div>
       </div>
 
-      <!-- Quantity -->
       <div class="form-group">
         <label class="form-label">
           <span class="lbl-icon">📦</span>
@@ -741,7 +523,6 @@
         </div>
       </div>
 
-      <!-- Submit -->
       <button type="button" class="submit-btn" id="submitBtn" onclick="submitOrder()">
         <span>✅ أتمم طلبي الآن</span>
       </button>
@@ -862,18 +643,14 @@ let currentQty = 1;
 let currentDelivery = 0;
 const PRODUCT_PRICE = 4200;
 
-// Scroll to form
 function scrollToForm(e) {
   e.preventDefault();
   document.getElementById('cod-form').scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
-// Wilaya change
 document.getElementById('wilaya').addEventListener('change', function() {
   const val = this.value;
   const baladiyaEl = document.getElementById('baladiya');
-  // Delivery price display removed
-
   baladiyaEl.innerHTML = '<option value="">-- اختر البلدية --</option>';
 
   if (val && communes[val]) {
@@ -883,10 +660,9 @@ document.getElementById('wilaya').addEventListener('change', function() {
       baladiyaEl.appendChild(o);
     });
     baladiyaEl.disabled = false;
-
     const price = deliveryPrices[val];
     if (price) {
-      currentDelivery = price.home; // Price hidden from display
+      currentDelivery = price.home;
     }
     updateTotal();
     this.classList.add('valid'); this.classList.remove('error');
@@ -894,7 +670,6 @@ document.getElementById('wilaya').addEventListener('change', function() {
   } else {
     baladiyaEl.disabled = true;
     baladiyaEl.innerHTML = '<option value="">-- اختر الولاية أولاً --</option>';
-    priceEl.textContent = '-- دج';
     currentDelivery = 0;
     updateTotal();
   }
@@ -919,7 +694,6 @@ function updateTotal() {
   const total = (PRODUCT_PRICE * currentQty) + currentDelivery;
 }
 
-// Validate
 function validate() {
   let ok = true;
   const name = document.getElementById('fullName').value.trim();
@@ -963,7 +737,6 @@ function validate() {
   return ok;
 }
 
-// Google Sheets submission
 async function submitOrder() {
   if (!validate()) {
     document.querySelector('.cod-form').scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -981,9 +754,8 @@ async function submitOrder() {
   const now = new Date();
   const dateStr = now.toLocaleDateString('fr-DZ') + ' ' + now.toLocaleTimeString('fr-DZ');
 
-  // Google Sheets Web App URL — using fetch to Apps Script
   const SHEET_ID = '1866YzqHkAY9Letk61jmyvVpR06qP_NZdLdVyNBbKT9U';
-  const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxPLACEHOLDER/exec'; // placeholder
+  const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxPLACEHOLDER/exec';
 
   const payload = {
     date: dateStr,
@@ -1003,17 +775,14 @@ async function submitOrder() {
   };
 
   try {
-    // Try to submit via Apps Script fetch
     const resp = await fetch(APPS_SCRIPT_URL, {
       method: 'POST',
       mode: 'no-cors',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload)
     });
-    // no-cors returns opaque, assume success
     showSuccess();
   } catch(e) {
-    // Fallback: show success anyway (Google Sheets endpoint handles it async)
     showSuccess();
   }
 
@@ -1023,12 +792,10 @@ async function submitOrder() {
 
 function showSuccess() {
   document.getElementById('successPopup').classList.add('active');
-  // Reset form
   document.getElementById('orderForm').reset();
   currentQty = 1;
   currentDelivery = 0;
   document.getElementById('qtyDisplay').textContent = '1';
-  // Price displays removed
   document.getElementById('baladiya').disabled = true;
   document.getElementById('baladiya').innerHTML = '<option value="">-- اختر الولاية أولاً --</option>';
   document.querySelectorAll('.form-input, .form-select').forEach(el => {
@@ -1040,16 +807,13 @@ function closePopup() {
   document.getElementById('successPopup').classList.remove('active');
 }
 
-// Phone: only numbers
 document.getElementById('phone').addEventListener('input', function() {
   this.value = this.value.replace(/[^0-9]/g, '');
 });
 
-// Click outside popup to close
 document.getElementById('successPopup').addEventListener('click', function(e) {
   if (e.target === this) closePopup();
 });
-
 </script>
 </body>
 </html>
