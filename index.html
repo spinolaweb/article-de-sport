@@ -804,7 +804,7 @@
                             <input type="radio" name="deliveryType" value="desk" />
                             <span class="check-mark"></span>
                             <span class="delivery-icon">📦</span>
-                            <span class="delivery-name">التوصيل إلى المكتب</span>
+                            <span class="delivery-name">التوصيل للمكتب</span>
                             <span class="delivery-price" id="deskPriceLabel">+ <strong id="deskPriceVal">0</strong> دج</span>
                         </label>
                     </div>
@@ -851,7 +851,7 @@
             <div class="footer-logo">
                 <img src="logo.jpeg" alt="Logo" onerror="this.style.display='none'; this.parentElement.innerHTML='<span class=\'footer-logo-placeholder\'>🏆</span>'" />
             </div>
-            <div class="footer-name">ARTICLE DE SPORT</div>
+            <div class="footer-name">Champions League</div>
             <div class="footer-info">
                 الجزائر، تيارت<br />
                 📞 <a href="tel:+213665017371">+213 665 017 371</a>
@@ -888,7 +888,6 @@
         const PIXEL_CURRENCY = 'DZD';
 
         // ─── Track ViewContent on page load ───
-        // Required for Advantage+ catalog ads and collaborative ads[reference:1][reference:2]
         fbq('track', 'ViewContent', {
             content_ids: [PIXEL_PRODUCT_ID],
             content_type: 'product',
@@ -897,7 +896,6 @@
         });
 
         // ─── Track AddToCart when quantity changes ───
-        // Required for Advantage+ catalog ads[reference:3][reference:4]
         function trackAddToCart(quantity) {
             fbq('track', 'AddToCart', {
                 contents: [{
@@ -925,7 +923,6 @@
         }
 
         // ─── Track Purchase on successful order submission ───
-        // Includes customer data (name, phone, wilaya) for advanced audiences[reference:5]
         function trackPurchase(quantity, deliveryPrice, customerName, customerPhone, customerWilaya) {
             fbq('track', 'Purchase', {
                 contents: [{
@@ -936,7 +933,6 @@
                 value: (PIXEL_PRICE_PER_UNIT * quantity) + deliveryPrice,
                 currency: PIXEL_CURRENCY,
                 num_items: quantity,
-                // Custom parameters for customer data (visible in Ads Manager)
                 customer_name: customerName,
                 customer_phone: customerPhone,
                 customer_wilaya: customerWilaya
@@ -1331,7 +1327,6 @@
             const newQty = Math.max(1, Math.min(10, currentQty + delta));
             if (newQty !== currentQty) {
                 currentQty = newQty;
-                // Track AddToCart when quantity changes (user is adding more)
                 trackAddToCart(currentQty);
                 updateUI();
             }
@@ -1395,20 +1390,21 @@
             btn.disabled = true;
             btn.innerHTML = '<span>⏳ جارٍ إرسال الطلب...</span>';
 
-            // ─── Track InitiateCheckout when user clicks submit ───
             trackInitiateCheckout(currentQty, currentDeliveryPrice);
 
             const wilayaEl = document.getElementById('wilaya');
             const wilayaText = wilayaEl.options[wilayaEl.selectedIndex].text;
             const baladiya = document.getElementById('baladiya').value;
             const total = getTotalPrice(currentQty, currentDeliveryPrice);
+            const productPrice = getProductPrice(currentQty);
             const now = new Date();
             const dateStr = now.toLocaleDateString('fr-DZ') + ' ' + now.toLocaleTimeString('fr-DZ');
             const customerName = document.getElementById('fullName').value.trim();
             const customerPhone = document.getElementById('phone').value.trim();
 
-            const APPS_SCRIPT_URL =
-                'https://script.google.com/macros/s/AKfycbwTDYNPaGD11LY6_0IFMclcRRMAMFUblvWlgv2GKy07SRJkgbFwQZf4JK5DljSxFUk6/exec';
+            // ─── SEND ALL DATA TO GOOGLE SHEET ───
+            // YOU MUST REPLACE THIS URL WITH YOUR DEPLOYED APPS SCRIPT URL
+            const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwjoQPM83ihsLOUCKzBF_dEmUTPYljDtE4QI7cPeANNgN3SZ5fnxQqqGDuLI4XPj22L/exec';
 
             const payload = {
                 date: dateStr,
@@ -1416,15 +1412,18 @@
                 phone: customerPhone,
                 wilaya: wilayaText,
                 commune: baladiya,
-                col_f: '',
                 produit: 'Champions League (Landing Page)',
-                prix_produit: getProductPrice(currentQty),
+                prix_produit: productPrice,
                 quantite: currentQty,
                 prix_total: total,
                 livraison: deliveryType === 'home' ? 'A Domicile' : 'Point Relais',
                 prix_livraison: currentDeliveryPrice,
-                col_m: '',
-                col_n: ''
+                // Extra fields for full tracking
+                delivery_type_code: deliveryType,
+                home_price: homePrice,
+                desk_price: deskPrice,
+                product_base_price: PRODUCT_BASE,
+                product_qty2_price: PRODUCT_QTY2
             };
 
             try {
@@ -1435,11 +1434,9 @@
                     body: JSON.stringify(payload)
                 });
             } catch (e) {
-                // silent fail
+                // Silent fail - order still processed
             }
 
-            // ─── Track Purchase on successful order ───
-            // Pass customer data (name, phone, wilaya) for advanced audiences[reference:6]
             trackPurchase(currentQty, currentDeliveryPrice, customerName, customerPhone, wilayaText);
 
             showSuccess();
