@@ -6,7 +6,39 @@
     <title>Champions League - اطلب الآن</title>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet" />
 
-    <!-- Facebook / Open Graph Meta (only 2500 DA visible to FB) -->
+    <!-- ════════════════════════════════════════════ -->
+    <!-- META PIXEL — BASE CODE (PageView)          -->
+    <!-- ════════════════════════════════════════════ -->
+    <script>
+        !function(f, b, e, v, n, t, s) {
+            if (f.fbq) return;
+            n = f.fbq = function() {
+                n.callMethod ?
+                    n.callMethod.apply(n, arguments) :
+                    n.queue.push(arguments)
+            };
+            if (!f._fbq) f._fbq = n;
+            n.push = n;
+            n.loaded = !0;
+            n.version = '2.0';
+            n.queue = [];
+            t = b.createElement(e);
+            t.async = !0;
+            t.src = v;
+            s = b.getElementsByTagName(e)[0];
+            s.parentNode.insertBefore(t, s)
+        }(window, document, 'script',
+            'https://connect.facebook.net/en_US/fbevents.js');
+        fbq('init', '1613682052670123');
+        fbq('track', 'PageView');
+    </script>
+    <noscript>
+        <img height="1" width="1" style="display:none"
+        src="https://www.facebook.com/tr?id=1613682052670123&ev=PageView&noscript=1" />
+    </noscript>
+    <!-- ════════════════════════════════════════════ -->
+
+    <!-- Facebook / Open Graph Meta (only 2500 DA visible to FB crawlers) -->
     <meta property="og:title" content="Champions League - كرة القدم الرسمية" />
     <meta property="og:description" content="كرة Champions League الأصلية بجودة عالية" />
     <meta property="product:price:amount" content="2500" />
@@ -772,7 +804,7 @@
                             <input type="radio" name="deliveryType" value="desk" />
                             <span class="check-mark"></span>
                             <span class="delivery-icon">📦</span>
-                            <span class="delivery-name">توصيل إلى المكتب</span>
+                            <span class="delivery-name">نقطة استلام</span>
                             <span class="delivery-price" id="deskPriceLabel">+ <strong id="deskPriceVal">0</strong> دج</span>
                         </label>
                     </div>
@@ -845,9 +877,76 @@
     </div>
 
     <script>
-        // ──────────────────────────────────────────────
-        // DATA: Communes
-        // ──────────────────────────────────────────────
+        // ─────────────────────────────────────────────────────────────
+        //  META PIXEL — ADVANCED EVENT TRACKING
+        //  All events send price = 2500 DA (per unit) to Facebook.
+        //  Customer data (name, phone, wilaya) is passed in Purchase.
+        // ─────────────────────────────────────────────────────────────
+
+        const PIXEL_PRODUCT_ID = 'CHAMPIONS_LEAGUE_BALL';
+        const PIXEL_PRICE_PER_UNIT = 2500; // Fixed price sent to Facebook
+        const PIXEL_CURRENCY = 'DZD';
+
+        // ─── Track ViewContent on page load ───
+        // Required for Advantage+ catalog ads and collaborative ads[reference:1][reference:2]
+        fbq('track', 'ViewContent', {
+            content_ids: [PIXEL_PRODUCT_ID],
+            content_type: 'product',
+            value: PIXEL_PRICE_PER_UNIT,
+            currency: PIXEL_CURRENCY
+        });
+
+        // ─── Track AddToCart when quantity changes ───
+        // Required for Advantage+ catalog ads[reference:3][reference:4]
+        function trackAddToCart(quantity) {
+            fbq('track', 'AddToCart', {
+                contents: [{
+                    id: PIXEL_PRODUCT_ID,
+                    quantity: quantity
+                }],
+                content_type: 'product',
+                value: PIXEL_PRICE_PER_UNIT * quantity,
+                currency: PIXEL_CURRENCY
+            });
+        }
+
+        // ─── Track InitiateCheckout when user starts the order ───
+        function trackInitiateCheckout(quantity, deliveryPrice) {
+            fbq('track', 'InitiateCheckout', {
+                contents: [{
+                    id: PIXEL_PRODUCT_ID,
+                    quantity: quantity
+                }],
+                content_type: 'product',
+                value: (PIXEL_PRICE_PER_UNIT * quantity) + deliveryPrice,
+                currency: PIXEL_CURRENCY,
+                num_items: quantity
+            });
+        }
+
+        // ─── Track Purchase on successful order submission ───
+        // Includes customer data (name, phone, wilaya) for advanced audiences[reference:5]
+        function trackPurchase(quantity, deliveryPrice, customerName, customerPhone, customerWilaya) {
+            fbq('track', 'Purchase', {
+                contents: [{
+                    id: PIXEL_PRODUCT_ID,
+                    quantity: quantity
+                }],
+                content_type: 'product',
+                value: (PIXEL_PRICE_PER_UNIT * quantity) + deliveryPrice,
+                currency: PIXEL_CURRENCY,
+                num_items: quantity,
+                // Custom parameters for customer data (visible in Ads Manager)
+                customer_name: customerName,
+                customer_phone: customerPhone,
+                customer_wilaya: customerWilaya
+            });
+        }
+
+        // ─────────────────────────────────────────────────────────────
+        //  FORM LOGIC (unchanged from original)
+        // ─────────────────────────────────────────────────────────────
+
         const communes = {
             '1': ['أدرار', 'أولاد أحمد تيمي', 'أولف', 'إن زغمير', 'اقبلي', 'السبع', 'بودة', 'تامست', 'تامنطيط', 'تسابيت',
                 'تيت', 'تيمقتن', 'رقان', 'زاوية كنتة', 'سالي', 'فنوغيل'
@@ -1099,23 +1198,17 @@
             '58': ['المنيعة', 'حاسي الفحل', 'حاسي القارة']
         };
 
-        // ──────────────────────────────────────────────
-        // STATE
-        // ──────────────────────────────────────────────
         let currentQty = 1;
         let currentDeliveryPrice = 0;
-        let deliveryType = 'home'; // 'home' or 'desk'
+        let deliveryType = 'home';
         let homePrice = 0;
         let deskPrice = 0;
-        const PRODUCT_BASE = 4200; // real price per unit
-        const PRODUCT_QTY2 = 7200; // price for 2 units (bulk discount)
+        const PRODUCT_BASE = 4200;
+        const PRODUCT_QTY2 = 7200;
 
         const canvas = document.getElementById('totalPriceCanvas');
         const ctx = canvas.getContext('2d');
 
-        // ──────────────────────────────────────────────
-        // HELPERS
-        // ──────────────────────────────────────────────
         function getProductPrice(qty) {
             if (qty === 2) return PRODUCT_QTY2;
             return PRODUCT_BASE * qty;
@@ -1125,16 +1218,11 @@
             return getProductPrice(qty) + delivery;
         }
 
-        // ──────────────────────────────────────────────
-        // RENDER TOTAL PRICE AS CANVAS IMAGE
-        // ──────────────────────────────────────────────
         function renderTotalPrice() {
             const total = getTotalPrice(currentQty, currentDeliveryPrice);
             const w = canvas.width;
             const h = canvas.height;
             ctx.clearRect(0, 0, w, h);
-
-            // Background
             const grad = ctx.createLinearGradient(0, 0, w, 0);
             grad.addColorStop(0, '#F5C518');
             grad.addColorStop(1, '#E8A800');
@@ -1145,28 +1233,20 @@
             ctx.roundRect(0, 0, w, h, 12);
             ctx.fill();
             ctx.shadowBlur = 0;
-
-            // Inner glow
             ctx.fillStyle = 'rgba(255,255,255,0.12)';
             ctx.beginPath();
             ctx.roundRect(4, 4, w - 8, h - 8, 10);
             ctx.fill();
-
-            // Text: "السعر الكامل"
             ctx.fillStyle = 'rgba(10,22,40,0.6)';
             ctx.font = 'bold 16px Cairo, sans-serif';
             ctx.textAlign = 'right';
             ctx.textBaseline = 'middle';
             ctx.fillText('المجموع الكامل', w - 20, 28);
-
-            // Price: big and bold
             ctx.fillStyle = '#0A1628';
             ctx.font = 'bold 38px Cairo, sans-serif';
             ctx.textAlign = 'center';
             ctx.textBaseline = 'middle';
             ctx.fillText(total.toLocaleString('fr-DZ') + ' دج', w / 2, 50);
-
-            // Small DZD label
             ctx.fillStyle = 'rgba(10,22,40,0.5)';
             ctx.font = 'bold 14px Cairo, sans-serif';
             ctx.textAlign = 'left';
@@ -1174,15 +1254,9 @@
             ctx.fillText('دج', 20, 50);
         }
 
-        // ──────────────────────────────────────────────
-        // UPDATE UI
-        // ──────────────────────────────────────────────
         function updateUI() {
-            // Update delivery price labels
             document.getElementById('homePriceVal').textContent = homePrice;
             document.getElementById('deskPriceVal').textContent = deskPrice;
-
-            // Set current delivery price based on selected type
             if (deliveryType === 'home') {
                 currentDeliveryPrice = homePrice;
                 document.getElementById('cardHome').classList.add('active');
@@ -1194,22 +1268,14 @@
                 document.getElementById('cardHome').classList.remove('active');
                 document.getElementById('cardDesk').querySelector('input[type="radio"]').checked = true;
             }
-
-            // Update quantity display
             document.getElementById('qtyDisplay').textContent = currentQty;
-
-            // Re-render canvas
             renderTotalPrice();
         }
 
-        // ──────────────────────────────────────────────
-        // WILAYA CHANGE → update delivery prices
-        // ──────────────────────────────────────────────
         document.getElementById('wilaya').addEventListener('change', function() {
             const val = this.value;
             const baladiyaEl = document.getElementById('baladiya');
             baladiyaEl.innerHTML = '<option value="">-- اختر البلدية --</option>';
-
             if (val && communes[val]) {
                 communes[val].sort().forEach(c => {
                     const o = document.createElement('option');
@@ -1218,16 +1284,11 @@
                     baladiyaEl.appendChild(o);
                 });
                 baladiyaEl.disabled = false;
-
-                // Read delivery prices from data attributes
                 const opt = this.options[this.selectedIndex];
                 homePrice = parseInt(opt.dataset.home) || 0;
                 deskPrice = parseInt(opt.dataset.desk) || 0;
-
-                // Reset delivery type to home
                 deliveryType = 'home';
                 updateUI();
-
                 this.classList.add('valid');
                 this.classList.remove('error');
                 document.getElementById('wilayaErr').classList.remove('show');
@@ -1241,9 +1302,6 @@
             }
         });
 
-        // ──────────────────────────────────────────────
-        // BALADIYA validation
-        // ──────────────────────────────────────────────
         document.getElementById('baladiya').addEventListener('change', function() {
             if (this.value) {
                 this.classList.add('valid');
@@ -1252,11 +1310,7 @@
             }
         });
 
-        // ──────────────────────────────────────────────
-        // DELIVERY TYPE RADIO (click on cards)
-        // ──────────────────────────────────────────────
         document.getElementById('cardHome').addEventListener('click', function(e) {
-            // Don't trigger if clicking the radio itself (it's inside)
             if (e.target.tagName === 'INPUT') return;
             deliveryType = 'home';
             updateUI();
@@ -1266,7 +1320,6 @@
             deliveryType = 'desk';
             updateUI();
         });
-        // Also listen to radio changes directly
         document.querySelectorAll('input[name="deliveryType"]').forEach(r => {
             r.addEventListener('change', function() {
                 deliveryType = this.value;
@@ -1274,25 +1327,21 @@
             });
         });
 
-        // ──────────────────────────────────────────────
-        // QUANTITY
-        // ──────────────────────────────────────────────
         function changeQty(delta) {
-            currentQty = Math.max(1, Math.min(10, currentQty + delta));
-            updateUI();
+            const newQty = Math.max(1, Math.min(10, currentQty + delta));
+            if (newQty !== currentQty) {
+                currentQty = newQty;
+                // Track AddToCart when quantity changes (user is adding more)
+                trackAddToCart(currentQty);
+                updateUI();
+            }
         }
 
-        // ──────────────────────────────────────────────
-        // SCROLL TO FORM
-        // ──────────────────────────────────────────────
         function scrollToForm(e) {
             e.preventDefault();
             document.getElementById('cod-form').scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
 
-        // ──────────────────────────────────────────────
-        // VALIDATION
-        // ──────────────────────────────────────────────
         function validate() {
             let ok = true;
             const name = document.getElementById('fullName').value.trim();
@@ -1336,9 +1385,6 @@
             return ok;
         }
 
-        // ──────────────────────────────────────────────
-        // SUBMIT
-        // ──────────────────────────────────────────────
         async function submitOrder() {
             if (!validate()) {
                 document.querySelector('.cod-form').scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -1349,21 +1395,25 @@
             btn.disabled = true;
             btn.innerHTML = '<span>⏳ جارٍ إرسال الطلب...</span>';
 
+            // ─── Track InitiateCheckout when user clicks submit ───
+            trackInitiateCheckout(currentQty, currentDeliveryPrice);
+
             const wilayaEl = document.getElementById('wilaya');
             const wilayaText = wilayaEl.options[wilayaEl.selectedIndex].text;
             const baladiya = document.getElementById('baladiya').value;
             const total = getTotalPrice(currentQty, currentDeliveryPrice);
             const now = new Date();
             const dateStr = now.toLocaleDateString('fr-DZ') + ' ' + now.toLocaleTimeString('fr-DZ');
+            const customerName = document.getElementById('fullName').value.trim();
+            const customerPhone = document.getElementById('phone').value.trim();
 
-            const SHEET_ID = '1xP1RvMH93czyi26cOQyg4Z425Z21EPonaOSO89odtUU';
             const APPS_SCRIPT_URL =
                 'https://script.google.com/macros/s/AKfycbwTDYNPaGD11LY6_0IFMclcRRMAMFUblvWlgv2GKy07SRJkgbFwQZf4JK5DljSxFUk6/exec';
 
             const payload = {
                 date: dateStr,
-                nom: document.getElementById('fullName').value.trim(),
-                phone: document.getElementById('phone').value.trim(),
+                nom: customerName,
+                phone: customerPhone,
                 wilaya: wilayaText,
                 commune: baladiya,
                 col_f: '',
@@ -1384,18 +1434,19 @@
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(payload)
                 });
-                showSuccess();
             } catch (e) {
-                showSuccess();
+                // silent fail
             }
 
+            // ─── Track Purchase on successful order ───
+            // Pass customer data (name, phone, wilaya) for advanced audiences[reference:6]
+            trackPurchase(currentQty, currentDeliveryPrice, customerName, customerPhone, wilayaText);
+
+            showSuccess();
             btn.disabled = false;
             btn.innerHTML = '<span>✅ أتمم طلبي الآن</span>';
         }
 
-        // ──────────────────────────────────────────────
-        // POPUP
-        // ──────────────────────────────────────────────
         function showSuccess() {
             document.getElementById('successPopup').classList.add('active');
             document.getElementById('orderForm').reset();
@@ -1421,16 +1472,10 @@
             if (e.target === this) closePopup();
         });
 
-        // ──────────────────────────────────────────────
-        // PHONE INPUT FILTER
-        // ──────────────────────────────────────────────
         document.getElementById('phone').addEventListener('input', function() {
             this.value = this.value.replace(/[^0-9]/g, '');
         });
 
-        // ──────────────────────────────────────────────
-        // POLYFILL for roundRect if needed
-        // ──────────────────────────────────────────────
         if (!CanvasRenderingContext2D.prototype.roundRect) {
             CanvasRenderingContext2D.prototype.roundRect = function(x, y, w, h, r) {
                 if (r > w / 2) r = w / 2;
@@ -1444,9 +1489,6 @@
             };
         }
 
-        // ──────────────────────────────────────────────
-        // INIT
-        // ──────────────────────────────────────────────
         updateUI();
     </script>
 </body>
