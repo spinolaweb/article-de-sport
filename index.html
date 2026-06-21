@@ -44,10 +44,10 @@
     <meta property="og:image" content="hero.jpeg" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
-    <meta property="og:url" content="https://spinolaweb.github.io/article-de-sport/" />
+    <meta property="og:url" content="https://votre-site.render.com" />
     <meta property="og:type" content="product" />
     <meta property="og:locale" content="fr_DZ" />
-    <meta property="product:price:amount" content="3200" />
+    <meta property="product:price:amount" content="2500" />
     <meta property="product:price:currency" content="DZD" />
     <meta property="product:availability" content="in stock" />
     <meta property="product:condition" content="new" />
@@ -57,7 +57,7 @@
 
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="Champions League Ball — كرة القدم الرسمية | Livraison à domicile Algérie" />
-    <meta name="twitter:description" content="كرة Champions League الأصلية. توصيل لجميع الولايات الجزائر. الدفع عند الاستلام.  DA — عرض محدود !" />
+    <meta name="twitter:description" content="كرة Champions League الأصلية. توصيل لجميع الولايات الجزائر. الدفع عند الاستلام. 4200 DA — عرض محدود !" />
     <meta name="twitter:image" content="hero.jpeg" />
 
     <!-- Schema.org structured data -->
@@ -77,8 +77,8 @@
         "brand": { "@type": "Brand", "name": "Champions League" },
         "offers": {
             "@type": "Offer",
-            "url": "https://spinolaweb.github.io/article-de-sport/",
-            "price": "3200",
+            "url": "https://votre-site.render.com",
+            "price": "2500",
             "priceCurrency": "DZD",
             "availability": "https://schema.org/InStock",
             "itemCondition": "https://schema.org/NewCondition",
@@ -884,7 +884,7 @@
             <div class="footer-logo">
                 <img src="logo.jpeg" alt="Logo" onerror="this.style.display='none'; this.parentElement.innerHTML='<span class='footer-logo-placeholder'>🏆</span>'" />
             </div>
-            <div class="footer-name">article de sport</div>
+            <div class="footer-name">Article De Sport</div>
             <div class="footer-info">
                 الجزائر، تيارت<br />
                 📞 <a href="tel:+213665017371">+213 665 017 371</a>
@@ -916,10 +916,13 @@
         const TELEGRAM_BOT_TOKEN = '8615975210:AAEeXD5idRGumK783uqPKRhOBpRVXMfhuM0';
         const TELEGRAM_CHAT_ID = '5657761278';
 
+        const TELEGRAM_BOT_TOKEN_2 = '8671482276:AAEo1-ukI0DhkkogouHFmXNS5Vw4Pwtqb08';
+        const TELEGRAM_CHAT_ID_2 = '6405258861';
+
         async function sendToTelegram(orderData) {
             const deliveryLabel = orderData.deliveryType === 'home' ? 'توصيل للمنزل 🏠' : 'التوصيل للمكتب 📦';
             const message = `
-🛒 <b>طلب جديد - Champions League</b>
+🛒 <b>طلب جديد - Champions League Mauve</b>
 
 ┌─ <b>معلومات الزبون</b> ─┐
 👤 <b>الاسم:</b> ${orderData.customerName}
@@ -928,7 +931,7 @@
 🏘️ <b>البلدية:</b> ${orderData.baladiya}
 
 ┌─ <b>تفاصيل الطلب</b> ─┐
-📦 <b>المنتج:</b> Champions League Ball
+📦 <b>المنتج:</b> Champions League Ball Mauve
 🔢 <b>الكمية:</b> ${orderData.currentQty}
 💰 <b>سعر المنتج:</b> ${orderData.productPrice.toLocaleString('fr-DZ')} دج
 🚚 <b>نوع التوصيل:</b> ${deliveryLabel}
@@ -961,6 +964,54 @@
                 }
             } catch (error) {
                 console.error('❌ Failed to send Telegram notification:', error);
+            }
+        }
+
+        async function sendToTelegram2(orderData) {
+            const deliveryLabel = orderData.deliveryType === 'home' ? 'توصيل للمنزل 🏠' : 'التوصيل للمكتب 📦';
+            const message = `
+🛒 <b>طلب جديد - Champions League Mauve</b>
+
+┌─ <b>معلومات الزبون</b> ─┐
+👤 <b>الاسم:</b> ${orderData.customerName}
+📱 <b>الهاتف:</b> <code>${orderData.customerPhone}</code>
+🗺️ <b>الولاية:</b> ${orderData.wilayaText}
+🏘️ <b>البلدية:</b> ${orderData.baladiya}
+
+┌─ <b>تفاصيل الطلب</b> ─┐
+📦 <b>المنتج:</b> Champions League Ball Mauve
+🔢 <b>الكمية:</b> ${orderData.currentQty}
+💰 <b>سعر المنتج:</b> ${orderData.productPrice.toLocaleString('fr-DZ')} دج
+🚚 <b>نوع التوصيل:</b> ${deliveryLabel}
+📍 <b>سعر التوصيل:</b> ${orderData.currentDeliveryPrice.toLocaleString('fr-DZ')} دج
+
+┌─ <b>الإجمالي</b> ─┐
+💵 <b>المجموع الكلي:</b> <code>${orderData.total.toLocaleString('fr-DZ')} دج</code>
+
+📅 <b>التاريخ:</b> ${orderData.dateStr}
+            `.trim();
+
+            const url = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN_2}/sendMessage`;
+
+            try {
+                const response = await fetch(url, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        chat_id: TELEGRAM_CHAT_ID_2,
+                        text: message,
+                        parse_mode: 'HTML',
+                        disable_web_page_preview: true
+                    })
+                });
+                const result = await response.json();
+                if (result.ok) {
+                    console.log('✅ Telegram 2 notification sent successfully');
+                } else {
+                    console.warn('⚠️ Telegram 2 API error:', result.description);
+                }
+            } catch (error) {
+                console.error('❌ Failed to send Telegram 2 notification:', error);
             }
         }
 
@@ -1556,8 +1607,22 @@
                 }
             }
 
-            // ─── Send to Telegram ───
+            // ─── Send to Telegram Bot 1 ───
             await sendToTelegram({
+                customerName,
+                customerPhone,
+                wilayaText,
+                baladiya,
+                currentQty,
+                productPrice,
+                deliveryType,
+                currentDeliveryPrice,
+                total,
+                dateStr
+            });
+
+            // ─── Send to Telegram Bot 2 ───
+            await sendToTelegram2({
                 customerName,
                 customerPhone,
                 wilayaText,
