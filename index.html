@@ -40,14 +40,14 @@
 
     <!-- Facebook / Open Graph Meta -->
     <meta property="og:title" content="Champions League Ball — كرة القدم الرسمية | Livraison à domicile Algérie | Paiement à la livraison" />
-    <meta property="og:description" content="🔥 كرة Champions League الأصلية بجودة عالية — تصميم رسمي UEFA، مقاومة للماء، خياطة متينة، أداء احترافي. مثالية للملاعب، التدريب، المباريات مع الأصدقاء. توصيل سريع لجميع الولايات — الجزائر، وهران، قسنطينة، عنابة، سطيف، البليدة، بومرداس + 48 ولاية. الدفع عند الاستلام (COD). عرض محدود : 1 كرة 4200 DA | 2 كرات = 7200 DA. الكمية محدودة — اطلب الآن !" />
+    <meta property="og:description" content="🔥 كرة Champions League الأصلية بجودة عالية — تصميم رسمي UEFA، مقاومة للماء، خياطة متينة، أداء احترافي. مثالية للملاعب، التدريب، المباريات مع الأصدقاء. توصيل سريع لجميع الولايات — الجزائر، وهران، قسنطينة، عنابة، سطيف، البليدة، بومرداس + 48 ولاية. الدفع عند الاستلام (COD)." />
     <meta property="og:image" content="hero.jpg" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
     <meta property="og:url" content="https://votre-site.render.com" />
     <meta property="og:type" content="product" />
     <meta property="og:locale" content="fr_DZ" />
-    <meta property="product:price:amount" content="2500" />
+    <meta property="product:price:amount" content="2900" />
     <meta property="product:price:currency" content="DZD" />
     <meta property="product:availability" content="in stock" />
     <meta property="product:condition" content="new" />
@@ -57,7 +57,7 @@
 
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="Champions League Ball — كرة القدم الرسمية | Livraison à domicile Algérie" />
-    <meta name="twitter:description" content="كرة Champions League الأصلية. توصيل لجميع الولايات الجزائر. الدفع عند الاستلام. 4200 DA — عرض محدود !" />
+    <meta name="twitter:description" content="كرة Champions League الأصلية. توصيل لجميع الولايات الجزائر. الدفع عند الاستلام.   — عرض محدود !" />
     <meta name="twitter:image" content="hero.jpg" />
 
     <!-- Schema.org structured data -->
@@ -78,7 +78,7 @@
         "offers": {
             "@type": "Offer",
             "url": "https://votre-site.render.com",
-            "price": "2500",
+            "price": "2900",
             "priceCurrency": "DZD",
             "availability": "https://schema.org/InStock",
             "itemCondition": "https://schema.org/NewCondition",
@@ -689,7 +689,7 @@
     <!-- ═══ HERO ═══ -->
     <section>
         <img class="fullscreen-img" src="hero.jpg" alt="Champions League" onerror="this.style.background='linear-gradient(135deg, #0A1628, #122040)'" />
-        <span class="fb-price" aria-label="2500 DZD" data-price="2500">2500 دج</span>
+        <span class="fb-price" aria-label="2900 DZD" data-price="2900">2900 دج</span>
     </section>
 
     <!-- ═══ PROBLEM + SOLUTION ═══ -->
@@ -705,7 +705,7 @@
     <!-- ═══ OFFER ═══ -->
     <section>
         <img class="fullscreen-img" src="offer.jpg" alt="العرض" onerror="this.style.background='#0A1628'" />
-        <span class="fb-price" aria-label="2500 DZD" data-price="2500">2500 دج</span>
+        <span class="fb-price" aria-label="2900 DZD" data-price="2900">2900 دج</span>
     </section>
 
     <!-- ═══ COD FORM ═══ -->
@@ -814,7 +814,7 @@
                         البلدية <span class="required-star">*</span>
                     </label>
                     <select id="baladiya" class="form-select" disabled>
-                        <option value="">-- اختر الولاية أولاً --</option>
+                        <option value="">-- اختر الولاية أولاًّ --</option>
                     </select>
                     <div class="field-error" id="baladiyaErr">يرجى اختيار البلدية</div>
                 </div>
@@ -1017,13 +1017,23 @@
 
         // ─────────────────────────────────────────────────────────────
         //  META PIXEL — ADVANCED EVENT TRACKING
-        //  All events send price = 2500 DA (per unit) to Facebook.
-        //  Customer data (name, phone, wilaya) is passed in Purchase.
+        //  All events send price = 2900 DA (per unit) + delivery to Facebook.
+        //  Real price (4200 DA) NEVER reaches Facebook.
+        //  Customer phone is formatted as +213XXXXXXXXX for Purchase event.
         // ─────────────────────────────────────────────────────────────
 
         const PIXEL_PRODUCT_ID = 'CHAMPIONS_LEAGUE_BALL';
-        const PIXEL_PRICE_PER_UNIT = 2500; // Fixed price sent to Facebook
+        const PIXEL_PRICE_PER_UNIT = 2900; // Fake price sent to Facebook
         const PIXEL_CURRENCY = 'DZD';
+
+        // Format phone for Facebook: 0696837272 → +213696837272
+        function formatPhoneForFacebook(phone) {
+            let cleaned = phone.replace(/\D/g, '');
+            if (cleaned.startsWith('0')) {
+                cleaned = cleaned.substring(1);
+            }
+            return '+213' + cleaned;
+        }
 
         // ─── Track ViewContent on page load ───
         fbq('track', 'ViewContent', {
@@ -1041,7 +1051,7 @@
                     quantity: quantity
                 }],
                 content_type: 'product',
-                value: PIXEL_PRICE_PER_UNIT * quantity,
+                value: (PIXEL_PRICE_PER_UNIT * quantity) + currentDeliveryPrice,
                 currency: PIXEL_CURRENCY
             });
         }
@@ -1072,7 +1082,7 @@
                 currency: PIXEL_CURRENCY,
                 num_items: quantity,
                 customer_name: customerName,
-                customer_phone: customerPhone,
+                customer_phone: formatPhoneForFacebook(customerPhone),
                 customer_wilaya: customerWilaya
             });
         }
@@ -1428,7 +1438,7 @@
                 document.getElementById('wilayaErr').classList.remove('show');
             } else {
                 baladiyaEl.disabled = true;
-                baladiyaEl.innerHTML = '<option value="">-- اختر الولاية أولاً --</option>';
+                baladiyaEl.innerHTML = '<option value="">-- اختر الولاية أولاًّ --</option>';
                 homePrice = 0;
                 deskPrice = 0;
                 deliveryType = 'home';
@@ -1654,7 +1664,7 @@
             deliveryType = 'home';
             document.getElementById('qtyDisplay').textContent = '1';
             document.getElementById('baladiya').disabled = true;
-            document.getElementById('baladiya').innerHTML = '<option value="">-- اختر الولاية أولاً --</option>';
+            document.getElementById('baladiya').innerHTML = '<option value="">-- اختر الولاية أولاًّ --</option>';
             document.querySelectorAll('.form-input, .form-select').forEach(el => {
                 el.classList.remove('valid', 'error');
             });
