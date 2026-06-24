@@ -1586,15 +1586,17 @@ function changeQty(delta) {
 
     function updateFloatBtn() {
         const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-        const heroHeight = document.getElementById('heroSection').offsetHeight;
+        const heroBottom = document.getElementById('heroSection').getBoundingClientRect().bottom;
 
-        if (scrollTop < heroHeight * 0.5) {
+        // User is still INSIDE hero section (not scrolled past it yet)
+        if (scrollTop < heroBottom) {
             if (floatBtnMode !== 'scroll') {
                 floatBtnMode = 'scroll';
                 floatBtn.innerHTML = '👇 اسحب الى الأسفل لاكتشاف كل التفاصيل';
                 floatBtn.href = '#section2';
             }
         } else {
+            // User scrolled past hero — switch to order button
             if (floatBtnMode !== 'order') {
                 floatBtnMode = 'order';
                 floatBtn.innerHTML = '🛒 اطلب الآن - الدفع عند الاستلام';
