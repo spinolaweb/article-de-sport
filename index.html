@@ -682,7 +682,7 @@
     </div>
 
     <!-- Floating CTA -->
-    <a class="float-btn" onclick="scrollToForm(event)" href="#cod-form">🛒 اطلب الآن - الدفع عند الاستلام</a>
+    <a class="float-btn" id="floatBtn" onclick="handleFloatClick(event)" href="#section2">👇 اسحب الى الأسفل لاكتشاف كل التفاصيل</a>
 
     <!-- ══════════════════════════════════════════════
          HERO SECTION - OPTIMIZED FOR INSTANT LCP
@@ -700,14 +700,7 @@
             decoding="async"
             onload="this.classList.add('loaded'); document.getElementById('heroSection').classList.add('loaded'); document.getElementById('heroPlaceholder').style.opacity='0';"
         />
-        <a href="#section2" class="scroll-indicator" id="scrollIndicator" onclick="scrollToSection('section2', event)">
-            <span class="scroll-text">👇 اسحب للأسفل لاكتشاف المزيد</span>
-            <div class="scroll-arrow">
-                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/>
-                </svg>
-            </div>
-        </a>
+        
     </div>
 
     <!-- ══════════════════════════════════════════════
@@ -1139,10 +1132,7 @@
             stickyHeader.classList.remove('visible');
         }
 
-        // Hide scroll indicator after user starts scrolling
-        if (scrollTop > 50) {
-            document.getElementById('scrollIndicator').classList.add('hidden');
-        }
+        
 
         // Track first scroll for engagement
         if (scrollTop > 100 && !hasScrolled) {
@@ -1579,6 +1569,46 @@ function changeQty(delta) {
     document.getElementById('phone').addEventListener('input', function () {
         this.value = this.value.replace(/[^0-9]/g, '');
     });
+// ══════════════════════════════════════════════
+    //  FLOATING CTA - DYNAMIC TEXT & BEHAVIOR
+    // ══════════════════════════════════════════════
+    const floatBtn = document.getElementById('floatBtn');
+    let floatBtnMode = 'scroll'; // 'scroll' or 'order'
+
+    function handleFloatClick(e) {
+        if (e) e.preventDefault();
+        if (floatBtnMode === 'scroll') {
+            scrollToSection('section2', e);
+        } else {
+            scrollToForm(e);
+        }
+    }
+
+    function updateFloatBtn() {
+        const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+        const heroHeight = document.getElementById('heroSection').offsetHeight;
+
+        if (scrollTop < heroHeight * 0.5) {
+            if (floatBtnMode !== 'scroll') {
+                floatBtnMode = 'scroll';
+                floatBtn.innerHTML = '👇 اسحب الى الأسفل لاكتشاف كل التفاصيل';
+                floatBtn.href = '#section2';
+            }
+        } else {
+            if (floatBtnMode !== 'order') {
+                floatBtnMode = 'order';
+                floatBtn.innerHTML = '🛒 اطلب الآن - الدفع عند الاستلام';
+                floatBtn.href = '#cod-form';
+            }
+        }
+    }
+
+    // Hook into existing scroll listener
+    const originalTrackScroll = trackScrollDepth;
+    trackScrollDepth = function() {
+        originalTrackScroll();
+        updateFloatBtn();
+    };
 
     // ══════════════════════════════════════════════
     //  INIT
