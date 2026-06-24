@@ -2,22 +2,660 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
     <title>Champions League Ball — كرة القدم الرسمية | Livraison à domicile Algérie | Paiement à la livraison</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet" />
 
+    <!-- ══════════════════════════════════════════════
+         CRITICAL: PRELOAD HERO IMAGE FOR INSTANT LCP
+         ══════════════════════════════════════════════ -->
+    <link rel="preload" as="image" href="hero.jpg" fetchpriority="high" />
+    <link rel="preload" as="image" href="ProblemSolution.jpg" fetchpriority="low" />
+    <link rel="preload" as="image" href="Benefits.jpg" fetchpriority="low" />
+    <link rel="preload" as="image" href="offer.jpg" fetchpriority="low" />
+
+    <!-- Preconnect to external domains -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="preconnect" href="https://www.googletagmanager.com" crossorigin />
+    <link rel="preconnect" href="https://connect.facebook.net" crossorigin />
+
+    <!-- ══════════════════════════════════════════════
+         CRITICAL CSS INLINE (Above the fold - no render blocking)
+         ══════════════════════════════════════════════ -->
+    <style>
+        /* CRITICAL CSS - Must load instantly */
+        * { margin:0; padding:0; box-sizing:border-box; }
+        html { scroll-behavior:smooth; }
+        body { 
+            font-family: system-ui, -apple-system, 'Segoe UI', sans-serif; 
+            background:#0A1628; 
+            color:#0A1628; 
+            direction:rtl; 
+            overflow-x:hidden;
+        }
+
+        :root {
+            --gold:#F5C518; --gold-dark:#D4A000;
+            --navy:#0A1628; --navy-mid:#122040;
+            --red:#E8132A; --white:#FFFFFF;
+            --off-white:#F8F9FA; --gray:#6C757D;
+            --light-gray:#E9ECEF; --success:#28A745;
+        }
+
+        /* ══════════════════════════════════════════════
+           PROGRESSIVE IMAGE LOADING SYSTEM
+           Low-res placeholder -> High-res swap
+           ══════════════════════════════════════════════ */
+        .img-section {
+            position: relative;
+            width: 100%;
+            display: block;
+            background: var(--navy);
+            line-height: 0;
+            overflow: hidden;
+        }
+
+        .img-section::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, #0A1628 0%, #1a3060 50%, #0d2040 100%);
+            z-index: 1;
+            transition: opacity 0.6s ease;
+        }
+
+        .img-section.loaded::before {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .fullscreen-img {
+            width: 100%;
+            height: auto;
+            display: block;
+            object-fit: cover;
+            vertical-align: bottom;
+            opacity: 0;
+            transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            z-index: 2;
+        }
+
+        .fullscreen-img.loaded {
+            opacity: 1;
+        }
+
+        /* Blur-up placeholder effect */
+        .img-placeholder {
+            position: absolute;
+            inset: 0;
+            background-size: cover;
+            background-position: center;
+            filter: blur(20px) brightness(0.4);
+            transform: scale(1.1);
+            z-index: 1;
+            transition: opacity 0.6s ease, filter 0.6s ease;
+        }
+
+        .img-section.loaded .img-placeholder {
+            opacity: 0;
+            filter: blur(0) brightness(1);
+        }
+
+        /* ══════════════════════════════════════════════
+           HERO SECTION - OPTIMIZED FOR INSTANT VISIBILITY
+           ══════════════════════════════════════════════ */
+        .hero-section {
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+        }
+
+        .hero-section .fullscreen-img {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* ══════════════════════════════════════════════
+           SCROLL INDICATOR - AGGRESSIVE ANIMATION
+           Forces users to scroll
+           ══════════════════════════════════════════════ */
+        .scroll-indicator {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 100;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            animation: scrollPulse 2s ease-in-out infinite;
+            text-decoration: none;
+        }
+
+        .scroll-indicator.hidden {
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.5s ease;
+        }
+
+        .scroll-text {
+            color: #fff;
+            font-size: 1rem;
+            font-weight: 900;
+            text-shadow: 0 2px 12px rgba(0,0,0,0.9), 0 0 4px rgba(0,0,0,0.9);
+            letter-spacing: 1px;
+            background: rgba(0,0,0,0.6);
+            padding: 6px 16px;
+            border-radius: 20px;
+            white-space: nowrap;
+            animation: textGlow 2s ease-in-out infinite;
+        }
+
+        .scroll-arrow {
+            width: 56px;
+            height: 56px;
+            background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow:
+                0 0 0 4px rgba(245,197,24,0.9),
+                0 0 0 10px rgba(245,197,24,0.3),
+                0 0 0 18px rgba(245,197,24,0.1),
+                0 10px 40px rgba(0,0,0,0.7);
+            animation: arrowBounce 1.5s ease-in-out infinite;
+        }
+
+        .scroll-arrow svg {
+            width: 28px;
+            height: 28px;
+            fill: var(--navy);
+        }
+
+        @keyframes scrollPulse {
+            0%, 100% { transform: translateX(-50%) translateY(0); }
+            50% { transform: translateX(-50%) translateY(-8px); }
+        }
+
+        @keyframes textGlow {
+            0%, 100% { opacity: 0.85; }
+            50% { opacity: 1; }
+        }
+
+        @keyframes arrowBounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-12px); }
+        }
+
+        /* ══════════════════════════════════════════════
+           FLOATING CTA - ALWAYS VISIBLE
+           ══════════════════════════════════════════════ */
+        .float-btn {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 999;
+            background: linear-gradient(135deg, var(--red), #c0001f);
+            color: white;
+            border: none;
+            padding: 16px 36px;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 900;
+            cursor: pointer;
+            box-shadow: 0 8px 30px rgba(232,19,42,0.5);
+            animation: floatPulse 2s infinite;
+            white-space: nowrap;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            font-family: inherit;
+        }
+
+        .float-btn:hover {
+            transform: translateX(-50%) scale(1.05);
+            box-shadow: 0 12px 40px rgba(232,19,42,0.7);
+        }
+
+        @keyframes floatPulse {
+            0%, 100% { box-shadow: 0 8px 30px rgba(232,19,42,0.5); }
+            50% { box-shadow: 0 8px 50px rgba(232,19,42,0.8); }
+        }
+
+        /* ══════════════════════════════════════════════
+           SCROLL-REVEAL ANIMATIONS
+           Elements animate in as user scrolls
+           ══════════════════════════════════════════════ */
+        .reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1), 
+                        transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .reveal-delay-1 { transition-delay: 0.1s; }
+        .reveal-delay-2 { transition-delay: 0.2s; }
+        .reveal-delay-3 { transition-delay: 0.3s; }
+
+        /* ══════════════════════════════════════════════
+           COD FORM SECTION
+           ══════════════════════════════════════════════ */
+        .cod-section {
+            background: linear-gradient(135deg, var(--navy) 0%, #0d2040 100%);
+            padding: 80px 20px 120px;
+        }
+
+        .form-header { text-align: center; margin-bottom: 48px; }
+        .form-header h2 { color: white; font-size: clamp(1.8rem, 4vw, 2.6rem); font-weight: 900; margin-bottom: 12px; }
+        .form-header h2 span { color: var(--gold); }
+        .form-header p { color: rgba(255,255,255,0.7); font-size: 1rem; }
+
+        .cod-form {
+            background: white;
+            border-radius: 24px;
+            padding: 48px 40px;
+            max-width: 720px;
+            margin: 0 auto;
+            box-shadow: 0 30px 80px rgba(0,0,0,0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cod-form::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            left: 0;
+            height: 6px;
+            background: linear-gradient(90deg, var(--gold), var(--red));
+        }
+
+        .form-group { margin-bottom: 24px; }
+        .form-label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: var(--navy);
+            margin-bottom: 10px;
+        }
+        .required-star { color: var(--red); }
+
+        .form-input, .form-select {
+            width: 100%;
+            padding: 14px 18px;
+            border: 2px solid var(--light-gray);
+            border-radius: 12px;
+            font-size: 1rem;
+            color: var(--navy);
+            background: var(--off-white);
+            transition: border-color 0.2s, box-shadow 0.2s;
+            direction: rtl;
+            -webkit-appearance: none;
+            appearance: none;
+            font-family: inherit;
+        }
+
+        .form-input:focus, .form-select:focus {
+            outline: none;
+            border-color: var(--gold);
+            box-shadow: 0 0 0 4px rgba(245,197,24,0.15);
+            background: white;
+        }
+
+        .form-input.error, .form-select.error {
+            border-color: var(--red);
+            box-shadow: 0 0 0 4px rgba(232,19,42,0.1);
+        }
+
+        .form-input.valid, .form-select.valid { border-color: var(--success); }
+
+        .field-error {
+            color: var(--red);
+            font-size: 0.82rem;
+            margin-top: 6px;
+            display: none;
+        }
+        .field-error.show { display: block; }
+
+        .form-select {
+            cursor: pointer;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' fill='none'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%230A1628' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: left 16px center;
+            padding-left: 40px;
+        }
+
+        /* Delivery Cards */
+        .delivery-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 4px; }
+        .delivery-card {
+            border: 2px solid var(--light-gray);
+            border-radius: 14px;
+            padding: 16px 14px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            background: var(--off-white);
+            position: relative;
+        }
+        .delivery-card:hover { border-color: var(--gold); background: #fffef5; transform: translateY(-2px); }
+        .delivery-card.active {
+            border-color: var(--gold);
+            background: #fff8e0;
+            box-shadow: 0 0 0 4px rgba(245,197,24,0.15);
+        }
+        .delivery-card .delivery-icon { font-size: 1.6rem; display: block; margin-bottom: 6px; }
+        .delivery-card .delivery-name { font-weight: 700; font-size: 0.95rem; color: var(--navy); }
+        .delivery-card .delivery-price { font-size: 0.85rem; color: var(--gray); margin-top: 2px; }
+        .delivery-card .delivery-price strong { color: var(--red); font-weight: 900; font-size: 1rem; }
+        .delivery-card input[type="radio"] { position: absolute; opacity: 0; width: 0; height: 0; }
+        .delivery-card .check-mark {
+            position: absolute;
+            top: 8px;
+            left: 8px;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            border: 2px solid var(--light-gray);
+            background: white;
+            transition: 0.2s;
+        }
+        .delivery-card.active .check-mark { border-color: var(--gold); background: var(--gold); }
+        .delivery-card.active .check-mark::after {
+            content: '✓';
+            color: white;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            height: 100%;
+            font-weight: 700;
+        }
+
+        /* Quantity */
+        .qty-control {
+            display: flex;
+            align-items: center;
+            gap: 0;
+            border: 2px solid var(--light-gray);
+            border-radius: 12px;
+            overflow: hidden;
+            background: var(--off-white);
+        }
+        .qty-btn {
+            width: 52px;
+            height: 52px;
+            background: var(--navy);
+            color: white;
+            border: none;
+            font-size: 1.4rem;
+            cursor: pointer;
+            transition: background 0.2s;
+            flex-shrink: 0;
+            font-family: inherit;
+        }
+        .qty-btn:hover { background: #1e3a6e; }
+        .qty-btn:active { transform: scale(0.95); }
+        .qty-display {
+            flex: 1;
+            text-align: center;
+            font-size: 1.3rem;
+            font-weight: 900;
+            color: var(--navy);
+            padding: 12px;
+            min-width: 60px;
+        }
+
+        /* Total Price */
+        .total-price-wrap {
+            background: linear-gradient(135deg, #fafbff, #f0f4ff);
+            border-radius: 14px;
+            padding: 18px 20px;
+            border: 2px dashed var(--gold);
+            text-align: center;
+            margin-top: 6px;
+        }
+        .total-price-wrap .label {
+            font-size: 0.85rem;
+            color: var(--gray);
+            font-weight: 600;
+            display: block;
+            margin-bottom: 6px;
+        }
+        #totalPriceCanvas { display: block; margin: 0 auto; max-width: 100%; height: auto; border-radius: 8px; background: transparent; }
+
+        /* Submit */
+        .submit-btn {
+            width: 100%;
+            padding: 18px;
+            background: linear-gradient(135deg, var(--red), #c0001f);
+            color: white;
+            border: none;
+            border-radius: 14px;
+            font-size: 1.2rem;
+            font-weight: 900;
+            cursor: pointer;
+            box-shadow: 0 8px 25px rgba(232,19,42,0.4);
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            font-family: inherit;
+        }
+        .submit-btn:hover { transform: translateY(-2px); box-shadow: 0 12px 35px rgba(232,19,42,0.6); }
+        .submit-btn:active { transform: translateY(0); }
+        .submit-btn:disabled { opacity: 0.7; cursor: not-allowed; transform: none; }
+
+        .trust-badges { display: flex; justify-content: center; gap: 24px; margin-top: 24px; flex-wrap: wrap; }
+        .trust-item { display: flex; align-items: center; gap: 6px; font-size: 0.82rem; color: rgba(255,255,255,0.7); }
+
+        /* Popup */
+        .popup-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.7);
+            z-index: 10000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .popup-overlay.active { display: flex; }
+        .popup-box {
+            background: white;
+            border-radius: 24px;
+            padding: 48px 40px;
+            max-width: 480px;
+            width: 100%;
+            text-align: center;
+            position: relative;
+            animation: popIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        @keyframes popIn { from { transform: scale(0.7); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+        .popup-check {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #28A745, #1e7e34);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            margin: 0 auto 24px;
+            color: white;
+            animation: checkPop 0.5s 0.3s both;
+        }
+        @keyframes checkPop { from { transform: scale(0); } to { transform: scale(1); } }
+        .popup-box h2 { font-size: 1.6rem; font-weight: 900; color: var(--navy); margin-bottom: 12px; }
+        .popup-box p { color: var(--gray); font-size: 0.95rem; line-height: 1.8; margin-bottom: 8px; }
+        .popup-box .highlight { color: var(--red); font-weight: 700; }
+        .popup-close {
+            position: absolute;
+            top: 16px;
+            left: 16px;
+            background: var(--light-gray);
+            border: none;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            font-size: 1.2rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--gray);
+        }
+        .popup-phone {
+            background: linear-gradient(135deg, #f0fff4, #e8f5e9);
+            border: 1px solid #c3e6cb;
+            border-radius: 12px;
+            padding: 14px 20px;
+            margin: 20px 0;
+            font-size: 1rem;
+            color: #155724;
+            font-weight: 600;
+        }
+
+        /* Footer */
+        footer { background: #060d1a; color: rgba(255,255,255,0.7); padding: 40px 20px; text-align: center; }
+        .footer-inner { max-width: 800px; margin: 0 auto; }
+        .footer-logo {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #1a3060, #0d2040);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            overflow: hidden;
+            border: 2px solid rgba(245,197,24,0.3);
+        }
+        .footer-logo img { width: 100%; height: 100%; object-fit: contain; }
+        .footer-name { color: white; font-size: 1.2rem; font-weight: 700; margin-bottom: 8px; }
+        .footer-info { font-size: 0.9rem; line-height: 1.8; opacity: 0.6; }
+        .footer-info a { color: inherit; }
+        .footer-divider { border-color: rgba(255,255,255,0.1); margin: 24px 0; }
+        .footer-copy { font-size: 0.8rem; opacity: 0.4; }
+
+        /* ══════════════════════════════════════════════
+           ENGAGEMENT BOOSTERS
+           ══════════════════════════════════════════════ */
+
+        /* Progress bar at top */
+        .scroll-progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--gold), var(--red));
+            z-index: 10001;
+            width: 0%;
+            transition: width 0.1s linear;
+        }
+/* Sticky header on scroll */
+        .sticky-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(10, 22, 40, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 998;
+            padding: 12px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            transform: translateY(-100%);
+            transition: transform 0.3s ease;
+        }
+        .sticky-header.visible { transform: translateY(0); }
+        .sticky-header .sticky-title { color: white; font-weight: 700; font-size: 0.9rem; }
+        .sticky-header .sticky-price { color: var(--gold); font-weight: 900; font-size: 1rem; }
+        .sticky-header .sticky-btn {
+            background: var(--red);
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-weight: 700;
+            font-size: 0.85rem;
+            cursor: pointer;
+            font-family: inherit;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .float-btn { padding: 14px 24px; font-size: 1rem; width: calc(100% - 40px); text-align: center; justify-content: center; }
+            .cod-form { padding: 32px 20px; }
+            .delivery-grid { gap: 10px; }
+            .delivery-card { padding: 12px 10px; }
+            .trust-badges { gap: 12px; }
+            .scroll-arrow { width: 48px; height: 48px; }
+            .scroll-arrow svg { width: 24px; height: 24px; }
+        }
+        @media (max-width: 480px) {
+            .cod-section { padding: 60px 12px 100px; }
+            .cod-form { padding: 24px 14px; border-radius: 18px; }
+            .delivery-card .delivery-name { font-size: 0.82rem; }
+            .popup-box { padding: 36px 20px; }
+            .scroll-text { font-size: 0.85rem; padding: 4px 12px; }
+        }
+    </style>
+
+    <!-- ══════════════════════════════════════════════
+         GOOGLE ANALYTICS 4 - LOAD ASYNC BUT EARLY
+         ══════════════════════════════════════════════ -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-3NJP2JDXV6"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
         function gtag(){dataLayer.push(arguments);}
         gtag('js', new Date());
-        gtag('config', 'G-3NJP2JDXV6', { send_page_view: true, currency: 'DZD', country: 'DZ' });
+        gtag('config', 'G-3NJP2JDXV6', { 
+            send_page_view: true, 
+            currency: 'DZD', 
+            country: 'DZ',
+            transport_type: 'beacon'
+        });
     </script>
 
+    <!-- ══════════════════════════════════════════════
+         META PIXEL - DEFERRED LOADING (Non-critical)
+         ══════════════════════════════════════════════ -->
     <script>
-        !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');
-        fbq('init','1613682052670123');
-        fbq('track','PageView');
+        // Defer Facebook pixel to after LCP
+        window.addEventListener('load', function() {
+            setTimeout(function() {
+                !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+                n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+                n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+                t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(
+                window,document,'script','https://connect.facebook.net/en_US/fbevents.js');
+                fbq('init','1613682052670123');
+                fbq('track','PageView');
+            }, 2000);
+        });
     </script>
     <noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=1613682052670123&ev=PageView&noscript=1"/></noscript>
 
@@ -31,400 +669,134 @@
     <script type="application/ld+json">
     {"@context":"https://schema.org","@type":"Product","name":"Champions League Ball","offers":{"@type":"Offer","price":"2900","priceCurrency":"DZD","availability":"https://schema.org/InStock"},"aggregateRating":{"@type":"AggregateRating","ratingValue":"4.9","reviewCount":"89"}}
     </script>
-
-    <style>
-        * { margin:0; padding:0; box-sizing:border-box; }
-        html { scroll-behavior:smooth; }
-        body { font-family:'Cairo',sans-serif; background:#0A1628; color:#0A1628; direction:rtl; }
-
-        :root {
-            --gold:#F5C518; --gold-dark:#D4A000;
-            --navy:#0A1628; --navy-mid:#122040;
-            --red:#E8132A; --white:#FFFFFF;
-            --off-white:#F8F9FA; --gray:#6C757D;
-            --light-gray:#E9ECEF; --success:#28A745;
-        }
-
-        .fb-price { position:absolute; left:0; top:0; width:1px; height:1px; overflow:hidden; opacity:0; color:transparent; font-size:0.001px; pointer-events:none; }
-
-        /* ── IMAGE SECTIONS — NO GAPS ── */
-        .img-section {
-            position: relative;
-            width: 100%;
-            /* Height adapts to image naturally — no forced 100vh that creates gaps */
-            display: block;
-            background: var(--navy);
-            line-height: 0; /* kills inline gap */
-        }
-
-        .fullscreen-img {
-            width: 100%;
-            height: auto;
-            display: block;
-            object-fit: cover;
-            /* Remove any bottom whitespace from inline elements */
-            vertical-align: bottom;
-        }
-
-        /* ── ARROW — Bold, ultra-visible on mobile ── */
-        .section-arrow-wrap {
-            position: absolute;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 100;
-            cursor: pointer;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 6px;
-            transition: opacity 0.5s ease, transform 0.5s ease;
-            opacity: 1;
-            pointer-events: auto;
-        }
-        .section-arrow-wrap.hidden {
-            opacity: 0;
-            pointer-events: none;
-        }
-        .arrow-text {
-            color: #fff;
-            font-size: 0.9rem;
-            font-weight: 900;
-            text-shadow: 0 2px 12px rgba(0,0,0,0.9), 0 0 4px rgba(0,0,0,0.9);
-            letter-spacing: 1px;
-            animation: fadePulse 1.8s ease-in-out infinite;
-            background: rgba(0,0,0,0.45);
-            padding: 4px 12px;
-            border-radius: 20px;
-        }
-        .section-arrow {
-            width: 64px;
-            height: 64px;
-            background: linear-gradient(135deg, var(--gold), var(--gold-dark));
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            /* Strong visible ring */
-            box-shadow:
-                0 0 0 4px rgba(245,197,24,0.9),
-                0 0 0 8px rgba(245,197,24,0.3),
-                0 8px 30px rgba(0,0,0,0.6);
-            animation: arrowBounce 1.5s ease-in-out infinite;
-        }
-        .section-arrow svg {
-            width: 28px;
-            height: 28px;
-            fill: var(--navy);
-        }
-
-        /* Extra bold for first arrow (hero) */
-        .section-arrow-wrap[data-arrow-index="0"] .section-arrow {
-            width: 72px;
-            height: 72px;
-            box-shadow:
-                0 0 0 5px rgba(245,197,24,1),
-                0 0 0 12px rgba(245,197,24,0.4),
-                0 0 0 20px rgba(245,197,24,0.1),
-                0 10px 40px rgba(0,0,0,0.7);
-        }
-        .section-arrow-wrap[data-arrow-index="0"] .section-arrow svg {
-            width: 32px;
-            height: 32px;
-        }
-        .section-arrow-wrap[data-arrow-index="0"] .arrow-text {
-            font-size: 1rem;
-            background: rgba(0,0,0,0.6);
-            padding: 5px 16px;
-        }
-
-        @keyframes arrowBounce {
-            0%,100% { transform: translateY(0); }
-            50% { transform: translateY(-14px); }
-        }
-        @keyframes fadePulse {
-            0%,100% { opacity:0.8; }
-            50% { opacity:1; }
-        }
-
-        /* ── Floating CTA ── */
-        .float-btn {
-            position:fixed; bottom:24px; left:50%; transform:translateX(-50%);
-            z-index:999; background:linear-gradient(135deg,var(--red),#c0001f);
-            color:white; border:none; padding:16px 40px; border-radius:50px;
-            font-family:'Cairo',sans-serif; font-size:1.1rem; font-weight:900;
-            cursor:pointer; box-shadow:0 8px 30px rgba(232,19,42,0.5);
-            animation:pulse 2s infinite; white-space:nowrap; text-decoration:none; display:inline-block;
-        }
-        .float-btn:hover { background:linear-gradient(135deg,#c0001f,var(--red)); transform:translateX(-50%) scale(1.05); }
-        @keyframes pulse {
-            0%,100% { box-shadow:0 8px 30px rgba(232,19,42,0.5); }
-            50% { box-shadow:0 8px 50px rgba(232,19,42,0.8); }
-        }
-
-        /* ── COD Form Section ── */
-        .cod-section {
-            background:linear-gradient(135deg,var(--navy) 0%,#0d2040 100%);
-            padding:80px 20px 120px;
-        }
-        .form-header { text-align:center; margin-bottom:48px; }
-        .form-header h2 { color:white; font-size:clamp(1.8rem,4vw,2.6rem); font-weight:900; margin-bottom:12px; }
-        .form-header h2 span { color:var(--gold); }
-        .form-header p { color:rgba(255,255,255,0.7); font-size:1rem; }
-
-        .cod-form {
-            background:white; border-radius:24px; padding:48px 40px;
-            max-width:720px; margin:0 auto;
-            box-shadow:0 30px 80px rgba(0,0,0,0.3);
-            position:relative; overflow:hidden;
-        }
-        .cod-form::before {
-            content:''; position:absolute; top:0; right:0; left:0; height:6px;
-            background:linear-gradient(90deg,var(--gold),var(--red));
-        }
-
-        .form-group { margin-bottom:24px; }
-        .form-label {
-            display:flex; align-items:center; gap:8px;
-            font-size:0.95rem; font-weight:700; color:var(--navy); margin-bottom:10px;
-        }
-        .required-star { color:var(--red); }
-
-        .form-input, .form-select {
-            width:100%; padding:14px 18px;
-            border:2px solid var(--light-gray); border-radius:12px;
-            font-family:'Cairo',sans-serif; font-size:1rem; color:var(--navy);
-            background:var(--off-white);
-            transition:border-color 0.2s, box-shadow 0.2s;
-            direction:rtl; -webkit-appearance:none; appearance:none;
-        }
-        .form-input:focus, .form-select:focus {
-            outline:none; border-color:var(--gold);
-            box-shadow:0 0 0 4px rgba(245,197,24,0.15); background:white;
-        }
-        .form-input.error, .form-select.error {
-            border-color:var(--red); box-shadow:0 0 0 4px rgba(232,19,42,0.1);
-        }
-        .form-input.valid, .form-select.valid { border-color:var(--success); }
-        .field-error { color:var(--red); font-size:0.82rem; margin-top:6px; display:none; }
-        .field-error.show { display:block; }
-
-        .form-select {
-            cursor:pointer;
-            background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' fill='none'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%230A1628' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E");
-            background-repeat:no-repeat; background-position:left 16px center; padding-left:40px;
-        }
-
-        /* Delivery Cards */
-        .delivery-grid { display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-top:4px; }
-        .delivery-card {
-            border:2px solid var(--light-gray); border-radius:14px; padding:16px 14px;
-            text-align:center; cursor:pointer; transition:all 0.25s ease;
-            background:var(--off-white); position:relative;
-        }
-        .delivery-card:hover { border-color:var(--gold); background:#fffef5; }
-        .delivery-card.active {
-            border-color:var(--gold); background:#fff8e0;
-            box-shadow:0 0 0 4px rgba(245,197,24,0.15);
-        }
-        .delivery-card .delivery-icon { font-size:1.6rem; display:block; margin-bottom:6px; }
-        .delivery-card .delivery-name { font-weight:700; font-size:0.95rem; color:var(--navy); }
-        .delivery-card .delivery-price { font-size:0.85rem; color:var(--gray); margin-top:2px; }
-        .delivery-card .delivery-price strong { color:var(--red); font-weight:900; font-size:1rem; }
-        .delivery-card input[type="radio"] { position:absolute; opacity:0; width:0; height:0; }
-        .delivery-card .check-mark {
-            position:absolute; top:8px; left:8px; width:20px; height:20px;
-            border-radius:50%; border:2px solid var(--light-gray); background:white; transition:0.2s;
-        }
-        .delivery-card.active .check-mark { border-color:var(--gold); background:var(--gold); }
-        .delivery-card.active .check-mark::after {
-            content:'✓'; color:white; font-size:12px;
-            display:flex; align-items:center; justify-content:center;
-            width:100%; height:100%; font-weight:700;
-        }
-
-        /* Quantity */
-        .qty-control {
-            display:flex; align-items:center; gap:0;
-            border:2px solid var(--light-gray); border-radius:12px;
-            overflow:hidden; background:var(--off-white);
-        }
-        .qty-btn {
-            width:52px; height:52px; background:var(--navy); color:white;
-            border:none; font-size:1.4rem; cursor:pointer;
-            font-family:'Cairo',sans-serif; transition:background 0.2s; flex-shrink:0;
-        }
-        .qty-btn:hover { background:#1e3a6e; }
-        .qty-display {
-            flex:1; text-align:center; font-size:1.3rem; font-weight:900;
-            color:var(--navy); padding:12px; min-width:60px;
-        }
-
-        /* Total Price Canvas */
-        .total-price-wrap {
-            background:linear-gradient(135deg,#fafbff,#f0f4ff);
-            border-radius:14px; padding:18px 20px;
-            border:2px dashed var(--gold); text-align:center; margin-top:6px;
-        }
-        .total-price-wrap .label {
-            font-size:0.85rem; color:var(--gray); font-weight:600;
-            display:block; margin-bottom:6px;
-        }
-        #totalPriceCanvas { display:block; margin:0 auto; max-width:100%; height:auto; border-radius:8px; background:transparent; }
-
-        /* Submit */
-        .submit-btn {
-            width:100%; padding:18px;
-            background:linear-gradient(135deg,var(--red),#c0001f);
-            color:white; border:none; border-radius:14px;
-            font-family:'Cairo',sans-serif; font-size:1.2rem; font-weight:900;
-            cursor:pointer; box-shadow:0 8px 25px rgba(232,19,42,0.4);
-            transition:all 0.3s; display:flex; align-items:center; justify-content:center; gap:10px;
-        }
-        .submit-btn:hover { transform:translateY(-2px); box-shadow:0 12px 35px rgba(232,19,42,0.6); }
-        .submit-btn:disabled { opacity:0.7; cursor:not-allowed; transform:none; }
-
-        .trust-badges { display:flex; justify-content:center; gap:24px; margin-top:24px; flex-wrap:wrap; }
-        .trust-item { display:flex; align-items:center; gap:6px; font-size:0.82rem; color:rgba(255,255,255,0.7); }
-
-        /* Popup */
-        .popup-overlay {
-            position:fixed; inset:0; background:rgba(0,0,0,0.7);
-            z-index:10000; display:none; align-items:center; justify-content:center; padding:20px;
-        }
-        .popup-overlay.active { display:flex; }
-        .popup-box {
-            background:white; border-radius:24px; padding:48px 40px;
-            max-width:480px; width:100%; text-align:center; position:relative;
-            animation:popIn 0.4s cubic-bezier(0.34,1.56,0.64,1);
-        }
-        @keyframes popIn { from{transform:scale(0.7);opacity:0} to{transform:scale(1);opacity:1} }
-        .popup-check {
-            width:80px; height:80px;
-            background:linear-gradient(135deg,#28A745,#1e7e34);
-            border-radius:50%; display:flex; align-items:center; justify-content:center;
-            font-size:2.5rem; margin:0 auto 24px; color:white;
-            animation:checkPop 0.5s 0.3s both;
-        }
-        @keyframes checkPop { from{transform:scale(0)} to{transform:scale(1)} }
-        .popup-box h2 { font-size:1.6rem; font-weight:900; color:var(--navy); margin-bottom:12px; }
-        .popup-box p { color:var(--gray); font-size:0.95rem; line-height:1.8; margin-bottom:8px; }
-        .popup-box .highlight { color:var(--red); font-weight:700; }
-        .popup-close {
-            position:absolute; top:16px; left:16px; background:var(--light-gray);
-            border:none; width:36px; height:36px; border-radius:50%; font-size:1.2rem;
-            cursor:pointer; display:flex; align-items:center; justify-content:center; color:var(--gray);
-        }
-        .popup-phone {
-            background:linear-gradient(135deg,#f0fff4,#e8f5e9);
-            border:1px solid #c3e6cb; border-radius:12px; padding:14px 20px;
-            margin:20px 0; font-size:1rem; color:#155724; font-weight:600;
-        }
-
-        /* Footer */
-        footer { background:#060d1a; color:rgba(255,255,255,0.7); padding:40px 20px; text-align:center; }
-        .footer-inner { max-width:800px; margin:0 auto; }
-        .footer-logo {
-            width:80px; height:80px;
-            background:linear-gradient(135deg,#1a3060,#0d2040);
-            border-radius:16px; display:flex; align-items:center; justify-content:center;
-            margin:0 auto 20px; overflow:hidden; border:2px solid rgba(245,197,24,0.3);
-        }
-        .footer-logo img { width:100%; height:100%; object-fit:contain; }
-        .footer-name { color:white; font-size:1.2rem; font-weight:700; margin-bottom:8px; }
-        .footer-info { font-size:0.9rem; line-height:1.8; opacity:0.6; }
-        .footer-info a { color:inherit; }
-        .footer-divider { border-color:rgba(255,255,255,0.1); margin:24px 0; }
-        .footer-copy { font-size:0.8rem; opacity:0.4; }
-
-        /* Responsive */
-        @media (max-width:768px) {
-            .float-btn { padding:14px 28px; font-size:1rem; width:calc(100% - 40px); text-align:center; }
-            .cod-form { padding:32px 20px; }
-            .delivery-grid { gap:10px; }
-            .delivery-card { padding:12px 10px; }
-            .trust-badges { gap:12px; }
-        }
-        @media (max-width:480px) {
-            .cod-section { padding:60px 12px 100px; }
-            .cod-form { padding:24px 14px; border-radius:18px; }
-            .delivery-card .delivery-name { font-size:0.82rem; }
-            .popup-box { padding:36px 20px; }
-        }
-    </style>
+<base target="_blank">
 </head>
 <body>
+    <!-- Scroll Progress Bar -->
+    <div class="scroll-progress" id="scrollProgress"></div>
+
+    <!-- Sticky Header -->
+    <div class="sticky-header" id="stickyHeader">
+                <span class="sticky-price">التوصيل 69 ولاية الدفع عند الاستلام</span>
+        <button class="sticky-btn" onclick="scrollToForm(event)">اطلب الآن</button>
+    </div>
 
     <!-- Floating CTA -->
     <a class="float-btn" onclick="scrollToForm(event)" href="#cod-form">🛒 اطلب الآن - الدفع عند الاستلام</a>
 
-    <!-- ═══ HERO ═══ -->
-    <div class="img-section">
-        <img class="fullscreen-img" src="hero.jpg" alt="Champions League" onerror="this.style.background='linear-gradient(135deg, #0A1628, #122040)'" />
-        <span class="fb-price" aria-label="2900 DZD" data-price="2900">2900 دج</span>
-        <div class="section-arrow-wrap" data-arrow-index="0" onclick="scrollToNextSection(0)">
-            <div class="arrow-text"></div>
-            <div class="section-arrow">
+    <!-- ══════════════════════════════════════════════
+         HERO SECTION - OPTIMIZED FOR INSTANT LCP
+         ══════════════════════════════════════════════ -->
+    <div class="img-section hero-section" id="heroSection">
+        <div class="img-placeholder" id="heroPlaceholder" style="background-image: url('data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEASABIAAD/2wBDAAEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQH/2wBDAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQH/wAARCAAIAAgDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAX/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBAAIRAxEAPwCdABmX/9k=');"></div>
+        <img 
+            class="fullscreen-img" 
+            id="heroImg"
+            src="hero.jpg" 
+            alt="Champions League" 
+            width="1200" 
+            height="800"
+            fetchpriority="high"
+            decoding="async"
+            onload="this.classList.add('loaded'); document.getElementById('heroSection').classList.add('loaded'); document.getElementById('heroPlaceholder').style.opacity='0';"
+        />
+        <a href="#section2" class="scroll-indicator" id="scrollIndicator" onclick="scrollToSection('section2', event)">
+            <span class="scroll-text">👇 اسحب للأسفل لاكتشاف المزيد</span>
+            <div class="scroll-arrow">
                 <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                     <path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/>
                 </svg>
             </div>
-        </div>
+        </a>
     </div>
 
-    <!-- ═══ PROBLEM + SOLUTION ═══ -->
-    <div class="img-section">
-        <img class="fullscreen-img" src="ProblemSolution.jpg" alt="المشكلة والحل" onerror="this.style.background='#0A1628'" />
-        <div class="section-arrow-wrap" data-arrow-index="1" onclick="scrollToNextSection(1)">
-            <div class="arrow-text"></div>
-            <div class="section-arrow">
+    <!-- ══════════════════════════════════════════════
+         SECTION 2: PROBLEM + SOLUTION
+         ══════════════════════════════════════════════ -->
+    <div class="img-section reveal" id="section2">
+        <div class="img-placeholder" style="background-image: url('data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEASABIAAD/2wBDAAEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQH/2wBDAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQH/wAARCAAIAAgDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAX/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBAAIRAxEAPwCdABmX/9k=');"></div>
+        <img 
+            class="fullscreen-img lazy-img" 
+            data-src="ProblemSolution.jpg" 
+            alt="المشكلة والحل" 
+            width="1200" 
+            height="800"
+            loading="lazy"
+            decoding="async"
+        />
+        <a href="#section3" class="scroll-indicator" onclick="scrollToSection('section3', event)">
+            <span class="scroll-text">استمر في التمرير</span>
+            <div class="scroll-arrow">
                 <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                     <path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/>
                 </svg>
             </div>
-        </div>
+        </a>
     </div>
 
-    <!-- ═══ BENEFITS ═══ -->
-    <div class="img-section">
-        <img class="fullscreen-img" src="Benefits.jpg" alt="المميزات" onerror="this.style.background='linear-gradient(135deg,#fafbff,#f0f4ff)'" />
-        <div class="section-arrow-wrap" data-arrow-index="2" onclick="scrollToNextSection(2)">
-            <div class="arrow-text"></div>
-            <div class="section-arrow">
+    <!-- ══════════════════════════════════════════════
+         SECTION 3: BENEFITS
+         ══════════════════════════════════════════════ -->
+    <div class="img-section reveal" id="section3">
+        <div class="img-placeholder" style="background-image: url('data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEASABIAAD/2wBDAAEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQH/2wBDAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQH/wAARCAAIAAgDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAX/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBAAIRAxEAPwCdABmX/9k=');"></div>
+        <img 
+            class="fullscreen-img lazy-img" 
+            data-src="Benefits.jpg" 
+            alt="المميزات" 
+            width="1200" 
+            height="800"
+            loading="lazy"
+            decoding="async"
+        />
+        <a href="#section4" class="scroll-indicator" onclick="scrollToSection('section4', event)">
+            <span class="scroll-text">شاهد العرض المميز</span>
+            <div class="scroll-arrow">
                 <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                     <path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/>
                 </svg>
             </div>
-        </div>
+        </a>
     </div>
 
-    <!-- ═══ OFFER ═══ -->
-    <div class="img-section">
-        <img class="fullscreen-img" src="offer.jpg" alt="العرض" onerror="this.style.background='#0A1628'" />
-        <span class="fb-price" aria-label="2900 DZD" data-price="2900">2900 دج</span>
-        <div class="section-arrow-wrap" data-arrow-index="3" onclick="scrollToNextSection(3)">
-            <div class="arrow-text"></div>
-            <div class="section-arrow">
+    <!-- ══════════════════════════════════════════════
+         SECTION 4: OFFER
+         ══════════════════════════════════════════════ -->
+    <div class="img-section reveal" id="section4">
+        <div class="img-placeholder" style="background-image: url('data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEASABIAAD/2wBDAAEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQH/2wBDAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQH/wAARCAAIAAgDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAX/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBAAIRAxEAPwCdABmX/9k=');"></div>
+        <img 
+            class="fullscreen-img lazy-img" 
+            data-src="offer.jpg" 
+            alt="العرض" 
+            width="1200" 
+            height="800"
+            loading="lazy"
+            decoding="async"
+        />
+        <a href="#cod-form" class="scroll-indicator" onclick="scrollToSection('cod-form', event)">
+            <span class="scroll-text">🛒 اطلب الآن واحصل على توصيل مجاني</span>
+            <div class="scroll-arrow">
                 <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                     <path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/>
                 </svg>
             </div>
-        </div>
+        </a>
     </div>
 
-    <!-- ═══ COD FORM ═══ -->
+    <!-- ══════════════════════════════════════════════
+         COD FORM SECTION
+         ══════════════════════════════════════════════ -->
     <section class="cod-section" id="cod-form">
         <div class="container">
-            <div class="form-header">
+            <div class="form-header reveal">
                 <h2>🛒 <span>أكمل طلبك الآن</span></h2>
                 <p>الدفع عند الاستلام — لا مخاطرة — توصيل لجميع الولايات</p>
             </div>
 
-            <form class="cod-form" id="orderForm" novalidate>
+            <form class="cod-form reveal reveal-delay-1" id="orderForm" novalidate>
                 <!-- Name -->
                 <div class="form-group">
                     <label class="form-label" for="fullName">
-                        <span class="lbl-icon">👤</span>
+                        <span>👤</span>
                         الاسم الكامل <span class="required-star">*</span>
                     </label>
                     <input type="text" id="fullName" class="form-input" placeholder="أدخل اسمك الكامل" autocomplete="off" />
@@ -434,7 +806,7 @@
                 <!-- Phone -->
                 <div class="form-group">
                     <label class="form-label" for="phone">
-                        <span class="lbl-icon">📱</span>
+                        <span>📱</span>
                         رقم الهاتف <span class="required-star">*</span>
                     </label>
                     <input type="tel" id="phone" class="form-input" placeholder="05XXXXXXXX أو 06XXXXXXXX أو 07XXXXXXXX" maxlength="10" autocomplete="off" inputmode="numeric" />
@@ -444,7 +816,7 @@
                 <!-- Wilaya -->
                 <div class="form-group">
                     <label class="form-label" for="wilaya">
-                        <span class="lbl-icon">🗺️</span>
+                        <span>🗺️</span>
                         الولاية <span class="required-star">*</span>
                     </label>
                     <select id="wilaya" class="form-select">
@@ -514,7 +886,7 @@
                 <!-- Baladiya -->
                 <div class="form-group">
                     <label class="form-label" for="baladiya">
-                        <span class="lbl-icon">🏘️</span>
+                        <span>🏘️</span>
                         البلدية <span class="required-star">*</span>
                     </label>
                     <select id="baladiya" class="form-select" disabled>
@@ -526,7 +898,7 @@
                 <!-- Delivery Type -->
                 <div class="form-group">
                     <label class="form-label">
-                        <span class="lbl-icon">🚚</span>
+                        <span>🚚</span>
                         نوع التوصيل <span class="required-star">*</span>
                     </label>
                     <div class="delivery-grid" id="deliveryGrid">
@@ -550,7 +922,7 @@
                 <!-- Quantity -->
                 <div class="form-group">
                     <label class="form-label">
-                        <span class="lbl-icon">📦</span>
+                        <span>📦</span>
                         الكمية
                     </label>
                     <div class="qty-control">
@@ -586,7 +958,7 @@
     <footer>
         <div class="footer-inner">
             <div class="footer-logo">
-                <img src="logo.jpeg" alt="Logo" onerror="this.style.display='none'" />
+                <img src="logo.jpeg" alt="Logo" loading="lazy" onerror="this.style.display='none'" />
             </div>
             <div class="footer-name">Article De Sport</div>
             <div class="footer-info">
@@ -612,6 +984,8 @@
             <p class="highlight">لا تقلق — المنتج في طريقه إليك! 🚚</p>
         </div>
     </div>
+
+    
 
     <script>
     // ══════════════════════════════════════════════
@@ -645,7 +1019,7 @@
     }
 
     // ══════════════════════════════════════════════
-    //  META PIXEL
+    //  META PIXEL - LAZY LOADED
     // ══════════════════════════════════════════════
     const PIXEL_PRODUCT_ID = 'CHAMPIONS_LEAGUE_BALL';
     const PIXEL_PRICE_PER_UNIT = 2900;
@@ -656,20 +1030,36 @@
         if (cleaned.startsWith('0')) cleaned = cleaned.substring(1);
         return '+213' + cleaned;
     }
-    fbq('track','ViewContent',{ content_ids:[PIXEL_PRODUCT_ID], content_type:'product', value:PIXEL_PRICE_PER_UNIT, currency:PIXEL_CURRENCY });
+
+    // Defer pixel tracking until after load
+    let pixelReady = false;
+    window.addEventListener('load', function() {
+        setTimeout(function() {
+            if (typeof fbq !== 'undefined') {
+                pixelReady = true;
+                fbq('track','ViewContent',{ content_ids:[PIXEL_PRODUCT_ID], content_type:'product', value:PIXEL_PRICE_PER_UNIT, currency:PIXEL_CURRENCY });
+            }
+        }, 2500);
+    });
 
     function trackAddToCart(qty) {
-        fbq('track','AddToCart',{ contents:[{id:PIXEL_PRODUCT_ID,quantity:qty}], content_type:'product', value:(PIXEL_PRICE_PER_UNIT*qty)+currentDeliveryPrice, currency:PIXEL_CURRENCY });
+        if (pixelReady && typeof fbq !== 'undefined') {
+            fbq('track','AddToCart',{ contents:[{id:PIXEL_PRODUCT_ID,quantity:qty}], content_type:'product', value:(PIXEL_PRICE_PER_UNIT*qty)+currentDeliveryPrice, currency:PIXEL_CURRENCY });
+        }
     }
     function trackInitiateCheckout(qty, deliveryPrice) {
-        fbq('track','InitiateCheckout',{ contents:[{id:PIXEL_PRODUCT_ID,quantity:qty}], content_type:'product', value:(PIXEL_PRICE_PER_UNIT*qty)+deliveryPrice, currency:PIXEL_CURRENCY, num_items:qty });
+        if (pixelReady && typeof fbq !== 'undefined') {
+            fbq('track','InitiateCheckout',{ contents:[{id:PIXEL_PRODUCT_ID,quantity:qty}], content_type:'product', value:(PIXEL_PRICE_PER_UNIT*qty)+deliveryPrice, currency:PIXEL_CURRENCY, num_items:qty });
+        }
     }
     function trackPurchase(qty, deliveryPrice, customerName, customerPhone, customerWilaya) {
-        fbq('track','Purchase',{ contents:[{id:PIXEL_PRODUCT_ID,quantity:qty}], content_type:'product', value:(PIXEL_PRICE_PER_UNIT*qty)+deliveryPrice, currency:PIXEL_CURRENCY, num_items:qty, customer_name:customerName, customer_phone:formatPhoneForFacebook(customerPhone), customer_wilaya:customerWilaya });
+        if (pixelReady && typeof fbq !== 'undefined') {
+            fbq('track','Purchase',{ contents:[{id:PIXEL_PRODUCT_ID,quantity:qty}], content_type:'product', value:(PIXEL_PRICE_PER_UNIT*qty)+deliveryPrice, currency:PIXEL_CURRENCY, num_items:qty, customer_name:customerName, customer_phone:formatPhoneForFacebook(customerPhone), customer_wilaya:customerWilaya });
+        }
     }
 
     // ══════════════════════════════════════════════
-    //  GA4
+    //  GA4 - OPTIMIZED EVENTS
     // ══════════════════════════════════════════════
     function ga4ViewContent() {
         gtag('event','view_item',{ currency:'DZD', value:PIXEL_PRICE_PER_UNIT, items:[{item_id:PIXEL_PRODUCT_ID,item_name:'Champions League Ball',price:PIXEL_PRICE_PER_UNIT,quantity:1}] });
@@ -685,24 +1075,180 @@
     }
 
     // ══════════════════════════════════════════════
+    //  ADVANCED GA4 ENGAGEMENT TRACKING
+    // ══════════════════════════════════════════════
+    let engagementTimer = null;
+    let engagementSent = false;
+    let scrollDepthTracked = {25: false, 50: false, 75: false, 90: false};
+    let timeOnPage = 0;
+    let lastActiveTime = Date.now();
+    let hasScrolled = false;
+    let hasInteracted = false;
+
+    // Track time on page for engagement
+    setInterval(function() {
+        if (document.visibilityState === 'visible') {
+            timeOnPage += 1;
+            // Send engagement_time_msec every 5 seconds to keep session alive
+            if (timeOnPage % 5 === 0 && timeOnPage > 0) {
+                gtag('event', 'user_engagement', {
+                    engagement_time_msec: timeOnPage * 1000
+                });
+            }
+            // Force engagement event at 10 seconds (GA4 threshold)
+            if (timeOnPage >= 10 && !engagementSent) {
+                engagementSent = true;
+                gtag('event', 'engaged_user', {
+                    engagement_time_msec: 10000,
+                    method: 'time_on_page'
+                });
+            }
+        }
+    }, 1000);
+
+    // Track scroll depth
+    function trackScrollDepth() {
+        const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+        const docHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+        const scrollPercent = docHeight > 0 ? Math.round((scrollTop / docHeight) * 100) : 0;
+
+        // Update progress bar
+        document.getElementById('scrollProgress').style.width = scrollPercent + '%';
+
+        // Track depth milestones
+        [25, 50, 75, 90].forEach(function(depth) {
+            if (scrollPercent >= depth && !scrollDepthTracked[depth]) {
+                scrollDepthTracked[depth] = true;
+                gtag('event', 'scroll', {
+                    percent_scrolled: depth.toString()
+                });
+
+                // Also track as custom event for better analytics
+                gtag('event', 'scroll_depth_' + depth, {
+                    event_category: 'engagement',
+                    event_label: depth + '%'
+                });
+            }
+        });
+
+        // Show sticky header after scrolling past hero
+        const stickyHeader = document.getElementById('stickyHeader');
+        if (scrollTop > window.innerHeight * 0.5) {
+            stickyHeader.classList.add('visible');
+        } else {
+            stickyHeader.classList.remove('visible');
+        }
+
+        // Hide scroll indicator after user starts scrolling
+        if (scrollTop > 50) {
+            document.getElementById('scrollIndicator').classList.add('hidden');
+        }
+
+        // Track first scroll for engagement
+        if (scrollTop > 100 && !hasScrolled) {
+            hasScrolled = true;
+            gtag('event', 'first_scroll', {
+                scroll_depth: scrollPercent
+            });
+        }
+    }
+
+    window.addEventListener('scroll', trackScrollDepth, { passive: true });
+
+    // Track form interactions for engagement
+    function trackFormInteraction(field) {
+        if (!hasInteracted) {
+            hasInteracted = true;
+            gtag('event', 'first_interaction', {
+                interaction_type: 'form_focus',
+                field_name: field
+            });
+        }
+        gtag('event', 'form_interaction', {
+            form_id: 'orderForm',
+            field_name: field
+        });
+    }
+
+    document.getElementById('fullName').addEventListener('focus', function() { trackFormInteraction('fullName'); });
+    document.getElementById('phone').addEventListener('focus', function() { trackFormInteraction('phone'); });
+    document.getElementById('wilaya').addEventListener('change', function() { trackFormInteraction('wilaya'); });
+
+    // Track clicks on delivery cards
+    document.getElementById('cardHome').addEventListener('click', function() {
+        gtag('event', 'select_delivery', { delivery_type: 'home', price: homePrice });
+    });
+    document.getElementById('cardDesk').addEventListener('click', function() {
+        gtag('event', 'select_delivery', { delivery_type: 'desk', price: deskPrice });
+    });
+
+    // Track quantity changes
+    function trackQtyChange(qty) {
+        gtag('event', 'quantity_change', { quantity: qty, product_price: getProductPrice(qty) });
+    }
+
+    
+
+    // ══════════════════════════════════════════════
+    //  SCROLL REVEAL OBSERVER
+    // ══════════════════════════════════════════════
+    const revealObserver = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+                revealObserver.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+
+    document.querySelectorAll('.reveal').forEach(function(el) {
+        revealObserver.observe(el);
+    });
+
+    // ══════════════════════════════════════════════
+    //  LAZY IMAGE LOADING WITH INTERSECTION OBSERVER
+    // ══════════════════════════════════════════════
+    const imgObserver = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+            if (entry.isIntersecting) {
+                const img = entry.target;
+                const src = img.dataset.src;
+                if (src) {
+                    img.src = src;
+                    img.onload = function() {
+                        img.classList.add('loaded');
+                        img.parentElement.classList.add('loaded');
+                    };
+                    img.removeAttribute('data-src');
+                }
+                imgObserver.unobserve(img);
+            }
+        });
+    }, { rootMargin: '200px 0px', threshold: 0 });
+
+    document.querySelectorAll('.lazy-img').forEach(function(img) {
+        imgObserver.observe(img);
+    });
+
+    // ══════════════════════════════════════════════
     //  COMMUNES DATA
     // ══════════════════════════════════════════════
     const communes = {
         '1':['أدرار','أولاد أحمد تيمي','أولف','إن زغمير','اقبلي','السبع','بودة','تامست','تامنطيط','تسابيت','تيت','تيمقتن','رقان','زاوية كنتة','سالي','فنوغيل'],
         '2':['أبو الحسن','أم الدروع','أولاد بن عبد القادر','أولاد عباس','أولاد فارس','الأبيض مجاجة','الحجاج','الزبوجة','الشطية','الشلف','الصبحة','الظهرة','الكريمية','المرسى','الهرانفة','بريرة','بنايرية','بني بوعتاب','بني حواء','بني راشد','بوزغاية','بوقادير','تاجنة','تاوقريت','تلعصة','تنس','حرشون','سنجاس','سيدي عبد الرحمن','سيدي عكاشة','عين مران','مصدق','وادي الفضة','وادي سلي','وادي قوسين'],
         '3':['أفلو','الأغواط','البيضاء','الحاج مشري','الحويطة','الخنق','العسافية','الغيشة','بريدة','بن ناصر بن شهرة','تاجرونة','تاجموت','تاويالة','حاسي الدلاعة','حاسي الرمل','سبقاق','سيدي بوزيد','سيدي مخلوف','عين سيدي علي','عين ماضي','قصر الحيران','قلتة سيدي سعد','وادي مرة','وادي مزي'],
-        '4':['أم البواقي','أولاد حملة','أولاد زواي','أولاد قاسم','البلالة','الجازية','الحرملية','الرحية','الزرق','الضلعة','العامرية','الفجوج بوغرارة سعودي','بئر الشهداء','بحير الشرقي','بريش','سوق نعمان','سيقوس','عين البيضاء','عين الديس','عين الزيتون','عين ببوش','عين فكرون','عين كرشة','عين مليلة','فكيرينة','قصر الصباحي','مسكيانة','هنشير تومغني','وادي نيني'],
+        '4':['أم البواقي','أولاد حملة','أولاد زواي','أولاد قاسم','البلالة','الجازية','الحرملية','الرحية','الزرق','الضلعة','العامرية','الفجوج بوغرارة سعودي','بئر الشهداء','بحير الشرقي','بريش','سوق نعمان','سيقوس','عين البيضاء','عين الديس','عين الزيتون','عين ببوش','عين فكرون','عين كرشة','عين مليلة','فكيرينة','قصر الصباحي','مسكيانة','هنين','هنين','وادي نيني'],
         '5':['أريس','أولاد سلام','أولاد سي سليمان','أولاد عمار','أولاد عوف','أولاد فاضل','إشمول','إمدوكل','إينوغيسن','الجزار','الحاسي','الرحبات','الشمرة','القصبات','القيقبة','المعذر','باتنة','بريكة','بني فضالة الحقانية','بوزينة','بولهيلات','بومقر','بومية','بيطام','تازولت','تاكسلانت','تالخمت','تغرغار','تكوت','تيغانمين','تيلاطو','تيمقاد','ثنية العابد','جرمة','حيدوسة','رأس العيون','زانة البيضاء','سريانة','سفيان','سقانة','شير','عزيل عبد القادر','عين التوتة','عين جاسر','عين ياقوت','عيون العصافير','غسيرة','فسديس','فم الطوب','قصر بلزمة','كيمل','لارباع','لازرو','لمسان','مروانة','معافة','منعة','نقاوس','وادي الشعبة','وادي الطاقة','وادي الماء'],
-        '6':['أدكار','أقبو','أكفادو','أمالو','أميزور','أوزلاقن','أوقاس','أيت إسماعيل','أيت رزين','إغيل علي','اغرم','الفلاي','القصر','بجاية','برباشة','بني جليل','بني كسيلة','بني معوش','بني مليكش','بو جليل','بوحمزة','بوخليفة','تازمالت','تاسكريوت','تالا حمزة','تامريجت','تامقرة','تاوريرت إغيل','توجة','تيزي نبربر','تيشي','تيفرة','تيمزريت','تينبدار','خراطة','درقينة','ذراع القايد','سمعون','سوق اوفلا','سوق لإثنين','سيدي عياد','سيدي عيش','شلاطة','شميني','صدوق','طيبان','فرعون','فناية الماثن','كنديرة','مالبو','مسيسنة','وادي غير'],
+        '6':['أدكار','أقبو','أكفادو','أمالو','أميزور','أوقاس','أوزلاقن','أيت إسماعيل','أيت رزين','إغيل علي','اغرم','الفلاي','القصر','بجاية','برباشة','بني جليل','بني كسيلة','بني معوش','بني مليكش','بو جليل','بوحمزة','بوخليفة','تازمالت','تاسكريوت','تالا حمزة','تامريجت','تامقرة','تاوريرت إغيل','توجة','تيزي نبربر','تيشي','تيفرة','تيمزريت','تينبدار','خراطة','درقينة','ذراع القايد','سمعون','سوق اوفلا','سوق لإثنين','سيدي عياد','سيدي عيش','شلاطة','شميني','صدوق','طيبان','فرعون','فناية الماثن','كنديرة','مالبو','مسيسنة','وادي غير'],
         '7':['أورلال','أوماش','الحاجب','الحوش','الغروس','الفيض','القنطرة','المزيرعة','الوطاية','برانيس','برج بن عزوز','بسكرة','بوشقرون','جمورة','خنقة سيدي ناجي','زريبة الوادي','سيدي عقبة','شتمة','طولقة','عين الناقة','عين زعطوط','فوغالة','ليشانة','ليوة','مخادمة','مشونش','مليلي'],
         '8':['العبادلة','القنادسة','المريجة','بشار','بني ونيف','بوكايس','تاغيت','تبلبالة','عرق فراج','لحمر','مشرع هواري بومدين','موغل'],
         '9':['أولاد يعيش','الأربعاء','البليدة','الشبلي','الشريعة','الشفة','الصومعة','العفرون','اولاد سلامة','بن خليل','بني تامو','بني مراد','بوعرفة','بوعينان','بوفاريك','بوقرة','جبابرة','حمام ملوان','صوحان','عين الرمانة','قرواو','مفتاح','موزاية','وادي العلايق','وادي جر'],
         '10':['آث منصور','أعمر','أغبالو','أمشدالة','أهل القصر','أولاد راشد','أيت لعزيز','الأخضرية','الأسنام','البويرة','الحاكمية','الحجرة الزرقاء','الخبوزية','الدشمية','العجيبة','المعمورة','المقراني','الهاشمية','بئر غبالو','برج أوخريص','بشلول','بودربالة','بوكرم','تاغزوت','تاقديت','جباحية','حنيف','حيزر','ديرة','روراوة','ريدان','زبربر','سحاريج','سور الغزلان','سوق الخميس','شرفة','عين الترك','عين الحجر','عين العلوي','عين بسام','قادرية','قرومة','مزدور','معلة','وادي البردي'],
         '11':['أدلس','ابلسة','تاظروك','تمنراست','عين امقل'],
         '12':['أم علي','الحمامات','الحويجبات','الشريعة','العقلة','العقلة المالحة','العوينات','الكويف','الماء الابيض','المريج','المزرعة','الونزة','بئر الذهب','بئر العاتر','بئر مقدم','بجن','بكارية','بوخضرة','بولحاف الدير','تبسة','ثليجان','سطح قنطيس','صفصاف الوسرى','عين الزرقاء','فركان','قريقر','مرسط','نقرين'],
-        '13':['أولاد رياح','أولاد ميمون','البويهي','الحناية','الرمشي','السواحلية','السواني','العريشة','العزايل','الغزوات','الفحول','القور','باب العسة','بن سكران','بني بهدل','بني بوسعيد','بني خلاد','بني سنوس','بني صميل','بني مستر','بني وارسوس','بوحلو','تلمسان','تيانت','تيرني بني هديل','جبالة','حمام بوغرارة','دار يغمراسن','زناتة','سبدو','سبعة شيوخ','سوق الثلاثاء','سيدي الجيلالي','سيدي العبدلي','سيدي مجاهد','شتوان','صبرة','عمير','عين الكبيرة','عين النحالة','عين تالوت','عين غرابة','عين فزة','عين فتاح','عين يوسف','فلاوسن','مرسى بن مهيدي','مسيردة الفواقة','مغنية','منصورة','ندرومة','هنين','وادي الخضر'],
+        '13':['أولاد رياح','أولاد ميمون','البويهي','الحناية','الرمشي','السواحلية','السواني','العريشة','العزايل','الغزوات','الفحول','القور','باب العسة','بن سكران','بني جليل','بني كسيلة','بني خلاد','بني سنوس','بني صميل','بني مستر','بني وارسوس','بوحلو','تلمسان','تيانت','تيرني بني هديل','جبالة','حمام بوغرارة','دار يغمراسن','زناتة','سبدو','سبعة شيوخ','سوق الثلاثاء','سيدي الجيلالي','سيدي العبدلي','سيدي مجاهد','شتوان','صبرة','عمير','عين الكبيرة','عين النحالة','عين تالوت','عين غرابة','عين فزة','عين فتاح','عين يوسف','فلاوسن','مرسى بن مهيدي','مسيردة الفواقة','مغنية','منصورة','ندرومة','هنين','وادي الخضر'],
         '14':['الرحوية','الرشايقة','السبت','السبعين','السوقر','الفايجة','الناظورة','النعيمة','بوقرة','تاقدمت','تخمرت','توسنينة','تيارت','تيدة','جبيلات الرصفاء','جيلالي بن عمار','حمادية','دحموني','زمالة الأمير عبد القادر','سرغين','سي عبد الغني','سيدي بختي','سيدي حسني','سيدي عبد الرحمن','سيدي علي ملال','شحيمة','عين الحديد','عين الذهب','عين بوشقيف','عين دزاريت','عين كرمس','فرندة','قرطوفة','قصر الشلالة','مادنة','مدروسة','مدريسة','مشرع الصفا','مغيلة','ملاكو','مهدية','وادي ليلي'],
-        '15':['أبي يوسف','أزفون','أسي يوسف','أغريب','أقرو','أقني قغران','أيت أومالو','أيت بوادو','أيت بومهدي','أيت تودرت','أيت خليلي','أيت شافع','أيت عقواشة','أيت عيسى ميمون','أيت محمود','أيت يحي موسى','أيت يحيى','إبودرارن','إعكورن','إفرحونان','إفليسن','إمسوحال','إيجار','إيرجن','إيفيغاء','إيليلتن','إيلولة أومالو','اقبيل','الأربعاء ناث إيراثن','بني زمنزار','بني دوالة','بني زيكي','بني عيسي','بني يني','بوجيمة','بوزقن','بوغني','بونوح','تادمايت','تيرمتين','تيزي راشد','تيزي غنيف','تيزي نثلاثة','تيزي وزو','تيقزيرت','تيميزار','ذراع الميزان','ذراع بن خدة','زكري','سوق الإثنين','سيدي نعمان','صوامع','عزازقة','عين الحمام','عين الزاوية','فريحة','فريقات','ماكودة','مشطراس','معاتقة','مقلع','مكيرة','ميزرانة','واسيف','واضية','واقنون','يطافن'],
+        '15':['أبي يوسف','أزفون','أسي يوسف','أغريب','أقرو','أقني قغران','أقني قغران','أيت أومالو','أيت بوادو','أيت بومهدي','أيت تودرت','أيت خليلي','أيت شافع','أيت عقواشة','أيت عيسى ميمون','أيت محمود','أيت يحي موسى','أيت يحيى','إبودرارن','إعكورن','إفرحونان','إفليسن','إمسوحال','إيجار','إيرجن','إيفيغاء','إيليلتن','إيلولة أومالو','اقبيل','الأربعاء ناث إيراثن','بني زمنزار','بني دوالة','بني زيكي','بني عيسي','بني يني','بوجيمة','بوزقن','بوغني','بونوح','تادمايت','تيرمتين','تيزي راشد','تيزي غنيف','تيزي نثلاثة','تيزي وزو','تيقزيرت','تيميزار','ذراع الميزان','ذراع بن خدة','زكري','سوق الإثنين','سيدي نعمان','صوامع','عزازقة','عين الحمام','عين الزاوية','فريحة','فريقات','ماكودة','مشطراس','معاتقة','مقلع','مكيرة','ميزرانة','واسيف','واضية','واقنون','يطافن'],
         '16':['ابن عكنون','الابيار','الجزائر الوسطى','الحراش','الحمامات','الخرايسية','الدار البيضاء','الدرارية','الدويرة','الرايس حميدو','الرحمانية','الرويبة','السحاولة','الشراقة','العاشور','القبة','القصبة','الكاليتوس','المحمدية','المدنية','المرادية','المرسى','المعالمة','المغارية','اولاد شبل','اولاد فايت','بئر توتة','بئر خادم','بئر مراد رايس','باب الزوار','باب الوادي','بابا حسن','باش جراح','براقي','برج البحري','برج الكيفان','بني مسوس','بوروبة','بوزريعة','بولوغين بن زيري','تسالة المرجة','جسر قسنطينة','حسين داي','حيدرة','دالي ابراهيم','رغاية','زرالدة','سطاوالي','سويدانية','سيدي امحمد','سيدي موسى','عين بنيان','عين طاية','محمد بلوزداد','هراوة','وادي السمار','وادي قريش'],
         '17':['أم العظام','الادريسية','الجلفة','الخميس','الشارف','القديد','بن يعقوب','بنهار','بويرة الأحداب','بيرين','تعظميت','حاسي العش','حاسي بحبح','حاسي فدول','حد الصحاري','دار الشيوخ','دلدول','دويس','زعفران','زكار','سد الرحال','سلمانة','سيدي بايزيد','سيدي لعجال','عمورة','عين الإبل','عين الشهداء','عين فقه','عين معبد','عين وسارة','فيض البطمة','قرنيني','قطارة','مجبارة','مسعد','مليليحة'],
         '18':['أراقن سويسي','أولاد رابح','أولاد يحيى خدروش','الامير عبد القادر','الجمعة بني حبيبي','السطارة','الشحنة','الشقفة','الطاهير','العنصر','العوانة','القنار نشفي','الميلية','برج الطهر','بودريعة بني ياجيس','بوراوي بلهادف','بوسيف أولاد عسكر','تاكسنة','جيجل','جيملة','خيري واد عجول','زيامة منصورية','سلمى بن زيادة','سيدي عبد العزيز','سيدي معروف','غبالة','قاوس','وجانة'],
@@ -729,7 +1275,7 @@
         '39':['البياضة','الحمراية','الدبيلة','الرباح','الرقيبة','الطالب العربي','الطريفاوي','العقلة','المقرن','النخلة','الوادي','اميه وانسة','بن قشة','تغزوت','حاسي خليفة','حساني عبد الكريم','دوار الماء','سيدي عون','قمار','كوينين','وادي العلندة','ورماس'],
         '40':['أولاد رشاش','الحامة','الرميلة','المحمل','الولجة','انسيغة','بابار','بغاي','بوحمامة','تاوزيانت','جلال','خنشلة','خيران','ششار','شلية','طامزة','عين الطويلة','قايس','متوسة','مصارة','يابوس'],
         '41':['أم العظايم','أولاد إدريس','أولاد مومن','الحدادة','الحنانشة','الخضارة','الدريعة','الراقوبة','الزعرورية','الزوابي','المراهنة','المشروحة','بئر بوحوش','تاورة','ترقالت','تيفاش','خميسة','سافل الويدان','سدراتة','سوق أهراس','سيدي فرج','عين الزانة','عين سلطان','مداوروش','وادي الكبريت','ويلان'],
-        '42':['أحمر العين','أغبال','الأرهاط','الحطاطبة','الداموس','الشعيبة','القليعة','الناظور','بني ميلك','بواسماعيل','بورقيقة','بوهارون','تيبازة','حجرة النص','حجوط','خميستي','دواودة','سيدي راشد','سيدي سميان','سيدي عامر','سيدي غيلاس','شرشال','عين تاقورايت','فوكة','قوراية','مراد','مسلمون','مناصر'],
+        '42':['أحمر العين','أغبال','الأرهاط','الداموس','الشعيبة','القليعة','الناظور','بني ميلك','بواسماعيل','بورقيقة','بوهارون','تيبازة','حجرة النص','حجوط','خميستي','دواودة','سيدي راشد','سيدي سميان','سيدي عامر','سيدي غيلاس','شرشال','عين تاقورايت','فوكة','قوراية','مراد','مسلمون','مناصر'],
         '43':['عين البيضاء أحريش','أحمد راشدي','أولاد اخلوف','اعميرة اراس','التلاغمة','الرواشد','الشيقارة','العياضي برباس','القرارم قوقة','بن يحي عبد الرحمن','بوحاتم','تاجنانت','ترعي باينان','تسالة لمطاعي','تسدان حدادة','تيبرقنت','حمالة','دراحي بوصلاح','زغاية','سيدي خليفة','سيدي مروان','شلغوم العيد','عين التين','عين الملوك','فرجيوة','مشيرة','ميلة','مينار زارزة','وادي العثمانية','وادي النجاء','وادي سقان','يحي بني قشة'],
         '44':['الحسانية','الحسينية','الروينة','العامرة','العبادية','العطاف','الماين','المخاطرية','بئر ولد خليفة','بربوش','برج الأمير خالد','بطحية','بلعاص','بن علال','بوراشد','بومدفع','تاشتة زقاغة','تبركانين','جليدة','جمعة أولاد الشيخ','جندل','حمام ريغة','خميس مليانة','زدين','سيدي الأخضر','طارق بن زياد','عريب','عين الاشياخ','عين البنيان','عين التركي','عين الدفلى','عين السلطان','عين بويحيى','مليانة','واد الجمعة','وادي الشرفاء'],
         '45':['البيوض','القصدير','المشرية','النعامة','تيوت','جنين بورزق','سفيسيفة','عسلة','عين الصفراء','عين بن خليل','مغرار','مكمن بن عمار'],
@@ -811,14 +1357,13 @@
     }
 
     // ══════════════════════════════════════════════
-    //  WILAYA → BALADIYA (FIXED)
+    //  WILAYA -> BALADIYA
     // ══════════════════════════════════════════════
     document.getElementById('wilaya').addEventListener('change', function () {
         const val = this.value;
         const baladiyaEl = document.getElementById('baladiya');
 
         if (val && communes[val]) {
-            // Build sorted options
             const sorted = [...communes[val]].sort();
             baladiyaEl.innerHTML = '<option value="">-- اختر البلدية --</option>';
             sorted.forEach(function(c) {
@@ -829,7 +1374,6 @@
             });
             baladiyaEl.disabled = false;
 
-            // Update delivery prices
             const opt = this.options[this.selectedIndex];
             homePrice = parseInt(opt.getAttribute('data-home')) || 0;
             deskPrice = parseInt(opt.getAttribute('data-desk')) || 0;
@@ -870,6 +1414,7 @@
         const newQty = Math.max(1, Math.min(10, currentQty + delta));
         if (newQty !== currentQty) {
             currentQty = newQty;
+            trackQtyChange(currentQty);
             trackAddToCart(currentQty);
             ga4AddToCart(currentQty);
             updateUI();
@@ -877,8 +1422,13 @@
     }
 
     function scrollToForm(e) {
-        e.preventDefault();
+        if (e) e.preventDefault();
         document.getElementById('cod-form').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    function scrollToSection(id, e) {
+        if (e) e.preventDefault();
+        document.getElementById(id).scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
 
     function validate() {
@@ -980,7 +1530,6 @@
 
     function showSuccess() {
         document.getElementById('successPopup').classList.add('active');
-        // Reset form
         document.getElementById('orderForm').reset();
         currentQty = 1;
         currentDeliveryPrice = 0;
@@ -1008,31 +1557,8 @@
     });
 
     // ══════════════════════════════════════════════
-    //  SECTION ARROWS — Click-to-scroll, hide once passed
+    //  INIT
     // ══════════════════════════════════════════════
-    const arrowClicked = new Set();
-
-    function scrollToNextSection(currentIndex) {
-        const sections = document.querySelectorAll('.img-section, .cod-section');
-        const nextSection = sections[currentIndex + 1];
-        if (nextSection) {
-            arrowClicked.add(currentIndex);
-            const arrowWrap = document.querySelector('.section-arrow-wrap[data-arrow-index="' + currentIndex + '"]');
-            if (arrowWrap) arrowWrap.classList.add('hidden');
-            nextSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }
-    }
-
-    window.addEventListener('scroll', function () {
-        document.querySelectorAll('.section-arrow-wrap').forEach(function(arrow) {
-            const idx = parseInt(arrow.dataset.arrowIndex);
-            if (arrowClicked.has(idx)) {
-                arrow.classList.add('hidden');
-            }
-        });
-    }, { passive: true });
-
-    // Init
     ga4ViewContent();
     updateUI();
     </script>
