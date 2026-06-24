@@ -122,21 +122,19 @@
         }
 
         /* ══════════════════════════════════════════════
-   SCROLL INDICATOR - FIXED POSITION ABOVE FLOAT BUTTON
+   SCROLL INDICATOR - BETWEEN SECTIONS
    ══════════════════════════════════════════════ */
 .scroll-indicator {
-    position: absolute;
-    bottom: 90px;          /* ↑ Was 30px — push up above float-btn (80px tall + padding) */
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 100;
-    cursor: pointer;
+    position: relative;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 6px;              /* Slightly tighter gap */
-    animation: scrollPulse 2s ease-in-out infinite;
+    gap: 6px;
     text-decoration: none;
+    margin-top: -34px;   /* Pull up to sit between sections */
+    margin-bottom: -34px; /* Pull down to sit between sections */
+    z-index: 10;
+    cursor: pointer;
 }
 
 .scroll-indicator.hidden {
@@ -147,43 +145,53 @@
 
 .scroll-text {
     color: #fff;
-    font-size: 1rem;
+    font-size: 0.9rem;
     font-weight: 900;
-    text-shadow: 0 2px 12px rgba(0,0,0,0.9), 0 0 4px rgba(0,0,0,0.9);
-    letter-spacing: 1px;
-    background: rgba(0,0,0,0.6);
+    text-shadow: 0 2px 8px rgba(0,0,0,0.9), 0 0 4px rgba(0,0,0,0.9);
+    letter-spacing: 0.5px;
+    background: rgba(10, 22, 40, 0.85);
     padding: 6px 16px;
     border-radius: 20px;
     white-space: nowrap;
     animation: textGlow 2s ease-in-out infinite;
-    margin-bottom: 4px;      /* Extra push up from arrow */
+    backdrop-filter: blur(4px);
+    border: 1px solid rgba(245,197,24,0.3);
 }
 
 .scroll-arrow {
-    width: 56px;
-    height: 56px;
+    width: 48px;
+    height: 48px;
     background: linear-gradient(135deg, var(--gold), var(--gold-dark));
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
     box-shadow:
-        0 0 0 4px rgba(245,197,24,0.9),
-        0 0 0 10px rgba(245,197,24,0.3),
-        0 0 0 18px rgba(245,197,24,0.1),
-        0 10px 40px rgba(0,0,0,0.7);
+        0 0 0 3px rgba(245,197,24,0.8),
+        0 0 0 8px rgba(245,197,24,0.2),
+        0 4px 20px rgba(0,0,0,0.5);
     animation: arrowBounce 1.5s ease-in-out infinite;
+    position: relative;
+}
+
+.scroll-arrow::before {
+    content: '';
+    position: absolute;
+    inset: -4px;
+    border-radius: 50%;
+    border: 2px solid rgba(245,197,24,0.3);
+    animation: pulseRing 2s ease-in-out infinite;
 }
 
 .scroll-arrow svg {
-    width: 28px;
-    height: 28px;
+    width: 24px;
+    height: 24px;
     fill: var(--navy);
 }
 
 @keyframes scrollPulse {
-    0%, 100% { transform: translateX(-50%) translateY(0); }
-    50% { transform: translateX(-50%) translateY(-8px); }
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-6px); }
 }
 
 @keyframes textGlow {
@@ -193,7 +201,12 @@
 
 @keyframes arrowBounce {
     0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-12px); }
+    50% { transform: translateY(-8px); }
+}
+
+@keyframes pulseRing {
+    0%, 100% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.15); opacity: 0.5; }
 }
 
         /* ══════════════════════════════════════════════
@@ -685,94 +698,77 @@
     <a class="float-btn" id="floatBtn" onclick="handleFloatClick(event)" href="#section2">👇 اسحب الى الأسفل لاكتشاف كل التفاصيل</a>
 
     <!-- ══════════════════════════════════════════════
-         HERO SECTION - OPTIMIZED FOR INSTANT LCP
+         HERO SECTION
          ══════════════════════════════════════════════ -->
     <div class="img-section hero-section" id="heroSection">
-        <div class="img-placeholder" id="heroPlaceholder" style="background-image: url('data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEASABIAAD/2wBDAAEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQH/2wBDAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQH/wAARCAAIAAgDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAX/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBAAIRAxEAPwCdABmX/9k=');"></div>
-        <img 
-            class="fullscreen-img" 
-            id="heroImg"
-            src="hero.jpg" 
-            alt="Champions League" 
-            width="1200" 
-            height="800"
-            fetchpriority="high"
-            decoding="async"
-            onload="this.classList.add('loaded'); document.getElementById('heroSection').classList.add('loaded'); document.getElementById('heroPlaceholder').style.opacity='0';"
-        />
-        
+        <div class="img-placeholder" id="heroPlaceholder" style="background-image: url('data:image/jpeg;base64,...');"></div>
+        <img class="fullscreen-img" id="heroImg" src="hero.jpg" alt="Champions League" width="1200" height="800" fetchpriority="high" decoding="async"
+            onload="this.classList.add('loaded'); document.getElementById('heroSection').classList.add('loaded'); document.getElementById('heroPlaceholder').style.opacity='0';" />
     </div>
+
+    <!-- Arrow between Hero and Section 2 -->
+    <a href="#section2" class="scroll-indicator" onclick="scrollToSection('section2', event)">
+        <span class="scroll-text">👇 اسحب للأسفل</span>
+        <div class="scroll-arrow">
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/>
+            </svg>
+        </div>
+    </a>
 
     <!-- ══════════════════════════════════════════════
          SECTION 2: PROBLEM + SOLUTION
          ══════════════════════════════════════════════ -->
     <div class="img-section reveal" id="section2">
-        <div class="img-placeholder" style="background-image: url('data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEASABIAAD/2wBDAAEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQH/2wBDAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQH/wAARCAAIAAgDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAX/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBAAIRAxEAPwCdABmX/9k=');"></div>
-        <img 
-            class="fullscreen-img lazy-img" 
-            data-src="ProblemSolution.jpg" 
-            alt="المشكلة والحل" 
-            width="1200" 
-            height="800"
-            loading="lazy"
-            decoding="async"
-        />
-        <a href="#section3" class="scroll-indicator" onclick="scrollToSection('section3', event)">
-            <span class="scroll-text">استمر في التمرير</span>
-            <div class="scroll-arrow">
-                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/>
-                </svg>
-            </div>
-        </a>
+        <div class="img-placeholder" style="background-image: url('data:image/jpeg;base64,...');"></div>
+        <img class="fullscreen-img lazy-img" data-src="ProblemSolution.jpg" alt="المشكلة والحل" width="1200" height="800" loading="lazy" decoding="async" />
     </div>
+
+    <!-- Arrow between Section 2 and Section 3 -->
+    <a href="#section3" class="scroll-indicator" onclick="scrollToSection('section3', event)">
+        <span class="scroll-text">استمر في التمرير</span>
+        <div class="scroll-arrow">
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/>
+            </svg>
+        </div>
+    </a>
 
     <!-- ══════════════════════════════════════════════
          SECTION 3: BENEFITS
          ══════════════════════════════════════════════ -->
     <div class="img-section reveal" id="section3">
-        <div class="img-placeholder" style="background-image: url('data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEASABIAAD/2wBDAAEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQH/2wBDAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQH/wAARCAAIAAgDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAX/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBAAIRAxEAPwCdABmX/9k=');"></div>
-        <img 
-            class="fullscreen-img lazy-img" 
-            data-src="Benefits.jpg" 
-            alt="المميزات" 
-            width="1200" 
-            height="800"
-            loading="lazy"
-            decoding="async"
-        />
-        <a href="#section4" class="scroll-indicator" onclick="scrollToSection('section4', event)">
-            <span class="scroll-text">شاهد العرض المميز</span>
-            <div class="scroll-arrow">
-                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/>
-                </svg>
-            </div>
-        </a>
+        <div class="img-placeholder" style="background-image: url('data:image/jpeg;base64,...');"></div>
+        <img class="fullscreen-img lazy-img" data-src="Benefits.jpg" alt="المميزات" width="1200" height="800" loading="lazy" decoding="async" />
     </div>
+
+    <!-- Arrow between Section 3 and Section 4 -->
+    <a href="#section4" class="scroll-indicator" onclick="scrollToSection('section4', event)">
+        <span class="scroll-text">شاهد العرض المميز</span>
+        <div class="scroll-arrow">
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/>
+            </svg>
+        </div>
+    </a>
 
     <!-- ══════════════════════════════════════════════
          SECTION 4: OFFER
          ══════════════════════════════════════════════ -->
     <div class="img-section reveal" id="section4">
-        <div class="img-placeholder" style="background-image: url('data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEASABIAAD/2wBDAAEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQH/2wBDAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQH/wAARCAAIAAgDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAX/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBAAIRAxEAPwCdABmX/9k=');"></div>
-        <img 
-            class="fullscreen-img lazy-img" 
-            data-src="offer.jpg" 
-            alt="العرض" 
-            width="1200" 
-            height="800"
-            loading="lazy"
-            decoding="async"
-        />
-        <a href="#cod-form" class="scroll-indicator" onclick="scrollToSection('cod-form', event)">
-            <span class="scroll-text"> اطلب الان</span>
-            <div class="scroll-arrow">
-                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/>
-                </svg>
-            </div>
-        </a>
+        <div class="img-placeholder" style="background-image: url('data:image/jpeg;base64,...');"></div>
+        <img class="fullscreen-img lazy-img" data-src="offer.jpg" alt="العرض" width="1200" height="800" loading="lazy" decoding="async" />
+    </div>
+
+    <!-- Arrow between Section 4 and Form -->
+    <a href="#cod-form" class="scroll-indicator" onclick="scrollToSection('cod-form', event)">
+        <span class="scroll-text">اطلب الآن</span>
+        <div class="scroll-arrow">
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/>
+            </svg>
+        </div>
+    </a>
     </div>
 
     <!-- ══════════════════════════════════════════════
