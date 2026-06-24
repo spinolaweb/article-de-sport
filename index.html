@@ -695,7 +695,86 @@
                 padding: 36px 20px;
             }
         }
-    </style>
+    
+
+        /* ── Section Down Arrows ── */
+        .section-arrow-wrap {
+            position: absolute;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 100;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            transition: opacity 0.6s ease, transform 0.6s ease;
+            opacity: 1;
+            pointer-events: auto;
+        }
+        .section-arrow-wrap.hidden {
+            opacity: 0;
+            pointer-events: none;
+            transform: translateX(-50%) translateY(20px);
+        }
+        .section-arrow-wrap .arrow-text {
+            color: white;
+            font-size: 0.85rem;
+            font-weight: 700;
+            text-shadow: 0 2px 8px rgba(0,0,0,0.5);
+            letter-spacing: 1px;
+            animation: fadePulse 2s ease-in-out infinite;
+        }
+        .section-arrow {
+            width: 56px;
+            height: 56px;
+            background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 6px 25px rgba(245, 197, 24, 0.4), 0 0 0 4px rgba(245, 197, 24, 0.15);
+            animation: arrowBounce 1.8s ease-in-out infinite;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .section-arrow:hover {
+            transform: scale(1.15);
+            box-shadow: 0 8px 35px rgba(245, 197, 24, 0.6), 0 0 0 6px rgba(245, 197, 24, 0.2);
+        }
+        .section-arrow svg {
+            width: 24px;
+            height: 24px;
+            fill: var(--navy);
+            filter: drop-shadow(0 1px 2px rgba(0,0,0,0.2));
+        }
+        @keyframes arrowBounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-12px); }
+        }
+        @keyframes fadePulse {
+            0%, 100% { opacity: 0.7; }
+            50% { opacity: 1; }
+        }
+        /* Make sections position relative for arrow positioning */
+        section:not(.cod-section) {
+            position: relative;
+        }
+        @media (max-width: 768px) {
+            .section-arrow {
+                width: 48px;
+                height: 48px;
+            }
+            .section-arrow svg {
+                width: 20px;
+                height: 20px;
+            }
+            .section-arrow-wrap {
+                bottom: 24px;
+            }
+        }
+</style>
+<base target="_blank">
 <base target="_blank">
 </head>
 <body>
@@ -707,23 +786,55 @@
     <section>
         <img class="fullscreen-img" src="hero.jpg" alt="Champions League" onerror="this.style.background='linear-gradient(135deg, #0A1628, #122040)'" />
         <span class="fb-price" aria-label="2900 DZD" data-price="2900">2900 دج</span>
-    </section>
+    
+        <div class="section-arrow-wrap" data-arrow-index="0" onclick="scrollToNextSection(0)">
+            <div class="arrow-text">استمر للأسفل</div>
+            <div class="section-arrow">
+                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/>
+                </svg>
+            </div>
+        </div></section>
 
     <!-- ═══ PROBLEM + SOLUTION ═══ -->
     <section>
         <img class="fullscreen-img" src="ProblemSolution.jpg" alt="المشكلة والحل" onerror="this.style.background='#0A1628'" />
-    </section>
+    
+        <div class="section-arrow-wrap" data-arrow-index="1" onclick="scrollToNextSection(1)">
+            <div class="arrow-text">استمر للأسفل</div>
+            <div class="section-arrow">
+                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/>
+                </svg>
+            </div>
+        </div></section>
 
     <!-- ═══ BENEFITS ═══ -->
     <section>
         <img class="fullscreen-img" src="Benefits.jpg" alt="المميزات" onerror="this.style.background='linear-gradient(135deg, #fafbff, #f0f4ff)'" />
-    </section>
+    
+        <div class="section-arrow-wrap" data-arrow-index="2" onclick="scrollToNextSection(2)">
+            <div class="arrow-text">استمر للأسفل</div>
+            <div class="section-arrow">
+                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/>
+                </svg>
+            </div>
+        </div></section>
 
     <!-- ═══ OFFER ═══ -->
     <section>
         <img class="fullscreen-img" src="offer.jpg" alt="العرض" onerror="this.style.background='#0A1628'" />
         <span class="fb-price" aria-label="2900 DZD" data-price="2900">2900 دج</span>
-    </section>
+    
+        <div class="section-arrow-wrap" data-arrow-index="3" onclick="scrollToNextSection(3)">
+            <div class="arrow-text">استمر للأسفل</div>
+            <div class="section-arrow">
+                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/>
+                </svg>
+            </div>
+        </div></section>
 
     <!-- ═══ COD FORM ═══ -->
     <section class="cod-section" id="cod-form">
@@ -1780,6 +1891,80 @@
         // Fire GA4 view_item on load
         ga4ViewContent();
         updateUI();
-    </script>
+    
+
+        // ═══════════════════════════════════════════════════════════
+        //  SECTION DOWN ARROWS — Click to scroll, one-time visibility
+        // ═══════════════════════════════════════════════════════════
+
+        // Track which arrows have been clicked (won't reappear)
+        const arrowClicked = new Set();
+
+        function scrollToNextSection(currentIndex) {
+            const sections = document.querySelectorAll('section');
+            const nextSection = sections[currentIndex + 1];
+            if (nextSection) {
+                // Mark this arrow as clicked
+                arrowClicked.add(currentIndex);
+
+                // Hide this arrow immediately
+                const arrowWrap = document.querySelector('.section-arrow-wrap[data-arrow-index="' + currentIndex + '"]');
+                if (arrowWrap) {
+                    arrowWrap.classList.add('hidden');
+                }
+
+                // Scroll to next section
+                nextSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+                // After scrolling, ensure arrow stays hidden
+                setTimeout(() => {
+                    if (arrowWrap) arrowWrap.classList.add('hidden');
+                }, 1000);
+            }
+        }
+
+        // IntersectionObserver to hide arrows when user scrolls past them
+        // Once hidden, they won't reappear even when scrolling back up
+        const arrowObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                const arrowIndex = parseInt(entry.target.dataset.arrowIndex);
+                if (!arrowIndex && arrowIndex !== 0) return;
+
+                // If arrow is scrolled out of view (going down), mark it
+                if (!entry.isIntersecting && entry.boundingClientRect.top < 0) {
+                    // User scrolled past this arrow (going down)
+                    arrowClicked.add(arrowIndex);
+                    entry.target.classList.add('hidden');
+                }
+                // If arrow was already clicked/hidden, keep it hidden even when scrolling back up
+                if (arrowClicked.has(arrowIndex)) {
+                    entry.target.classList.add('hidden');
+                }
+            });
+        }, {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        });
+
+        // Observe all arrow wraps
+        document.querySelectorAll('.section-arrow-wrap').forEach(arrow => {
+            arrowObserver.observe(arrow);
+        });
+
+        // Also handle scroll event to ensure arrows stay hidden after being passed
+        let lastScrollY = window.scrollY;
+        window.addEventListener('scroll', () => {
+            const currentScrollY = window.scrollY;
+
+            document.querySelectorAll('.section-arrow-wrap').forEach(arrow => {
+                const arrowIndex = parseInt(arrow.dataset.arrowIndex);
+                if (arrowClicked.has(arrowIndex)) {
+                    arrow.classList.add('hidden');
+                }
+            });
+
+            lastScrollY = currentScrollY;
+        }, { passive: true });
+</script>
 </body>
 </html>
