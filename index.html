@@ -915,7 +915,7 @@
     // ── FIX 1: sendToTelegram now RETURNS a boolean so we know if it succeeded ──
     async function sendToTelegram(orderData) {
         const deliveryLabel = orderData.deliveryType === 'home' ? 'توصيل للمنزل 🏠' : 'التوصيل للمكتب 📦';
-        const message = `🛒 <b>طلب جديد - Champions League</b>\n\n👤 <b>الاسم:</b> ${orderData.customerName}\n📱 <b>الهاتف:</b> <code>${orderData.customerPhone}</code>\n🗺️ <b>الولاية:</b> ${orderData.wilayaText}\n🏘️ <b>البلدية:</b> ${orderData.baladiya}\n\n📦 <b>الكمية:</b> ${orderData.currentQty}\n💰 <b>سعر المنتج:</b> ${orderData.productPrice.toLocaleString('fr-DZ')} دج\n🚚 <b>نوع التوصيل:</b> ${deliveryLabel}\n📍 <b>سعر التوصيل:</b> ${orderData.currentDeliveryPrice.toLocaleString('fr-DZ')} دج\n\n💵 <b>المجموع الكلي:</b> <code>${orderData.total.toLocaleString('fr-DZ')} دج</code>\n📅 <b>التاريخ:</b> ${orderData.dateStr}`.trim();
+        const message = `🛒 <b>طلب جديد - Champions League</b>\n\n👤 <b>الاسم:</b> ${orderData.customerName}\n📱 <b>الهاتف:</b> <code>${orderData.customerPhone}</code>\n🗺️ <b>الولاية:</b> ${orderData.wilayaText}\n🏘️ <b>البلدية:</b> ${orderData.baladiya}\n\n📦 <b>الكمية:</b> ${orderData.currentQty}\n💰 <b>سعر المنتج:</b> ${orderData.productPrice.toLocaleString('fr-DZ')} دج\n🚚 <b>نوع التوصيل:</b> ${deliveryLabel}\n📍 <b>سعر التوصيل:</b> ${orderData.currentDeliveryPrice.toLocaleString('fr-DZ')} دج\n\n💵 <b>المجموع الكلي:</b> <code>${orderData.total.toLocaleString('fr-DZ')} دج</code>\n📅 <b>التاريخ:</b> ${orderData.dateStr}\n🆔 <b>معرف الطلب:</b> <code>${orderData.transactionId}</code>`.trim();
         try {
             const res = await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, {
                 method: 'POST',
@@ -931,7 +931,7 @@
 
     async function sendToTelegram2(orderData) {
         const deliveryLabel = orderData.deliveryType === 'home' ? 'توصيل للمنزل 🏠' : 'التوصيل للمكتب 📦';
-        const message = `🛒 <b>طلب جديد - Champions League</b>\n\n👤 <b>الاسم:</b> ${orderData.customerName}\n📱 <b>الهاتف:</b> <code>${orderData.customerPhone}</code>\n🗺️ <b>الولاية:</b> ${orderData.wilayaText}\n🏘️ <b>البلدية:</b> ${orderData.baladiya}\n\n📦 <b>الكمية:</b> ${orderData.currentQty}\n💰 <b>سعر المنتج:</b> ${orderData.productPrice.toLocaleString('fr-DZ')} دج\n🚚 <b>نوع التوصيل:</b> ${deliveryLabel}\n📍 <b>سعر التوصيل:</b> ${orderData.currentDeliveryPrice.toLocaleString('fr-DZ')} دج\n\n💵 <b>المجموع الكلي:</b> <code>${orderData.total.toLocaleString('fr-DZ')} دج</code>\n📅 <b>التاريخ:</b> ${orderData.dateStr}`.trim();
+        const message = `🛒 <b>طلب جديد - Champions League</b>\n\n👤 <b>الاسم:</b> ${orderData.customerName}\n📱 <b>الهاتف:</b> <code>${orderData.customerPhone}</code>\n🗺️ <b>الولاية:</b> ${orderData.wilayaText}\n🏘️ <b>البلدية:</b> ${orderData.baladiya}\n\n📦 <b>الكمية:</b> ${orderData.currentQty}\n💰 <b>سعر المنتج:</b> ${orderData.productPrice.toLocaleString('fr-DZ')} دج\n🚚 <b>نوع التوصيل:</b> ${deliveryLabel}\n📍 <b>سعر التوصيل:</b> ${orderData.currentDeliveryPrice.toLocaleString('fr-DZ')} دج\n\n💵 <b>المجموع الكلي:</b> <code>${orderData.total.toLocaleString('fr-DZ')} دج</code>\n📅 <b>التاريخ:</b> ${orderData.dateStr}\n🆔 <b>معرف الطلب:</b> <code>${orderData.transactionId}</code>`.trim();
         try {
             const res = await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN_2}/sendMessage`, {
                 method: 'POST',
@@ -978,9 +978,21 @@
             fbq('track', 'InitiateCheckout', { contents: [{ id: PIXEL_PRODUCT_ID, quantity: qty }], content_type: 'product', value: (PIXEL_PRICE_PER_UNIT * qty) + deliveryPrice, currency: PIXEL_CURRENCY, num_items: qty });
         }
     }
-    function trackPurchase(qty, deliveryPrice, customerName, customerPhone, customerWilaya) {
+        function trackPurchase(qty, deliveryPrice, customerName, customerPhone, customerWilaya, transactionId) {
         if (pixelReady && typeof fbq !== 'undefined') {
-            fbq('track', 'Purchase', { contents: [{ id: PIXEL_PRODUCT_ID, quantity: qty }], content_type: 'product', value: (PIXEL_PRICE_PER_UNIT * qty) + deliveryPrice, currency: PIXEL_CURRENCY, num_items: qty, customer_name: customerName, customer_phone: formatPhoneForFacebook(customerPhone), customer_wilaya: customerWilaya });
+            fbq('track', 'Purchase',
+                {
+                    contents: [{ id: PIXEL_PRODUCT_ID, quantity: qty }],
+                    content_type: 'product',
+                    value: (PIXEL_PRICE_PER_UNIT * qty) + deliveryPrice,
+                    currency: PIXEL_CURRENCY,
+                    num_items: qty,
+                    customer_name: customerName,
+                    customer_phone: formatPhoneForFacebook(customerPhone),
+                    customer_wilaya: customerWilaya
+                },
+                { eventID: transactionId }
+            );
         }
     }
 
@@ -996,8 +1008,15 @@
     function ga4BeginCheckout(qty, deliveryPrice) {
         gtag('event', 'begin_checkout', { currency: 'DZD', value: (PIXEL_PRICE_PER_UNIT * qty) + deliveryPrice, items: [{ item_id: PIXEL_PRODUCT_ID, item_name: 'Champions League Ball', price: PIXEL_PRICE_PER_UNIT, quantity: qty }] });
     }
-    function ga4Purchase(qty, deliveryPrice) {
-        gtag('event', 'purchase', { transaction_id: 'ORD-' + Date.now(), value: (PIXEL_PRICE_PER_UNIT * qty) + deliveryPrice, currency: 'DZD', tax: 0, shipping: deliveryPrice, items: [{ item_id: PIXEL_PRODUCT_ID, item_name: 'Champions League Ball', price: PIXEL_PRICE_PER_UNIT, quantity: qty }] });
+        function ga4Purchase(qty, deliveryPrice, transactionId) {
+        gtag('event', 'purchase', {
+            transaction_id: transactionId,
+            value: (PIXEL_PRICE_PER_UNIT * qty) + deliveryPrice,
+            currency: 'DZD',
+            tax: 0,
+            shipping: deliveryPrice,
+            items: [{ item_id: PIXEL_PRODUCT_ID, item_name: 'Champions League Ball', price: PIXEL_PRICE_PER_UNIT, quantity: qty }]
+        });
     }
 
     // ══════════════════════════════════════════════
@@ -1374,15 +1393,13 @@
         return ok;
     }
 
-    async function submitOrder() {
-        // ── FIX 3: hard permanent lock — first click wins, all others ignored ──
+        async function submitOrder() {
         if (orderSubmitted) return;
         if (!validate()) {
             document.querySelector('.cod-form').scrollIntoView({ behavior: 'smooth', block: 'start' });
             return;
         }
 
-        // Lock immediately — before any async work
         orderSubmitted = true;
 
         const btn = document.getElementById('submitBtn');
@@ -1402,50 +1419,69 @@
         const customerName  = document.getElementById('fullName').value.trim();
         const customerPhone = document.getElementById('phone').value.trim();
 
+        // ── CRITICAL: Generate unique ID and capture values BEFORE any reset ──
+        const transactionId = 'ORD-' + Date.now() + '-' + Math.random().toString(36).substr(2, 9);
+        const orderQty = currentQty;
+        const orderDeliveryPrice = currentDeliveryPrice;
+        const orderDeliveryType = deliveryType;
+
         const orderData = {
             customerName, customerPhone, wilayaText, baladiya,
-            currentQty, productPrice, deliveryType,
-            currentDeliveryPrice, total, dateStr
+            currentQty: orderQty, productPrice, deliveryType: orderDeliveryType,
+            currentDeliveryPrice: orderDeliveryPrice, total, dateStr, transactionId
         };
 
         const payload = {
+            transaction_id: transactionId,
             date: dateStr, nom: customerName, phone: customerPhone,
             wilaya: wilayaText, commune: baladiya,
             produit: 'Champions League (Landing Page)',
-            prix_produit: productPrice, quantite: currentQty, prix_total: total,
-            livraison: deliveryType === 'home' ? 'A Domicile' : 'Point Relais',
-            prix_livraison: currentDeliveryPrice, delivery_type_code: deliveryType,
+            prix_produit: productPrice, quantite: orderQty, prix_total: total,
+            livraison: orderDeliveryType === 'home' ? 'A Domicile' : 'Point Relais',
+            prix_livraison: orderDeliveryPrice, delivery_type_code: orderDeliveryType,
             home_price: homePrice, desk_price: deskPrice,
             product_base_price: PRODUCT_BASE, product_qty2_price: PRODUCT_QTY2
         };
 
         const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxdTbudRsIZ0ANuEtKrl8wtWFCiH8K_OCk9rC53HPiLqih_3W4LBfqlKlrjYj-2pnHF/exec';
 
-        // ── FIX 4: send to Telegram FIRST and wait — only then show success & fire pixel ──
+        let sheetSuccess = false;
+        let telegram1Success = false;
+        let telegram2Success = false;
+
         try {
             await fetch(APPS_SCRIPT_URL, {
                 method: 'POST', mode: 'no-cors',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(payload)
             });
+            sheetSuccess = true;
         } catch(e) { console.warn('Sheet send error', e); }
 
-        // Both Telegram calls are awaited before success is shown
-        await sendToTelegram(orderData);
-        await sendToTelegram2(orderData);
+        telegram1Success = await sendToTelegram(orderData);
+        telegram2Success = await sendToTelegram2(orderData);
 
-        // ── FIX 5: showSuccess BEFORE pixel — form is reset, then pixel fires ──
+        // ── CRITICAL: Only fire Purchase if at least one backend confirmed ──
+        if (!sheetSuccess && !telegram1Success && !telegram2Success) {
+            btn.innerHTML = '<span>❌ فشل الإرسال، اضغط للمحاولة</span>';
+            btn.disabled = false;
+            orderSubmitted = false; // allow retry
+            alert('حدث خطأ في إرسال الطلب. يرجى التحقق من اتصالك والمحاولة مرة أخرى.');
+            return;
+        }
+
+        // ── CRITICAL: Fire pixel WITH CAPTURED values (before showSuccess resets them) ──
+        trackPurchase(orderQty, orderDeliveryPrice, customerName, customerPhone, wilayaText, transactionId);
+        ga4Purchase(orderQty, orderDeliveryPrice, transactionId);
+
+        // Now safe to reset
         showSuccess();
 
-        // Purchase pixel fires ONLY once, ONLY after confirmed Telegram delivery
-        trackPurchase(currentQty, currentDeliveryPrice, customerName, customerPhone, wilayaText);
-        ga4Purchase(currentQty, currentDeliveryPrice);
-
-        // ── FIX 6: button stays disabled permanently after submission ──
-        // Do NOT re-enable: btn.disabled = false  ← removed intentionally
+        btn.innerHTML = '<span>✅ تم الإرسال بنجاح</span>';
+        // btn stays disabled — page refresh needed for new order (prevents double-fire)
     }
 
-    function showSuccess() {
+        function showSuccess() {
         document.getElementById('successPopup').classList.add('active');
         document.getElementById('orderForm').reset();
         currentQty           = 1;
@@ -1453,6 +1489,7 @@
         homePrice            = 0;
         deskPrice            = 0;
         deliveryType         = 'home';
+        addToCartFired       = false; // ← reset for next order session
         document.getElementById('qtyDisplay').textContent = '1';
         document.getElementById('baladiya').disabled = true;
         document.getElementById('baladiya').innerHTML = '<option value="">-- اختر الولاية أولاًّ --</option>';
