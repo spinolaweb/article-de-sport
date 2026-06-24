@@ -702,8 +702,9 @@
          ══════════════════════════════════════════════ -->
     <div class="img-section hero-section" id="heroSection">
         <div class="img-placeholder" id="heroPlaceholder" style="background-image: url('data:image/jpeg;base64,...');"></div>
-        <img class="fullscreen-img" id="heroImg" src="hero.jpg" alt="Champions League" width="1200" height="800" fetchpriority="high" decoding="async"
-            onload="this.classList.add('loaded'); document.getElementById('heroSection').classList.add('loaded'); document.getElementById('heroPlaceholder').style.opacity='0';" />
+                <img class="fullscreen-img" id="heroImg" src="hero.jpg" alt="Champions League" width="1200" height="800" fetchpriority="high" decoding="async"
+            onload="this.classList.add('loaded'); document.getElementById('heroSection').classList.add('loaded'); document.getElementById('heroPlaceholder').style.opacity='0';"
+            onerror="this.style.opacity='1'; document.getElementById('heroSection').classList.add('loaded');" />
     </div>
 
     <!-- Arrow between Hero and Section 2 -->
@@ -768,8 +769,7 @@
                 <path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/>
             </svg>
         </div>
-    </a>
-    </div>
+        </a>
 
     <!-- ══════════════════════════════════════════════
          COD FORM SECTION
@@ -1223,27 +1223,29 @@
     // ══════════════════════════════════════════════
     //  LAZY IMAGE LOADING WITH INTERSECTION OBSERVER
     // ══════════════════════════════════════════════
-    const imgObserver = new IntersectionObserver(function(entries) {
+        const imgObserver = new IntersectionObserver(function(entries) {
         entries.forEach(function(entry) {
             if (entry.isIntersecting) {
                 const img = entry.target;
                 const src = img.dataset.src;
                 if (src) {
-                    img.src = src;
+                    // FIX: Set handlers BEFORE src so cached images still trigger
                     img.onload = function() {
                         img.classList.add('loaded');
                         img.parentElement.classList.add('loaded');
                     };
+                    img.onerror = function() {
+                        console.error('Image failed:', src);
+                        img.style.opacity = '1';
+                        img.parentElement.classList.add('loaded');
+                    };
+                    img.src = src;
                     img.removeAttribute('data-src');
                 }
                 imgObserver.unobserve(img);
             }
         });
     }, { rootMargin: '200px 0px', threshold: 0 });
-
-    document.querySelectorAll('.lazy-img').forEach(function(img) {
-        imgObserver.observe(img);
-    });
 
     // ══════════════════════════════════════════════
     //  COMMUNES DATA
@@ -1681,11 +1683,20 @@ function updateFloatBtn() {
 // Add updateFloatBtn as a SEPARATE scroll listener (don't override trackScrollDepth)
 window.addEventListener('scroll', updateFloatBtn, { passive: true });
 
-    // ══════════════════════════════════════════════
+        // ══════════════════════════════════════════════
     //  INIT
     // ══════════════════════════════════════════════
     ga4ViewContent();
     updateUI();
-    </script>
-</body>
-</html>
+
+    // Hero image cached fallback
+    (function initHero() {
+        const heroImg = document.getElementById('heroImg');
+        const heroSection = document.getElementById('heroSection');
+        const heroPlaceholder = document.getElementById('heroPlaceholder');
+        if (heroImg && heroImg.complete && heroImg.naturalHeight > 0) {
+            heroImg.classList.add('loaded');
+            heroSection.classList.add('loaded');
+            if (heroPlaceholder) heroPlaceholder.style.opacity = '0';
+        }
+    })();
