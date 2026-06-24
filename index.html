@@ -157,20 +157,107 @@
             pointer-events: none;
         }
 
+
+
         /* ── Fullscreen Images ── */
         .fullscreen-img {
             width: 100%;
-            height: 100vh;
+            height: 100%;
             display: block;
-            object-fit: cover;
+            object-fit: contain;
             object-position: center;
         }
-        @media (min-width: 769px) {
-            .fullscreen-img {
-                object-fit: contain;
-                background: var(--navy);
+
+        /* ── Image Sections ── */
+        section:not(.cod-section) {
+            position: relative;
+            width: 100%;
+            height: 100vh;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: var(--navy);
+            overflow: hidden;
+        }
+
+        /* ── Section Down Arrows ── */
+        .section-arrow-wrap {
+            position: absolute;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 100;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            transition: opacity 0.6s ease, transform 0.6s ease;
+            opacity: 1;
+            pointer-events: auto;
+        }
+        .section-arrow-wrap.hidden {
+            opacity: 0;
+            pointer-events: none;
+            transform: translateX(-50%) translateY(20px);
+        }
+        .section-arrow-wrap .arrow-text {
+            color: white;
+            font-size: 0.85rem;
+            font-weight: 700;
+            text-shadow: 0 2px 8px rgba(0,0,0,0.5);
+            letter-spacing: 1px;
+            animation: fadePulse 2s ease-in-out infinite;
+        }
+        .section-arrow {
+            width: 56px;
+            height: 56px;
+            background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 6px 25px rgba(245, 197, 24, 0.4), 0 0 0 4px rgba(245, 197, 24, 0.15);
+            animation: arrowBounce 1.8s ease-in-out infinite;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .section-arrow:hover {
+            transform: scale(1.15);
+            box-shadow: 0 8px 35px rgba(245, 197, 24, 0.6), 0 0 0 6px rgba(245, 197, 24, 0.2);
+        }
+        .section-arrow svg {
+            width: 24px;
+            height: 24px;
+            fill: var(--navy);
+            filter: drop-shadow(0 1px 2px rgba(0,0,0,0.2));
+        }
+        @keyframes arrowBounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-12px); }
+        }
+        @keyframes fadePulse {
+            0%, 100% { opacity: 0.7; }
+            50% { opacity: 1; }
+        }
+        @media (max-width: 768px) {
+            .section-arrow {
+                width: 48px;
+                height: 48px;
+            }
+            .section-arrow svg {
+                width: 20px;
+                height: 20px;
+            }
+            .section-arrow-wrap {
+                bottom: 24px;
+            }
+            .section-arrow-wrap .arrow-text {
+                font-size: 0.75rem;
             }
         }
+
 
         /* ── Floating CTA ── */
         .float-btn {
@@ -695,85 +782,7 @@
                 padding: 36px 20px;
             }
         }
-    
-
-        /* ── Section Down Arrows ── */
-        .section-arrow-wrap {
-            position: absolute;
-            bottom: 40px;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 100;
-            cursor: pointer;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 8px;
-            transition: opacity 0.6s ease, transform 0.6s ease;
-            opacity: 1;
-            pointer-events: auto;
-        }
-        .section-arrow-wrap.hidden {
-            opacity: 0;
-            pointer-events: none;
-            transform: translateX(-50%) translateY(20px);
-        }
-        .section-arrow-wrap .arrow-text {
-            color: white;
-            font-size: 0.85rem;
-            font-weight: 700;
-            text-shadow: 0 2px 8px rgba(0,0,0,0.5);
-            letter-spacing: 1px;
-            animation: fadePulse 2s ease-in-out infinite;
-        }
-        .section-arrow {
-            width: 56px;
-            height: 56px;
-            background: linear-gradient(135deg, var(--gold), var(--gold-dark));
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 6px 25px rgba(245, 197, 24, 0.4), 0 0 0 4px rgba(245, 197, 24, 0.15);
-            animation: arrowBounce 1.8s ease-in-out infinite;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-        .section-arrow:hover {
-            transform: scale(1.15);
-            box-shadow: 0 8px 35px rgba(245, 197, 24, 0.6), 0 0 0 6px rgba(245, 197, 24, 0.2);
-        }
-        .section-arrow svg {
-            width: 24px;
-            height: 24px;
-            fill: var(--navy);
-            filter: drop-shadow(0 1px 2px rgba(0,0,0,0.2));
-        }
-        @keyframes arrowBounce {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-12px); }
-        }
-        @keyframes fadePulse {
-            0%, 100% { opacity: 0.7; }
-            50% { opacity: 1; }
-        }
-        /* Make sections position relative for arrow positioning */
-        section:not(.cod-section) {
-            position: relative;
-        }
-        @media (max-width: 768px) {
-            .section-arrow {
-                width: 48px;
-                height: 48px;
-            }
-            .section-arrow svg {
-                width: 20px;
-                height: 20px;
-            }
-            .section-arrow-wrap {
-                bottom: 24px;
-            }
-        }
-</style>
+    </style>
 <base target="_blank">
 <base target="_blank">
 </head>
@@ -1848,50 +1857,7 @@
 
         function showSuccess() {
             document.getElementById('successPopup').classList.add('active');
-            document.getElementById('orderForm').reset();
-            currentQty = 1;
-            currentDeliveryPrice = 0;
-            homePrice = 0;
-            deskPrice = 0;
-            deliveryType = 'home';
-            document.getElementById('qtyDisplay').textContent = '1';
-            document.getElementById('baladiya').disabled = true;
-            document.getElementById('baladiya').innerHTML = '<option value="">-- اختر الولاية أولاًّ --</option>';
-            document.querySelectorAll('.form-input, .form-select').forEach(el => {
-                el.classList.remove('valid', 'error');
-            });
-            updateUI();
-        }
-
-        function closePopup() {
-            document.getElementById('successPopup').classList.remove('active');
-        }
-
-        document.getElementById('successPopup').addEventListener('click', function(e) {
-            if (e.target === this) closePopup();
-        });
-
-        document.getElementById('phone').addEventListener('input', function() {
-            this.value = this.value.replace(/[^0-9]/g, '');
-        });
-
-        if (!CanvasRenderingContext2D.prototype.roundRect) {
-            CanvasRenderingContext2D.prototype.roundRect = function(x, y, w, h, r) {
-                if (r > w / 2) r = w / 2;
-                if (r > h / 2) r = h / 2;
-                this.moveTo(x + r, y);
-                this.arcTo(x + w, y, x + w, y + h, r);
-                this.arcTo(x + w, y + h, x, y + h, r);
-                this.arcTo(x, y + h, x, y, r);
-                this.arcTo(x, y, x + w, y, r);
-                return this;
-            };
-        }
-
-        // Fire GA4 view_item on load
-        ga4ViewContent();
-        updateUI();
-    
+            document.getElementById('orderFor
 
         // ═══════════════════════════════════════════════════════════
         //  SECTION DOWN ARROWS — Click to scroll, one-time visibility
@@ -1965,6 +1931,49 @@
 
             lastScrollY = currentScrollY;
         }, { passive: true });
-</script>
+m').reset();
+            currentQty = 1;
+            currentDeliveryPrice = 0;
+            homePrice = 0;
+            deskPrice = 0;
+            deliveryType = 'home';
+            document.getElementById('qtyDisplay').textContent = '1';
+            document.getElementById('baladiya').disabled = true;
+            document.getElementById('baladiya').innerHTML = '<option value="">-- اختر الولاية أولاًّ --</option>';
+            document.querySelectorAll('.form-input, .form-select').forEach(el => {
+                el.classList.remove('valid', 'error');
+            });
+            updateUI();
+        }
+
+        function closePopup() {
+            document.getElementById('successPopup').classList.remove('active');
+        }
+
+        document.getElementById('successPopup').addEventListener('click', function(e) {
+            if (e.target === this) closePopup();
+        });
+
+        document.getElementById('phone').addEventListener('input', function() {
+            this.value = this.value.replace(/[^0-9]/g, '');
+        });
+
+        if (!CanvasRenderingContext2D.prototype.roundRect) {
+            CanvasRenderingContext2D.prototype.roundRect = function(x, y, w, h, r) {
+                if (r > w / 2) r = w / 2;
+                if (r > h / 2) r = h / 2;
+                this.moveTo(x + r, y);
+                this.arcTo(x + w, y, x + w, y + h, r);
+                this.arcTo(x + w, y + h, x, y + h, r);
+                this.arcTo(x, y + h, x, y, r);
+                this.arcTo(x, y, x + w, y, r);
+                return this;
+            };
+        }
+
+        // Fire GA4 view_item on load
+        ga4ViewContent();
+        updateUI();
+    </script>
 </body>
 </html>
