@@ -1585,11 +1585,11 @@ function changeQty(delta) {
     }
 
     function updateFloatBtn() {
-        const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
         const heroBottom = document.getElementById('heroSection').getBoundingClientRect().bottom;
 
-        // User is still INSIDE hero section (not scrolled past it yet)
-        if (scrollTop < heroBottom) {
+        // heroBottom > 0 means the bottom edge of hero is still visible in viewport
+        // heroBottom > 100 means user hasn't scrolled past hero yet (buffer for safety)
+        if (heroBottom > 100) {
             if (floatBtnMode !== 'scroll') {
                 floatBtnMode = 'scroll';
                 floatBtn.innerHTML = '👇 اسحب الى الأسفل لاكتشاف كل التفاصيل';
