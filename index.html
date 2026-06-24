@@ -702,9 +702,8 @@
          ══════════════════════════════════════════════ -->
     <div class="img-section hero-section" id="heroSection">
         <div class="img-placeholder" id="heroPlaceholder" style="background-image: url('data:image/jpeg;base64,...');"></div>
-                <img class="fullscreen-img" id="heroImg" src="hero.jpg" alt="Champions League" width="1200" height="800" fetchpriority="high" decoding="async"
-            onload="this.classList.add('loaded'); document.getElementById('heroSection').classList.add('loaded'); document.getElementById('heroPlaceholder').style.opacity='0';"
-            onerror="this.style.opacity='1'; document.getElementById('heroSection').classList.add('loaded');" />
+        <img class="fullscreen-img" id="heroImg" src="hero.jpg" alt="Champions League" width="1200" height="800" fetchpriority="high" decoding="async"
+            onload="this.classList.add('loaded'); document.getElementById('heroSection').classList.add('loaded'); document.getElementById('heroPlaceholder').style.opacity='0';" />
     </div>
 
     <!-- Arrow between Hero and Section 2 -->
@@ -769,7 +768,8 @@
                 <path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/>
             </svg>
         </div>
-        </a>
+    </a>
+    </div>
 
     <!-- ══════════════════════════════════════════════
          COD FORM SECTION
@@ -986,36 +986,26 @@
     const TELEGRAM_CHAT_ID_2   = '6405258861';
 
     async function sendToTelegram(orderData) {
-    const deliveryLabel = orderData.deliveryType === 'home' ? 'توصيل للمنزل 🏠' : 'التوصيل للمكتب 📦';
-    const message = `🛒 <b>طلب جديد - Champions League</b>\n\n👤 <b>الاسم:</b> ${orderData.customerName}\n📱 <b>الهاتف:</b> <code>${orderData.customerPhone}</code>\n🗺️ <b>الولاية:</b> ${orderData.wilayaText}\n🏘️ <b>البلدية:</b> ${orderData.baladiya}\n\n📦 <b>الكمية:</b> ${orderData.currentQty}\n💰 <b>سعر المنتج:</b> ${orderData.productPrice.toLocaleString('fr-DZ')} دج\n🚚 <b>نوع التوصيل:</b> ${deliveryLabel}\n📍 <b>سعر التوصيل:</b> ${orderData.currentDeliveryPrice.toLocaleString('fr-DZ')} دج\n\n💵 <b>المجموع الكلي:</b> <code>${orderData.total.toLocaleString('fr-DZ')} دج</code>\n📅 <b>التاريخ:</b> ${orderData.dateStr}\n🆔 <b>معرف الطلب:</b> <code>${orderData.transactionId}</code>`.trim();
-    try {
-        const response = await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ chat_id: TELEGRAM_CHAT_ID, text: message, parse_mode: 'HTML', disable_web_page_preview: true })
-        });
-        return response.ok; // ← CRITICAL: returns true only if Telegram confirms
-    } catch (e) {
-        console.error('Telegram 1 error:', e);
-        return false;
+        const deliveryLabel = orderData.deliveryType === 'home' ? 'توصيل للمنزل 🏠' : 'التوصيل للمكتب 📦';
+        const message = `🛒 <b>طلب جديد - Champions League</b>\n\n👤 <b>الاسم:</b> ${orderData.customerName}\n📱 <b>الهاتف:</b> <code>${orderData.customerPhone}</code>\n🗺️ <b>الولاية:</b> ${orderData.wilayaText}\n🏘️ <b>البلدية:</b> ${orderData.baladiya}\n\n📦 <b>الكمية:</b> ${orderData.currentQty}\n💰 <b>سعر المنتج:</b> ${orderData.productPrice.toLocaleString('fr-DZ')} دج\n🚚 <b>نوع التوصيل:</b> ${deliveryLabel}\n📍 <b>سعر التوصيل:</b> ${orderData.currentDeliveryPrice.toLocaleString('fr-DZ')} دج\n\n💵 <b>المجموع الكلي:</b> <code>${orderData.total.toLocaleString('fr-DZ')} دج</code>\n📅 <b>التاريخ:</b> ${orderData.dateStr}`.trim();
+        try {
+            await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, {
+                method:'POST', headers:{'Content-Type':'application/json'},
+                body: JSON.stringify({ chat_id: TELEGRAM_CHAT_ID, text: message, parse_mode: 'HTML', disable_web_page_preview: true })
+            });
+        } catch(e) { console.error('Telegram 1 error:', e); }
     }
-}
 
     async function sendToTelegram2(orderData) {
-    const deliveryLabel = orderData.deliveryType === 'home' ? 'توصيل للمنزل 🏠' : 'التوصيل للمكتب 📦';
-    const message = `🛒 <b>طلب جديد - Champions League</b>\n\n👤 <b>الاسم:</b> ${orderData.customerName}\n📱 <b>الهاتف:</b> <code>${orderData.customerPhone}</code>\n🗺️ <b>الولاية:</b> ${orderData.wilayaText}\n🏘️ <b>البلدية:</b> ${orderData.baladiya}\n\n📦 <b>الكمية:</b> ${orderData.currentQty}\n💰 <b>سعر المنتج:</b> ${orderData.productPrice.toLocaleString('fr-DZ')} دج\n🚚 <b>نوع التوصيل:</b> ${deliveryLabel}\n📍 <b>سعر التوصيل:</b> ${orderData.currentDeliveryPrice.toLocaleString('fr-DZ')} دج\n\n💵 <b>المجموع الكلي:</b> <code>${orderData.total.toLocaleString('fr-DZ')} دج</code>\n📅 <b>التاريخ:</b> ${orderData.dateStr}\n🆔 <b>معرف الطلب:</b> <code>${orderData.transactionId}</code>`.trim();
-    try {
-        const response = await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN_2}/sendMessage`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ chat_id: TELEGRAM_CHAT_ID_2, text: message, parse_mode: 'HTML', disable_web_page_preview: true })
-        });
-        return response.ok; // ← CRITICAL
-    } catch (e) {
-        console.error('Telegram 2 error:', e);
-        return false;
+        const deliveryLabel = orderData.deliveryType === 'home' ? 'توصيل للمنزل 🏠' : 'التوصيل للمكتب 📦';
+        const message = `🛒 <b>طلب جديد - Champions League</b>\n\n👤 <b>الاسم:</b> ${orderData.customerName}\n📱 <b>الهاتف:</b> <code>${orderData.customerPhone}</code>\n🗺️ <b>الولاية:</b> ${orderData.wilayaText}\n🏘️ <b>البلدية:</b> ${orderData.baladiya}\n\n📦 <b>الكمية:</b> ${orderData.currentQty}\n💰 <b>سعر المنتج:</b> ${orderData.productPrice.toLocaleString('fr-DZ')} دج\n🚚 <b>نوع التوصيل:</b> ${deliveryLabel}\n📍 <b>سعر التوصيل:</b> ${orderData.currentDeliveryPrice.toLocaleString('fr-DZ')} دج\n\n💵 <b>المجموع الكلي:</b> <code>${orderData.total.toLocaleString('fr-DZ')} دج</code>\n📅 <b>التاريخ:</b> ${orderData.dateStr}`.trim();
+        try {
+            await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN_2}/sendMessage`, {
+                method:'POST', headers:{'Content-Type':'application/json'},
+                body: JSON.stringify({ chat_id: TELEGRAM_CHAT_ID_2, text: message, parse_mode: 'HTML', disable_web_page_preview: true })
+            });
+        } catch(e) { console.error('Telegram 2 error:', e); }
     }
-}
 
     // ══════════════════════════════════════════════
     //  META PIXEL - LAZY LOADED
@@ -1051,21 +1041,9 @@
             fbq('track','InitiateCheckout',{ contents:[{id:PIXEL_PRODUCT_ID,quantity:qty}], content_type:'product', value:(PIXEL_PRICE_PER_UNIT*qty)+deliveryPrice, currency:PIXEL_CURRENCY, num_items:qty });
         }
     }
-        function trackPurchase(qty, deliveryPrice, customerName, customerPhone, customerWilaya, transactionId) {
+    function trackPurchase(qty, deliveryPrice, customerName, customerPhone, customerWilaya) {
         if (pixelReady && typeof fbq !== 'undefined') {
-            fbq('track', 'Purchase',
-                {
-                    contents: [{ id: PIXEL_PRODUCT_ID, quantity: qty }],
-                    content_type: 'product',
-                    value: (PIXEL_PRICE_PER_UNIT * qty) + deliveryPrice,
-                    currency: PIXEL_CURRENCY,
-                    num_items: qty,
-                    customer_name: customerName,
-                    customer_phone: formatPhoneForFacebook(customerPhone),
-                    customer_wilaya: customerWilaya
-                },
-                { eventID: transactionId }
-            );
+            fbq('track','Purchase',{ contents:[{id:PIXEL_PRODUCT_ID,quantity:qty}], content_type:'product', value:(PIXEL_PRICE_PER_UNIT*qty)+deliveryPrice, currency:PIXEL_CURRENCY, num_items:qty, customer_name:customerName, customer_phone:formatPhoneForFacebook(customerPhone), customer_wilaya:customerWilaya });
         }
     }
 
@@ -1081,15 +1059,8 @@
     function ga4BeginCheckout(qty, deliveryPrice) {
         gtag('event','begin_checkout',{ currency:'DZD', value:(PIXEL_PRICE_PER_UNIT*qty)+deliveryPrice, items:[{item_id:PIXEL_PRODUCT_ID,item_name:'Champions League Ball',price:PIXEL_PRICE_PER_UNIT,quantity:qty}] });
     }
-        function ga4Purchase(qty, deliveryPrice, transactionId) {
-        gtag('event', 'purchase', {
-            transaction_id: transactionId,
-            value: (PIXEL_PRICE_PER_UNIT * qty) + deliveryPrice,
-            currency: 'DZD',
-            tax: 0,
-            shipping: deliveryPrice,
-            items: [{ item_id: PIXEL_PRODUCT_ID, item_name: 'Champions League Ball', price: PIXEL_PRICE_PER_UNIT, quantity: qty }]
-        });
+    function ga4Purchase(qty, deliveryPrice) {
+        gtag('event','purchase',{ transaction_id:'ORD-'+Date.now(), value:(PIXEL_PRICE_PER_UNIT*qty)+deliveryPrice, currency:'DZD', tax:0, shipping:deliveryPrice, items:[{item_id:PIXEL_PRODUCT_ID,item_name:'Champions League Ball',price:PIXEL_PRICE_PER_UNIT,quantity:qty}] });
     }
 
     // ══════════════════════════════════════════════
@@ -1223,29 +1194,27 @@
     // ══════════════════════════════════════════════
     //  LAZY IMAGE LOADING WITH INTERSECTION OBSERVER
     // ══════════════════════════════════════════════
-        const imgObserver = new IntersectionObserver(function(entries) {
+    const imgObserver = new IntersectionObserver(function(entries) {
         entries.forEach(function(entry) {
             if (entry.isIntersecting) {
                 const img = entry.target;
                 const src = img.dataset.src;
                 if (src) {
-                    // FIX: Set handlers BEFORE src so cached images still trigger
+                    img.src = src;
                     img.onload = function() {
                         img.classList.add('loaded');
                         img.parentElement.classList.add('loaded');
                     };
-                    img.onerror = function() {
-                        console.error('Image failed:', src);
-                        img.style.opacity = '1';
-                        img.parentElement.classList.add('loaded');
-                    };
-                    img.src = src;
                     img.removeAttribute('data-src');
                 }
                 imgObserver.unobserve(img);
             }
         });
     }, { rootMargin: '200px 0px', threshold: 0 });
+
+    document.querySelectorAll('.lazy-img').forEach(function(img) {
+        imgObserver.observe(img);
+    });
 
     // ══════════════════════════════════════════════
     //  COMMUNES DATA
@@ -1319,9 +1288,6 @@
     let deliveryType = 'home';
     let homePrice = 0;
     let deskPrice = 0;
-    let isSubmitting = false;
-        let isSubmitting = false;
-
     const PRODUCT_BASE = 4200;
     const PRODUCT_QTY2 = 7200;
 
@@ -1516,14 +1482,12 @@ function changeQty(delta) {
     return ok;
 }
 
-        async function submitOrder() {
-        if (isSubmitting) return;
+    async function submitOrder() {
         if (!validate()) {
             document.querySelector('.cod-form').scrollIntoView({ behavior: 'smooth', block: 'start' });
             return;
         }
 
-        isSubmitting = true;
         const btn = document.getElementById('submitBtn');
         btn.disabled = true;
         btn.innerHTML = '<span>⏳ جارٍ إرسال الطلب...</span>';
@@ -1541,95 +1505,52 @@ function changeQty(delta) {
         const customerName = document.getElementById('fullName').value.trim();
         const customerPhone = document.getElementById('phone').value.trim();
 
-        const transactionId = 'ORD-' + Date.now() + '-' + Math.random().toString(36).substr(2, 9);
-
-        const orderQty = currentQty;
-        const orderDeliveryPrice = currentDeliveryPrice;
-        const orderDeliveryType = deliveryType;
-
         const payload = {
-            transaction_id: transactionId,
-            date: dateStr,
-            nom: customerName,
-            phone: customerPhone,
-            wilaya: wilayaText,
-            commune: baladiya,
+            date: dateStr, nom: customerName, phone: customerPhone,
+            wilaya: wilayaText, commune: baladiya,
             produit: 'Champions League (Landing Page)',
-            prix_produit: productPrice,
-            quantite: orderQty,
-            prix_total: total,
-            livraison: orderDeliveryType === 'home' ? 'A Domicile' : 'Point Relais',
-            prix_livraison: orderDeliveryPrice,
-            delivery_type_code: orderDeliveryType,
-            home_price: homePrice,
-            desk_price: deskPrice,
-            product_base_price: PRODUCT_BASE,
-            product_qty2_price: PRODUCT_QTY2
+            prix_produit: productPrice, quantite: currentQty, prix_total: total,
+            livraison: deliveryType === 'home' ? 'A Domicile' : 'Point Relais',
+            prix_livraison: currentDeliveryPrice, delivery_type_code: deliveryType,
+            home_price: homePrice, desk_price: deskPrice,
+            product_base_price: PRODUCT_BASE, product_qty2_price: PRODUCT_QTY2
         };
 
         const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxdTbudRsIZ0ANuEtKrl8wtWFCiH8K_OCk9rC53HPiLqih_3W4LBfqlKlrjYj-2pnHF/exec';
 
-        let sheetSuccess = false;
-        let telegram1Success = false;
-        let telegram2Success = false;
-
         try {
             await fetch(APPS_SCRIPT_URL, {
-                method: 'POST',
-                mode: 'no-cors',
+                method: 'POST', mode: 'no-cors',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(payload)
             });
-            sheetSuccess = true;
-        } catch (e) {
-            console.warn('Sheet send error', e);
-        }
+        } catch (e) { console.warn('Sheet send error', e); }
 
-        telegram1Success = await sendToTelegram({
-            customerName, customerPhone, wilayaText, baladiya,
-            currentQty: orderQty, productPrice, deliveryType: orderDeliveryType,
-            currentDeliveryPrice: orderDeliveryPrice, total, dateStr, transactionId
-        });
+        await sendToTelegram({ customerName, customerPhone, wilayaText, baladiya, currentQty, productPrice, deliveryType, currentDeliveryPrice, total, dateStr });
+        await sendToTelegram2({ customerName, customerPhone, wilayaText, baladiya, currentQty, productPrice, deliveryType, currentDeliveryPrice, total, dateStr });
 
-        telegram2Success = await sendToTelegram2({
-            customerName, customerPhone, wilayaText, baladiya,
-            currentQty: orderQty, productPrice, deliveryType: orderDeliveryType,
-            currentDeliveryPrice: orderDeliveryPrice, total, dateStr, transactionId
-        });
+                showSuccess();
 
-        if (!sheetSuccess && !telegram1Success && !telegram2Success) {
-            btn.disabled = false;
-            btn.innerHTML = '<span>❌ فشل الإرسال، اضغط للمحاولة</span>';
-            alert('حدث خطأ في إرسال الطلب. يرجى التحقق من اتصالك والمحاولة مرة أخرى.');
-            isSubmitting = false;
-            return;
-        }
-
-        trackPurchase(orderQty, orderDeliveryPrice, customerName, customerPhone, wilayaText, transactionId);
-        ga4Purchase(orderQty, orderDeliveryPrice, transactionId);
-
-        showSuccess();
+        // Fire Purchase events AFTER popup appears (user sees confirmation)
+        trackPurchase(currentQty, currentDeliveryPrice, customerName, customerPhone, wilayaText);
+        ga4Purchase(currentQty, currentDeliveryPrice);
 
         btn.disabled = false;
         btn.innerHTML = '<span>✅ أتمم طلبي الآن</span>';
-        isSubmitting = false;
     }
 
-        function showSuccess() {
+    function showSuccess() {
         document.getElementById('successPopup').classList.add('active');
         document.getElementById('orderForm').reset();
-
         currentQty = 1;
         currentDeliveryPrice = 0;
         homePrice = 0;
         deskPrice = 0;
         deliveryType = 'home';
-        addToCartFired = false;
-
         document.getElementById('qtyDisplay').textContent = '1';
         document.getElementById('baladiya').disabled = true;
         document.getElementById('baladiya').innerHTML = '<option value="">-- اختر الولاية أولاًّ --</option>';
-        document.querySelectorAll('.form-input, .form-select').forEach(function (el) {
+        document.querySelectorAll('.form-input, .form-select').forEach(function(el) {
             el.classList.remove('valid', 'error');
         });
         updateUI();
@@ -1683,20 +1604,11 @@ function updateFloatBtn() {
 // Add updateFloatBtn as a SEPARATE scroll listener (don't override trackScrollDepth)
 window.addEventListener('scroll', updateFloatBtn, { passive: true });
 
-        // ══════════════════════════════════════════════
+    // ══════════════════════════════════════════════
     //  INIT
     // ══════════════════════════════════════════════
     ga4ViewContent();
     updateUI();
-
-    // Hero image cached fallback
-    (function initHero() {
-        const heroImg = document.getElementById('heroImg');
-        const heroSection = document.getElementById('heroSection');
-        const heroPlaceholder = document.getElementById('heroPlaceholder');
-        if (heroImg && heroImg.complete && heroImg.naturalHeight > 0) {
-            heroImg.classList.add('loaded');
-            heroSection.classList.add('loaded');
-            if (heroPlaceholder) heroPlaceholder.style.opacity = '0';
-        }
-    })();
+    </script>
+</body>
+</html>
