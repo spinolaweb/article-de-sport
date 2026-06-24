@@ -74,7 +74,7 @@
 
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="Champions League Ball — كرة القدم الرسمية | Livraison à domicile Algérie" />
-    <meta name="twitter:description" content="كرة Champions League الأصلية. توصيل لجميع الولايات الجزائر. الدفع عند الاستلام." />
+    <meta name="twitter:description" content="كرة Champions League  توصيل لجميع الولايات الجزائر. الدفع عند الاستلام.  " />
     <meta name="twitter:image" content="hero.jpg" />
 
     <!-- Schema.org structured data -->
@@ -150,6 +150,9 @@
             font-weight: 700;
             animation: urgencyPulse 2s infinite;
             box-shadow: 0 4px 20px rgba(232, 19, 42, 0.4);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
         .urgency-bar .stock-count {
             background: white;
@@ -266,7 +269,7 @@
         /* ── Floating scroll indicator ── */
         .scroll-hint {
             position: absolute;
-            bottom: 30px;
+            bottom: 20px;
             left: 50%;
             transform: translateX(-50%);
             z-index: 10;
@@ -323,13 +326,26 @@
         }
 
         /* ── Hero section with overlay ── */
-        .hero-section { position: relative; padding-top: 44px; }
+        .hero-section {
+            position: relative;
+            padding-top: 44px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            background: var(--navy);
+        }
         .hero-overlay {
             position: absolute;
             bottom: 80px;
             right: 20px; left: 20px;
             z-index: 5;
             text-align: center;
+            pointer-events: none;
+        }
+        .hero-overlay > * {
+            pointer-events: auto;
         }
         .hero-badge {
             display: inline-block;
@@ -395,6 +411,15 @@
         .cod-section {
             background: linear-gradient(135deg, var(--navy) 0%, #0d2040 100%);
             padding: 80px 20px 120px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .cod-section .container {
+            width: 100%;
+            max-width: 720px;
+            margin: 0 auto;
         }
         .form-header {
             text-align: center;
@@ -791,20 +816,41 @@
                 width: calc(100% - 40px);
                 text-align: center;
             }
+            .fullscreen-img {
+                min-height: auto;
+                height: auto;
+                width: 100%;
+            }
+            .hero-section {
+                min-height: auto;
+                padding-top: 44px;
+            }
+            .hero-overlay {
+                position: relative;
+                bottom: auto;
+                right: auto;
+                left: auto;
+                margin-top: -60px;
+                padding: 0 16px 20px;
+                background: linear-gradient(to top, rgba(10,22,40,0.9), transparent);
+            }
+            .scroll-hint { display: none; }
             .cod-form { padding: 32px 20px; }
             .delivery-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
             .delivery-card { padding: 12px 10px; }
             .trust-badges { gap: 12px; }
-            .hero-overlay { bottom: 60px; }
-            .hero-price { font-size: 1.8rem; }
+            .hero-price { font-size: 1.6rem; }
+            .hero-badge { font-size: 0.8rem; }
         }
         @media (max-width: 480px) {
-            .cod-section { padding: 60px 12px 100px; }
+            .cod-section { padding: 60px 12px 100px; min-height: auto; }
             .cod-form { padding: 24px 14px; border-radius: 18px; }
             .delivery-grid { grid-template-columns: 1fr 1fr; gap: 8px; }
             .delivery-card .delivery-name { font-size: 0.82rem; }
             .popup-box { padding: 36px 20px; }
-            .urgency-bar { font-size: 0.8rem; padding: 8px 12px; }
+            .urgency-bar { font-size: 0.75rem; padding: 8px 10px; }
+            .hero-price { font-size: 1.4rem; }
+            .hero-price .old-price { font-size: 1rem; }
         }
     </style>
 <base target="_blank">
@@ -838,10 +884,7 @@
     <section class="hero-section" id="hero">
         <img class="fullscreen-img" src="hero.jpg" alt="Champions League" onerror="this.style.background='linear-gradient(135deg, #0A1628, #122040)'" />
         <div class="hero-overlay">
-            <div class="hero-badge bounce-in"></div>
-            <div class="hero-price bounce-in" style="animation-delay: 0.2s">
-                <span class="old-price"></span>
-                
+            
             </div>
         </div>
         <div class="scroll-hint" onclick="scrollToNextSection()">
