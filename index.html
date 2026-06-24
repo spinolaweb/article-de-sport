@@ -1410,16 +1410,24 @@
         updateUI();
     });
 
-    function changeQty(delta) {
-        const newQty = Math.max(1, Math.min(10, currentQty + delta));
-        if (newQty !== currentQty) {
-            currentQty = newQty;
-            trackQtyChange(currentQty);
+    let addToCartFired = false;
+
+function changeQty(delta) {
+    const newQty = Math.max(1, Math.min(10, currentQty + delta));
+    if (newQty !== currentQty) {
+        currentQty = newQty;
+        trackQtyChange(currentQty);
+
+        // Fire AddToCart ONLY the first time user changes quantity
+        if (!addToCartFired) {
             trackAddToCart(currentQty);
             ga4AddToCart(currentQty);
-            updateUI();
+            addToCartFired = true;
         }
+
+        updateUI();
     }
+}
 
     function scrollToForm(e) {
         if (e) e.preventDefault();
@@ -1432,45 +1440,61 @@
     }
 
     function validate() {
-        let ok = true;
-        const name = document.getElementById('fullName').value.trim();
-        const phone = document.getElementById('phone').value.trim();
-        const wilaya = document.getElementById('wilaya').value;
-        const baladiya = document.getElementById('baladiya').value;
+    let ok = true;
 
-        if (!name) {
-            document.getElementById('fullName').classList.add('error');
-            document.getElementById('nameErr').classList.add('show');
-            ok = false;
-        } else {
-            document.getElementById('fullName').classList.remove('error');
-            document.getElementById('fullName').classList.add('valid');
-            document.getElementById('nameErr').classList.remove('show');
-        }
-
-        const phoneRx = /^(05|06|07)\d{8}$/;
-        if (!phoneRx.test(phone)) {
-            document.getElementById('phone').classList.add('error');
-            document.getElementById('phoneErr').classList.add('show');
-            ok = false;
-        } else {
-            document.getElementById('phone').classList.remove('error');
-            document.getElementById('phone').classList.add('valid');
-            document.getElementById('phoneErr').classList.remove('show');
-        }
-
-        if (!wilaya) {
-            document.getElementById('wilaya').classList.add('error');
-            document.getElementById('wilayaErr').classList.add('show');
-            ok = false;
-        }
-        if (!baladiya) {
-            document.getElementById('baladiya').classList.add('error');
-            document.getElementById('baladiyaErr').classList.add('show');
-            ok = false;
-        }
-        return ok;
+    // OPTIONAL: Name — no longer blocks submission
+    const name = document.getElementById('fullName').value.trim();
+    document.getElementById('fullName').classList.remove('error');
+    document.getElementById('nameErr').classList.remove('show');
+    if (name) {
+        document.getElementById('fullName').classList.add('valid');
+    } else {
+        document.getElementById('fullName').classList.remove('valid');
     }
+
+    // REQUIRED: Phone (you MUST call them for COD)
+    const phone = document.getElementById('phone').value.trim();
+    const phoneRx = /^(05|06|07)\d{8}$/;
+    if (!phoneRx.test(phone)) {
+        document.getElementById('phone').classList.add('error');
+        document.getElementById('phone').classList.remove('valid');
+        document.getElementById('phoneErr').classList.add('show');
+        ok = false;
+    } else {
+        document.getElementById('phone').classList.remove('error');
+        document.getElementById('phone').classList.add('valid');
+        document.getElementById('phoneErr').classList.remove('show');
+    }
+
+    // REQUIRED: Wilaya (needed to calculate delivery price)
+    const wilaya = document.getElementById('wilaya').value;
+    if (!wilaya) {
+        document.getElementById('wilaya').classList.add('error');
+        document.getElementById('wilaya').classList.remove('valid');
+        document.getElementById('wilayaErr').classList.add('show');
+        ok = false;
+    } else {
+        document.getElementById('wilaya').classList.remove('error');
+        document.getElementById('wilaya').classList.add('valid');
+        document.getElementById('wilayaErr').classList.remove('show');
+    }
+
+    // OPTIONAL: Baladiya — no longer blocks submission
+    const baladiya = document.getElementById('baladiya').value;
+    document.getElementById('baladiya').classList.remove('error');
+    document.getElementById('baladiyaErr').classList.remove('show');
+    if (baladiya) {
+        document.getElementById('baladiya').classList.add('valid');
+    } else {
+        document.getElementById('baladiya').classList.remove('valid');
+    }
+
+    // OPTIONAL: Delivery type — defaults to 'home' anyway, so always valid
+    // If you want to allow "no selection", keep the default homePrice logic
+    // No validation needed here.
+
+    return ok;
+}
 
     async function submitOrder() {
         if (!validate()) {
