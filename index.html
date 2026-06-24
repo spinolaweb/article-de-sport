@@ -1533,10 +1533,11 @@ function changeQty(delta) {
         await sendToTelegram({ customerName, customerPhone, wilayaText, baladiya, currentQty, productPrice, deliveryType, currentDeliveryPrice, total, dateStr });
         await sendToTelegram2({ customerName, customerPhone, wilayaText, baladiya, currentQty, productPrice, deliveryType, currentDeliveryPrice, total, dateStr });
 
+                showSuccess();
+
+        // Fire Purchase events AFTER popup appears (user sees confirmation)
         trackPurchase(currentQty, currentDeliveryPrice, customerName, customerPhone, wilayaText);
         ga4Purchase(currentQty, currentDeliveryPrice);
-
-        showSuccess();
 
         btn.disabled = false;
         btn.innerHTML = '<span>✅ أتمم طلبي الآن</span>';
@@ -1570,47 +1571,42 @@ function changeQty(delta) {
         this.value = this.value.replace(/[^0-9]/g, '');
     });
 // ══════════════════════════════════════════════
-    //  FLOATING CTA - DYNAMIC TEXT & BEHAVIOR
-    // ══════════════════════════════════════════════
-    const floatBtn = document.getElementById('floatBtn');
-    let floatBtnMode = 'scroll'; // 'scroll' or 'order'
+//  FLOATING CTA - DYNAMIC TEXT & BEHAVIOR
+// ══════════════════════════════════════════════
+const floatBtn = document.getElementById('floatBtn');
+let floatBtnMode = 'scroll'; // 'scroll' or 'order'
 
-    function handleFloatClick(e) {
-        if (e) e.preventDefault();
-        if (floatBtnMode === 'scroll') {
-            scrollToSection('section2', e);
-        } else {
-            scrollToForm(e);
+function handleFloatClick(e) {
+    if (e) e.preventDefault();
+    if (floatBtnMode === 'scroll') {
+        scrollToSection('section2', e);
+    } else {
+        scrollToForm(e);
+    }
+}
+
+function updateFloatBtn() {
+    const heroBottom = document.getElementById('heroSection').getBoundingClientRect().bottom;
+
+    // heroBottom > 100 means the bottom of hero is still in viewport
+    if (heroBottom > 100) {
+        if (floatBtnMode !== 'scroll') {
+            floatBtnMode = 'scroll';
+            floatBtn.innerHTML = '👇 اسحب الى الأسفل لاكتشاف كل التفاصيل';
+            floatBtn.href = '#section2';
+        }
+    } else {
+        // User scrolled past hero — switch to order button
+        if (floatBtnMode !== 'order') {
+            floatBtnMode = 'order';
+            floatBtn.innerHTML = '🛒 اطلب الآن - الدفع عند الاستلام';
+            floatBtn.href = '#cod-form';
         }
     }
+}
 
-    function updateFloatBtn() {
-        const heroBottom = document.getElementById('heroSection').getBoundingClientRect().bottom;
-
-        // heroBottom > 0 means the bottom edge of hero is still visible in viewport
-        // heroBottom > 100 means user hasn't scrolled past hero yet (buffer for safety)
-        if (heroBottom > 100) {
-            if (floatBtnMode !== 'scroll') {
-                floatBtnMode = 'scroll';
-                floatBtn.innerHTML = '👇 اسحب الى الأسفل لاكتشاف كل التفاصيل';
-                floatBtn.href = '#section2';
-            }
-        } else {
-            // User scrolled past hero — switch to order button
-            if (floatBtnMode !== 'order') {
-                floatBtnMode = 'order';
-                floatBtn.innerHTML = '🛒 اطلب الآن - الدفع عند الاستلام';
-                floatBtn.href = '#cod-form';
-            }
-        }
-    }
-
-    // Hook into existing scroll listener
-    const originalTrackScroll = trackScrollDepth;
-    trackScrollDepth = function() {
-        originalTrackScroll();
-        updateFloatBtn();
-    };
+// Add updateFloatBtn as a SEPARATE scroll listener (don't override trackScrollDepth)
+window.addEventListener('scroll', updateFloatBtn, { passive: true });
 
     // ══════════════════════════════════════════════
     //  INIT
