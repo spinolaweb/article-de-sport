@@ -5,25 +5,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
     <title>Champions League Ball — كرة القدم الرسمية | Livraison à domicile Algérie | Paiement à la livraison</title>
 
-    <!-- ══════════════════════════════════════════════
-         CRITICAL: PRELOAD HERO IMAGE FOR INSTANT LCP
-         ══════════════════════════════════════════════ -->
     <link rel="preload" as="image" href="hero.jpg" fetchpriority="high" />
     <link rel="preload" as="image" href="ProblemSolution.jpg" fetchpriority="low" />
     <link rel="preload" as="image" href="Benefits.jpg" fetchpriority="low" />
     <link rel="preload" as="image" href="offer.jpg" fetchpriority="low" />
 
-    <!-- Preconnect to external domains -->
     <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link rel="preconnect" href="https://www.googletagmanager.com" crossorigin />
     <link rel="preconnect" href="https://connect.facebook.net" crossorigin />
 
-    <!-- ══════════════════════════════════════════════
-         CRITICAL CSS INLINE (Above the fold - no render blocking)
-         ══════════════════════════════════════════════ -->
     <style>
-        /* CRITICAL CSS - Must load instantly */
         * { margin:0; padding:0; box-sizing:border-box; }
         html { scroll-behavior:smooth; }
         body { 
@@ -42,10 +34,6 @@
             --light-gray:#E9ECEF; --success:#28A745;
         }
 
-        /* ══════════════════════════════════════════════
-           PROGRESSIVE IMAGE LOADING SYSTEM
-           Low-res placeholder -> High-res swap
-           ══════════════════════════════════════════════ */
         .img-section {
             position: relative;
             width: 100%;
@@ -85,7 +73,6 @@
             opacity: 1;
         }
 
-        /* Blur-up placeholder effect */
         .img-placeholder {
             position: absolute;
             inset: 0;
@@ -102,9 +89,6 @@
             filter: blur(0) brightness(1);
         }
 
-        /* ══════════════════════════════════════════════
-           HERO SECTION - OPTIMIZED FOR INSTANT VISIBILITY
-           ══════════════════════════════════════════════ */
         .hero-section {
             position: relative;
             min-height: 100vh;
@@ -121,97 +105,86 @@
             object-fit: cover;
         }
 
-        /* ══════════════════════════════════════════════
-   SCROLL INDICATOR - BETWEEN SECTIONS
-   ══════════════════════════════════════════════ */
-.scroll-indicator {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 6px;
-    text-decoration: none;
-    margin-top: -34px;   /* Pull up to sit between sections */
-    margin-bottom: -34px; /* Pull down to sit between sections */
-    z-index: 10;
-    cursor: pointer;
-}
+        .scroll-indicator {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+            text-decoration: none;
+            margin-top: -34px;
+            margin-bottom: -34px;
+            z-index: 10;
+            cursor: pointer;
+        }
 
-.scroll-indicator.hidden {
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.5s ease;
-}
+        .scroll-indicator.hidden {
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.5s ease;
+        }
 
-.scroll-text {
-    color: #fff;
-    font-size: 0.9rem;
-    font-weight: 900;
-    text-shadow: 0 2px 8px rgba(0,0,0,0.9), 0 0 4px rgba(0,0,0,0.9);
-    letter-spacing: 0.5px;
-    background: rgba(10, 22, 40, 0.85);
-    padding: 6px 16px;
-    border-radius: 20px;
-    white-space: nowrap;
-    animation: textGlow 2s ease-in-out infinite;
-    backdrop-filter: blur(4px);
-    border: 1px solid rgba(245,197,24,0.3);
-}
+        .scroll-text {
+            color: #fff;
+            font-size: 0.9rem;
+            font-weight: 900;
+            text-shadow: 0 2px 8px rgba(0,0,0,0.9), 0 0 4px rgba(0,0,0,0.9);
+            letter-spacing: 0.5px;
+            background: rgba(10, 22, 40, 0.85);
+            padding: 6px 16px;
+            border-radius: 20px;
+            white-space: nowrap;
+            animation: textGlow 2s ease-in-out infinite;
+            backdrop-filter: blur(4px);
+            border: 1px solid rgba(245,197,24,0.3);
+        }
 
-.scroll-arrow {
-    width: 48px;
-    height: 48px;
-    background: linear-gradient(135deg, var(--gold), var(--gold-dark));
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow:
-        0 0 0 3px rgba(245,197,24,0.8),
-        0 0 0 8px rgba(245,197,24,0.2),
-        0 4px 20px rgba(0,0,0,0.5);
-    animation: arrowBounce 1.5s ease-in-out infinite;
-    position: relative;
-}
+        .scroll-arrow {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow:
+                0 0 0 3px rgba(245,197,24,0.8),
+                0 0 0 8px rgba(245,197,24,0.2),
+                0 4px 20px rgba(0,0,0,0.5);
+            animation: arrowBounce 1.5s ease-in-out infinite;
+            position: relative;
+        }
 
-.scroll-arrow::before {
-    content: '';
-    position: absolute;
-    inset: -4px;
-    border-radius: 50%;
-    border: 2px solid rgba(245,197,24,0.3);
-    animation: pulseRing 2s ease-in-out infinite;
-}
+        .scroll-arrow::before {
+            content: '';
+            position: absolute;
+            inset: -4px;
+            border-radius: 50%;
+            border: 2px solid rgba(245,197,24,0.3);
+            animation: pulseRing 2s ease-in-out infinite;
+        }
 
-.scroll-arrow svg {
-    width: 24px;
-    height: 24px;
-    fill: var(--navy);
-}
+        .scroll-arrow svg {
+            width: 24px;
+            height: 24px;
+            fill: var(--navy);
+        }
 
-@keyframes scrollPulse {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-6px); }
-}
+        @keyframes textGlow {
+            0%, 100% { opacity: 0.85; }
+            50% { opacity: 1; }
+        }
 
-@keyframes textGlow {
-    0%, 100% { opacity: 0.85; }
-    50% { opacity: 1; }
-}
+        @keyframes arrowBounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
+        }
 
-@keyframes arrowBounce {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-8px); }
-}
+        @keyframes pulseRing {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.15); opacity: 0.5; }
+        }
 
-@keyframes pulseRing {
-    0%, 100% { transform: scale(1); opacity: 1; }
-    50% { transform: scale(1.15); opacity: 0.5; }
-}
-
-        /* ══════════════════════════════════════════════
-           FLOATING CTA - ALWAYS VISIBLE
-           ══════════════════════════════════════════════ */
         .float-btn {
             position: fixed;
             bottom: 20px;
@@ -247,10 +220,6 @@
             50% { box-shadow: 0 8px 50px rgba(232,19,42,0.8); }
         }
 
-        /* ══════════════════════════════════════════════
-           SCROLL-REVEAL ANIMATIONS
-           Elements animate in as user scrolls
-           ══════════════════════════════════════════════ */
         .reveal {
             opacity: 0;
             transform: translateY(40px);
@@ -267,9 +236,6 @@
         .reveal-delay-2 { transition-delay: 0.2s; }
         .reveal-delay-3 { transition-delay: 0.3s; }
 
-        /* ══════════════════════════════════════════════
-           COD FORM SECTION
-           ══════════════════════════════════════════════ */
         .cod-section {
             background: linear-gradient(135deg, var(--navy) 0%, #0d2040 100%);
             padding: 80px 20px 120px;
@@ -358,7 +324,6 @@
             padding-left: 40px;
         }
 
-        /* Delivery Cards */
         .delivery-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 4px; }
         .delivery-card {
             border: 2px solid var(--light-gray);
@@ -405,7 +370,6 @@
             font-weight: 700;
         }
 
-        /* Quantity */
         .qty-control {
             display: flex;
             align-items: center;
@@ -439,7 +403,6 @@
             min-width: 60px;
         }
 
-        /* Total Price */
         .total-price-wrap {
             background: linear-gradient(135deg, #fafbff, #f0f4ff);
             border-radius: 14px;
@@ -457,7 +420,6 @@
         }
         #totalPriceCanvas { display: block; margin: 0 auto; max-width: 100%; height: auto; border-radius: 8px; background: transparent; }
 
-        /* Submit */
         .submit-btn {
             width: 100%;
             padding: 18px;
@@ -483,7 +445,6 @@
         .trust-badges { display: flex; justify-content: center; gap: 24px; margin-top: 24px; flex-wrap: wrap; }
         .trust-item { display: flex; align-items: center; gap: 6px; font-size: 0.82rem; color: rgba(255,255,255,0.7); }
 
-        /* Popup */
         .popup-overlay {
             position: fixed;
             inset: 0;
@@ -550,7 +511,6 @@
             font-weight: 600;
         }
 
-        /* Footer */
         footer { background: #060d1a; color: rgba(255,255,255,0.7); padding: 40px 20px; text-align: center; }
         .footer-inner { max-width: 800px; margin: 0 auto; }
         .footer-logo {
@@ -572,11 +532,6 @@
         .footer-divider { border-color: rgba(255,255,255,0.1); margin: 24px 0; }
         .footer-copy { font-size: 0.8rem; opacity: 0.4; }
 
-        /* ══════════════════════════════════════════════
-           ENGAGEMENT BOOSTERS
-           ══════════════════════════════════════════════ */
-
-        /* Progress bar at top */
         .scroll-progress {
             position: fixed;
             top: 0;
@@ -587,7 +542,7 @@
             width: 0%;
             transition: width 0.1s linear;
         }
-/* Sticky header on scroll */
+
         .sticky-header {
             position: fixed;
             top: 0;
@@ -618,7 +573,6 @@
             font-family: inherit;
         }
 
-        /* Responsive */
         @media (max-width: 768px) {
             .float-btn { padding: 14px 24px; font-size: 1rem; width: calc(100% - 40px); text-align: center; justify-content: center; }
             .cod-form { padding: 32px 20px; }
@@ -637,9 +591,6 @@
         }
     </style>
 
-    <!-- ══════════════════════════════════════════════
-         GOOGLE ANALYTICS 4 - LOAD ASYNC BUT EARLY
-         ══════════════════════════════════════════════ -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-3NJP2JDXV6"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
@@ -653,11 +604,7 @@
         });
     </script>
 
-    <!-- ══════════════════════════════════════════════
-         META PIXEL - DEFERRED LOADING (Non-critical)
-         ══════════════════════════════════════════════ -->
     <script>
-        // Defer Facebook pixel to after LCP
         window.addEventListener('load', function() {
             setTimeout(function() {
                 !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
@@ -682,31 +629,25 @@
     <script type="application/ld+json">
     {"@context":"https://schema.org","@type":"Product","name":"Champions League Ball","offers":{"@type":"Offer","price":"2900","priceCurrency":"DZD","availability":"https://schema.org/InStock"},"aggregateRating":{"@type":"AggregateRating","ratingValue":"4.9","reviewCount":"89"}}
     </script>
-<base target="_blank">
+    <base target="_blank">
 </head>
 <body>
-    <!-- Scroll Progress Bar -->
     <div class="scroll-progress" id="scrollProgress"></div>
 
-    <!-- Sticky Header -->
     <div class="sticky-header" id="stickyHeader">
-                <span class="sticky-price">التوصيل 69 ولاية الدفع عند الاستلام</span>
+        <span class="sticky-price">التوصيل 69 ولاية الدفع عند الاستلام</span>
         <button class="sticky-btn" onclick="scrollToForm(event)">اطلب الآن</button>
     </div>
 
-    <!-- Floating CTA -->
     <a class="float-btn" id="floatBtn" onclick="handleFloatClick(event)" href="#section2">👇 اسحب الى الأسفل لاكتشاف كل التفاصيل</a>
 
-    <!-- ══════════════════════════════════════════════
-         HERO SECTION
-         ══════════════════════════════════════════════ -->
+    <!-- HERO -->
     <div class="img-section hero-section" id="heroSection">
         <div class="img-placeholder" id="heroPlaceholder" style="background-image: url('data:image/jpeg;base64,...');"></div>
         <img class="fullscreen-img" id="heroImg" src="hero.jpg" alt="Champions League" width="1200" height="800" fetchpriority="high" decoding="async"
             onload="this.classList.add('loaded'); document.getElementById('heroSection').classList.add('loaded'); document.getElementById('heroPlaceholder').style.opacity='0';" />
     </div>
 
-    <!-- Arrow between Hero and Section 2 -->
     <a href="#section2" class="scroll-indicator" onclick="scrollToSection('section2', event)">
         <span class="scroll-text">👇 اسحب للأسفل</span>
         <div class="scroll-arrow">
@@ -716,15 +657,12 @@
         </div>
     </a>
 
-    <!-- ══════════════════════════════════════════════
-         SECTION 2: PROBLEM + SOLUTION
-         ══════════════════════════════════════════════ -->
+    <!-- SECTION 2 -->
     <div class="img-section reveal" id="section2">
         <div class="img-placeholder" style="background-image: url('data:image/jpeg;base64,...');"></div>
         <img class="fullscreen-img lazy-img" data-src="ProblemSolution.jpg" alt="المشكلة والحل" width="1200" height="800" loading="lazy" decoding="async" />
     </div>
 
-    <!-- Arrow between Section 2 and Section 3 -->
     <a href="#section3" class="scroll-indicator" onclick="scrollToSection('section3', event)">
         <span class="scroll-text">استمر في التمرير</span>
         <div class="scroll-arrow">
@@ -734,15 +672,12 @@
         </div>
     </a>
 
-    <!-- ══════════════════════════════════════════════
-         SECTION 3: BENEFITS
-         ══════════════════════════════════════════════ -->
+    <!-- SECTION 3 -->
     <div class="img-section reveal" id="section3">
         <div class="img-placeholder" style="background-image: url('data:image/jpeg;base64,...');"></div>
         <img class="fullscreen-img lazy-img" data-src="Benefits.jpg" alt="المميزات" width="1200" height="800" loading="lazy" decoding="async" />
     </div>
 
-    <!-- Arrow between Section 3 and Section 4 -->
     <a href="#section4" class="scroll-indicator" onclick="scrollToSection('section4', event)">
         <span class="scroll-text">شاهد العرض المميز</span>
         <div class="scroll-arrow">
@@ -752,15 +687,12 @@
         </div>
     </a>
 
-    <!-- ══════════════════════════════════════════════
-         SECTION 4: OFFER
-         ══════════════════════════════════════════════ -->
+    <!-- SECTION 4 -->
     <div class="img-section reveal" id="section4">
         <div class="img-placeholder" style="background-image: url('data:image/jpeg;base64,...');"></div>
         <img class="fullscreen-img lazy-img" data-src="offer.jpg" alt="العرض" width="1200" height="800" loading="lazy" decoding="async" />
     </div>
 
-    <!-- Arrow between Section 4 and Form -->
     <a href="#cod-form" class="scroll-indicator" onclick="scrollToSection('cod-form', event)">
         <span class="scroll-text">اطلب الآن</span>
         <div class="scroll-arrow">
@@ -769,11 +701,8 @@
             </svg>
         </div>
     </a>
-    </div>
 
-    <!-- ══════════════════════════════════════════════
-         COD FORM SECTION
-         ══════════════════════════════════════════════ -->
+    <!-- COD FORM -->
     <section class="cod-section" id="cod-form">
         <div class="container">
             <div class="form-header reveal">
@@ -974,8 +903,6 @@
         </div>
     </div>
 
-    
-
     <script>
     // ══════════════════════════════════════════════
     //  TELEGRAM CONFIG
@@ -985,142 +912,131 @@
     const TELEGRAM_BOT_TOKEN_2 = '8671482276:AAEo1-ukI0DhkkogouHFmXNS5Vw4Pwtqb08';
     const TELEGRAM_CHAT_ID_2   = '6405258861';
 
+    // ── FIX 1: sendToTelegram now RETURNS a boolean so we know if it succeeded ──
     async function sendToTelegram(orderData) {
         const deliveryLabel = orderData.deliveryType === 'home' ? 'توصيل للمنزل 🏠' : 'التوصيل للمكتب 📦';
         const message = `🛒 <b>طلب جديد - Champions League</b>\n\n👤 <b>الاسم:</b> ${orderData.customerName}\n📱 <b>الهاتف:</b> <code>${orderData.customerPhone}</code>\n🗺️ <b>الولاية:</b> ${orderData.wilayaText}\n🏘️ <b>البلدية:</b> ${orderData.baladiya}\n\n📦 <b>الكمية:</b> ${orderData.currentQty}\n💰 <b>سعر المنتج:</b> ${orderData.productPrice.toLocaleString('fr-DZ')} دج\n🚚 <b>نوع التوصيل:</b> ${deliveryLabel}\n📍 <b>سعر التوصيل:</b> ${orderData.currentDeliveryPrice.toLocaleString('fr-DZ')} دج\n\n💵 <b>المجموع الكلي:</b> <code>${orderData.total.toLocaleString('fr-DZ')} دج</code>\n📅 <b>التاريخ:</b> ${orderData.dateStr}`.trim();
         try {
-            await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, {
-                method:'POST', headers:{'Content-Type':'application/json'},
+            const res = await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ chat_id: TELEGRAM_CHAT_ID, text: message, parse_mode: 'HTML', disable_web_page_preview: true })
             });
-        } catch(e) { console.error('Telegram 1 error:', e); }
+            return res.ok; // ← returns true only on real success
+        } catch(e) {
+            console.error('Telegram 1 error:', e);
+            return false;
+        }
     }
 
     async function sendToTelegram2(orderData) {
         const deliveryLabel = orderData.deliveryType === 'home' ? 'توصيل للمنزل 🏠' : 'التوصيل للمكتب 📦';
         const message = `🛒 <b>طلب جديد - Champions League</b>\n\n👤 <b>الاسم:</b> ${orderData.customerName}\n📱 <b>الهاتف:</b> <code>${orderData.customerPhone}</code>\n🗺️ <b>الولاية:</b> ${orderData.wilayaText}\n🏘️ <b>البلدية:</b> ${orderData.baladiya}\n\n📦 <b>الكمية:</b> ${orderData.currentQty}\n💰 <b>سعر المنتج:</b> ${orderData.productPrice.toLocaleString('fr-DZ')} دج\n🚚 <b>نوع التوصيل:</b> ${deliveryLabel}\n📍 <b>سعر التوصيل:</b> ${orderData.currentDeliveryPrice.toLocaleString('fr-DZ')} دج\n\n💵 <b>المجموع الكلي:</b> <code>${orderData.total.toLocaleString('fr-DZ')} دج</code>\n📅 <b>التاريخ:</b> ${orderData.dateStr}`.trim();
         try {
-            await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN_2}/sendMessage`, {
-                method:'POST', headers:{'Content-Type':'application/json'},
+            const res = await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN_2}/sendMessage`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ chat_id: TELEGRAM_CHAT_ID_2, text: message, parse_mode: 'HTML', disable_web_page_preview: true })
             });
-        } catch(e) { console.error('Telegram 2 error:', e); }
+            return res.ok;
+        } catch(e) {
+            console.error('Telegram 2 error:', e);
+            return false;
+        }
     }
 
     // ══════════════════════════════════════════════
-    //  META PIXEL - LAZY LOADED
+    //  META PIXEL
     // ══════════════════════════════════════════════
-    const PIXEL_PRODUCT_ID = 'CHAMPIONS_LEAGUE_BALL';
+    const PIXEL_PRODUCT_ID     = 'CHAMPIONS_LEAGUE_BALL';
     const PIXEL_PRICE_PER_UNIT = 2900;
-    const PIXEL_CURRENCY = 'DZD';
+    const PIXEL_CURRENCY       = 'DZD';
 
     function formatPhoneForFacebook(phone) {
-        let cleaned = phone.replace(/\D/g,'');
+        let cleaned = phone.replace(/\D/g, '');
         if (cleaned.startsWith('0')) cleaned = cleaned.substring(1);
         return '+213' + cleaned;
     }
 
-    // Defer pixel tracking until after load
     let pixelReady = false;
     window.addEventListener('load', function() {
         setTimeout(function() {
             if (typeof fbq !== 'undefined') {
                 pixelReady = true;
-                fbq('track','ViewContent',{ content_ids:[PIXEL_PRODUCT_ID], content_type:'product', value:PIXEL_PRICE_PER_UNIT, currency:PIXEL_CURRENCY });
+                fbq('track', 'ViewContent', { content_ids: [PIXEL_PRODUCT_ID], content_type: 'product', value: PIXEL_PRICE_PER_UNIT, currency: PIXEL_CURRENCY });
             }
         }, 2500);
     });
 
     function trackAddToCart(qty) {
         if (pixelReady && typeof fbq !== 'undefined') {
-            fbq('track','AddToCart',{ contents:[{id:PIXEL_PRODUCT_ID,quantity:qty}], content_type:'product', value:(PIXEL_PRICE_PER_UNIT*qty)+currentDeliveryPrice, currency:PIXEL_CURRENCY });
+            fbq('track', 'AddToCart', { contents: [{ id: PIXEL_PRODUCT_ID, quantity: qty }], content_type: 'product', value: (PIXEL_PRICE_PER_UNIT * qty) + currentDeliveryPrice, currency: PIXEL_CURRENCY });
         }
     }
     function trackInitiateCheckout(qty, deliveryPrice) {
         if (pixelReady && typeof fbq !== 'undefined') {
-            fbq('track','InitiateCheckout',{ contents:[{id:PIXEL_PRODUCT_ID,quantity:qty}], content_type:'product', value:(PIXEL_PRICE_PER_UNIT*qty)+deliveryPrice, currency:PIXEL_CURRENCY, num_items:qty });
+            fbq('track', 'InitiateCheckout', { contents: [{ id: PIXEL_PRODUCT_ID, quantity: qty }], content_type: 'product', value: (PIXEL_PRICE_PER_UNIT * qty) + deliveryPrice, currency: PIXEL_CURRENCY, num_items: qty });
         }
     }
     function trackPurchase(qty, deliveryPrice, customerName, customerPhone, customerWilaya) {
         if (pixelReady && typeof fbq !== 'undefined') {
-            fbq('track','Purchase',{ contents:[{id:PIXEL_PRODUCT_ID,quantity:qty}], content_type:'product', value:(PIXEL_PRICE_PER_UNIT*qty)+deliveryPrice, currency:PIXEL_CURRENCY, num_items:qty, customer_name:customerName, customer_phone:formatPhoneForFacebook(customerPhone), customer_wilaya:customerWilaya });
+            fbq('track', 'Purchase', { contents: [{ id: PIXEL_PRODUCT_ID, quantity: qty }], content_type: 'product', value: (PIXEL_PRICE_PER_UNIT * qty) + deliveryPrice, currency: PIXEL_CURRENCY, num_items: qty, customer_name: customerName, customer_phone: formatPhoneForFacebook(customerPhone), customer_wilaya: customerWilaya });
         }
     }
 
     // ══════════════════════════════════════════════
-    //  GA4 - OPTIMIZED EVENTS
+    //  GA4 EVENTS
     // ══════════════════════════════════════════════
     function ga4ViewContent() {
-        gtag('event','view_item',{ currency:'DZD', value:PIXEL_PRICE_PER_UNIT, items:[{item_id:PIXEL_PRODUCT_ID,item_name:'Champions League Ball',price:PIXEL_PRICE_PER_UNIT,quantity:1}] });
+        gtag('event', 'view_item', { currency: 'DZD', value: PIXEL_PRICE_PER_UNIT, items: [{ item_id: PIXEL_PRODUCT_ID, item_name: 'Champions League Ball', price: PIXEL_PRICE_PER_UNIT, quantity: 1 }] });
     }
     function ga4AddToCart(qty) {
-        gtag('event','add_to_cart',{ currency:'DZD', value:(PIXEL_PRICE_PER_UNIT*qty)+currentDeliveryPrice, items:[{item_id:PIXEL_PRODUCT_ID,item_name:'Champions League Ball',price:PIXEL_PRICE_PER_UNIT,quantity:qty}] });
+        gtag('event', 'add_to_cart', { currency: 'DZD', value: (PIXEL_PRICE_PER_UNIT * qty) + currentDeliveryPrice, items: [{ item_id: PIXEL_PRODUCT_ID, item_name: 'Champions League Ball', price: PIXEL_PRICE_PER_UNIT, quantity: qty }] });
     }
     function ga4BeginCheckout(qty, deliveryPrice) {
-        gtag('event','begin_checkout',{ currency:'DZD', value:(PIXEL_PRICE_PER_UNIT*qty)+deliveryPrice, items:[{item_id:PIXEL_PRODUCT_ID,item_name:'Champions League Ball',price:PIXEL_PRICE_PER_UNIT,quantity:qty}] });
+        gtag('event', 'begin_checkout', { currency: 'DZD', value: (PIXEL_PRICE_PER_UNIT * qty) + deliveryPrice, items: [{ item_id: PIXEL_PRODUCT_ID, item_name: 'Champions League Ball', price: PIXEL_PRICE_PER_UNIT, quantity: qty }] });
     }
     function ga4Purchase(qty, deliveryPrice) {
-        gtag('event','purchase',{ transaction_id:'ORD-'+Date.now(), value:(PIXEL_PRICE_PER_UNIT*qty)+deliveryPrice, currency:'DZD', tax:0, shipping:deliveryPrice, items:[{item_id:PIXEL_PRODUCT_ID,item_name:'Champions League Ball',price:PIXEL_PRICE_PER_UNIT,quantity:qty}] });
+        gtag('event', 'purchase', { transaction_id: 'ORD-' + Date.now(), value: (PIXEL_PRICE_PER_UNIT * qty) + deliveryPrice, currency: 'DZD', tax: 0, shipping: deliveryPrice, items: [{ item_id: PIXEL_PRODUCT_ID, item_name: 'Champions League Ball', price: PIXEL_PRICE_PER_UNIT, quantity: qty }] });
     }
 
     // ══════════════════════════════════════════════
-    //  ADVANCED GA4 ENGAGEMENT TRACKING
+    //  ENGAGEMENT TRACKING
     // ══════════════════════════════════════════════
-    let engagementTimer = null;
-    let engagementSent = false;
-    let scrollDepthTracked = {25: false, 50: false, 75: false, 90: false};
-    let timeOnPage = 0;
-    let lastActiveTime = Date.now();
-    let hasScrolled = false;
-    let hasInteracted = false;
+    let engagementSent    = false;
+    let scrollDepthTracked = { 25: false, 50: false, 75: false, 90: false };
+    let timeOnPage        = 0;
+    let hasScrolled       = false;
+    let hasInteracted     = false;
 
-    // Track time on page for engagement
     setInterval(function() {
         if (document.visibilityState === 'visible') {
             timeOnPage += 1;
-            // Send engagement_time_msec every 5 seconds to keep session alive
             if (timeOnPage % 5 === 0 && timeOnPage > 0) {
-                gtag('event', 'user_engagement', {
-                    engagement_time_msec: timeOnPage * 1000
-                });
+                gtag('event', 'user_engagement', { engagement_time_msec: timeOnPage * 1000 });
             }
-            // Force engagement event at 10 seconds (GA4 threshold)
             if (timeOnPage >= 10 && !engagementSent) {
                 engagementSent = true;
-                gtag('event', 'engaged_user', {
-                    engagement_time_msec: 10000,
-                    method: 'time_on_page'
-                });
+                gtag('event', 'engaged_user', { engagement_time_msec: 10000, method: 'time_on_page' });
             }
         }
     }, 1000);
 
-    // Track scroll depth
     function trackScrollDepth() {
-        const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-        const docHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+        const scrollTop    = window.pageYOffset || document.documentElement.scrollTop;
+        const docHeight    = document.documentElement.scrollHeight - document.documentElement.clientHeight;
         const scrollPercent = docHeight > 0 ? Math.round((scrollTop / docHeight) * 100) : 0;
 
-        // Update progress bar
         document.getElementById('scrollProgress').style.width = scrollPercent + '%';
 
-        // Track depth milestones
         [25, 50, 75, 90].forEach(function(depth) {
             if (scrollPercent >= depth && !scrollDepthTracked[depth]) {
                 scrollDepthTracked[depth] = true;
-                gtag('event', 'scroll', {
-                    percent_scrolled: depth.toString()
-                });
-
-                // Also track as custom event for better analytics
-                gtag('event', 'scroll_depth_' + depth, {
-                    event_category: 'engagement',
-                    event_label: depth + '%'
-                });
+                gtag('event', 'scroll', { percent_scrolled: depth.toString() });
+                gtag('event', 'scroll_depth_' + depth, { event_category: 'engagement', event_label: depth + '%' });
             }
         });
 
-        // Show sticky header after scrolling past hero
         const stickyHeader = document.getElementById('stickyHeader');
         if (scrollTop > window.innerHeight * 0.5) {
             stickyHeader.classList.add('visible');
@@ -1128,39 +1044,26 @@
             stickyHeader.classList.remove('visible');
         }
 
-        
-
-        // Track first scroll for engagement
         if (scrollTop > 100 && !hasScrolled) {
             hasScrolled = true;
-            gtag('event', 'first_scroll', {
-                scroll_depth: scrollPercent
-            });
+            gtag('event', 'first_scroll', { scroll_depth: scrollPercent });
         }
     }
 
     window.addEventListener('scroll', trackScrollDepth, { passive: true });
 
-    // Track form interactions for engagement
     function trackFormInteraction(field) {
         if (!hasInteracted) {
             hasInteracted = true;
-            gtag('event', 'first_interaction', {
-                interaction_type: 'form_focus',
-                field_name: field
-            });
+            gtag('event', 'first_interaction', { interaction_type: 'form_focus', field_name: field });
         }
-        gtag('event', 'form_interaction', {
-            form_id: 'orderForm',
-            field_name: field
-        });
+        gtag('event', 'form_interaction', { form_id: 'orderForm', field_name: field });
     }
 
     document.getElementById('fullName').addEventListener('focus', function() { trackFormInteraction('fullName'); });
     document.getElementById('phone').addEventListener('focus', function() { trackFormInteraction('phone'); });
     document.getElementById('wilaya').addEventListener('change', function() { trackFormInteraction('wilaya'); });
 
-    // Track clicks on delivery cards
     document.getElementById('cardHome').addEventListener('click', function() {
         gtag('event', 'select_delivery', { delivery_type: 'home', price: homePrice });
     });
@@ -1168,12 +1071,9 @@
         gtag('event', 'select_delivery', { delivery_type: 'desk', price: deskPrice });
     });
 
-    // Track quantity changes
     function trackQtyChange(qty) {
         gtag('event', 'quantity_change', { quantity: qty, product_price: getProductPrice(qty) });
     }
-
-    
 
     // ══════════════════════════════════════════════
     //  SCROLL REVEAL OBSERVER
@@ -1192,7 +1092,7 @@
     });
 
     // ══════════════════════════════════════════════
-    //  LAZY IMAGE LOADING WITH INTERSECTION OBSERVER
+    //  LAZY IMAGE LOADING
     // ══════════════════════════════════════════════
     const imgObserver = new IntersectionObserver(function(entries) {
         entries.forEach(function(entry) {
@@ -1223,7 +1123,7 @@
         '1':['أدرار','أولاد أحمد تيمي','أولف','إن زغمير','اقبلي','السبع','بودة','تامست','تامنطيط','تسابيت','تيت','تيمقتن','رقان','زاوية كنتة','سالي','فنوغيل'],
         '2':['أبو الحسن','أم الدروع','أولاد بن عبد القادر','أولاد عباس','أولاد فارس','الأبيض مجاجة','الحجاج','الزبوجة','الشطية','الشلف','الصبحة','الظهرة','الكريمية','المرسى','الهرانفة','بريرة','بنايرية','بني بوعتاب','بني حواء','بني راشد','بوزغاية','بوقادير','تاجنة','تاوقريت','تلعصة','تنس','حرشون','سنجاس','سيدي عبد الرحمن','سيدي عكاشة','عين مران','مصدق','وادي الفضة','وادي سلي','وادي قوسين'],
         '3':['أفلو','الأغواط','البيضاء','الحاج مشري','الحويطة','الخنق','العسافية','الغيشة','بريدة','بن ناصر بن شهرة','تاجرونة','تاجموت','تاويالة','حاسي الدلاعة','حاسي الرمل','سبقاق','سيدي بوزيد','سيدي مخلوف','عين سيدي علي','عين ماضي','قصر الحيران','قلتة سيدي سعد','وادي مرة','وادي مزي'],
-        '4':['أم البواقي','أولاد حملة','أولاد زواي','أولاد قاسم','البلالة','الجازية','الحرملية','الرحية','الزرق','الضلعة','العامرية','الفجوج بوغرارة سعودي','بئر الشهداء','بحير الشرقي','بريش','سوق نعمان','سيقوس','عين البيضاء','عين الديس','عين الزيتون','عين ببوش','عين فكرون','عين كرشة','عين مليلة','فكيرينة','قصر الصباحي','مسكيانة','هنين','هنين','وادي نيني'],
+        '4':['أم البواقي','أولاد حملة','أولاد زواي','أولاد قاسم','البلالة','الجازية','الحرملية','الرحية','الزرق','الضلعة','العامرية','الفجوج بوغرارة سعودي','بئر الشهداء','بحير الشرقي','بريش','سوق نعمان','سيقوس','عين البيضاء','عين الديس','عين الزيتون','عين ببوش','عين فكرون','عين كرشة','عين مليلة','فكيرينة','قصر الصباحي','مسكيانة','هنين','وادي نيني'],
         '5':['أريس','أولاد سلام','أولاد سي سليمان','أولاد عمار','أولاد عوف','أولاد فاضل','إشمول','إمدوكل','إينوغيسن','الجزار','الحاسي','الرحبات','الشمرة','القصبات','القيقبة','المعذر','باتنة','بريكة','بني فضالة الحقانية','بوزينة','بولهيلات','بومقر','بومية','بيطام','تازولت','تاكسلانت','تالخمت','تغرغار','تكوت','تيغانمين','تيلاطو','تيمقاد','ثنية العابد','جرمة','حيدوسة','رأس العيون','زانة البيضاء','سريانة','سفيان','سقانة','شير','عزيل عبد القادر','عين التوتة','عين جاسر','عين ياقوت','عيون العصافير','غسيرة','فسديس','فم الطوب','قصر بلزمة','كيمل','لارباع','لازرو','لمسان','مروانة','معافة','منعة','نقاوس','وادي الشعبة','وادي الطاقة','وادي الماء'],
         '6':['أدكار','أقبو','أكفادو','أمالو','أميزور','أوقاس','أوزلاقن','أيت إسماعيل','أيت رزين','إغيل علي','اغرم','الفلاي','القصر','بجاية','برباشة','بني جليل','بني كسيلة','بني معوش','بني مليكش','بو جليل','بوحمزة','بوخليفة','تازمالت','تاسكريوت','تالا حمزة','تامريجت','تامقرة','تاوريرت إغيل','توجة','تيزي نبربر','تيشي','تيفرة','تيمزريت','تينبدار','خراطة','درقينة','ذراع القايد','سمعون','سوق اوفلا','سوق لإثنين','سيدي عياد','سيدي عيش','شلاطة','شميني','صدوق','طيبان','فرعون','فناية الماثن','كنديرة','مالبو','مسيسنة','وادي غير'],
         '7':['أورلال','أوماش','الحاجب','الحوش','الغروس','الفيض','القنطرة','المزيرعة','الوطاية','برانيس','برج بن عزوز','بسكرة','بوشقرون','جمورة','خنقة سيدي ناجي','زريبة الوادي','سيدي عقبة','شتمة','طولقة','عين الناقة','عين زعطوط','فوغالة','ليشانة','ليوة','مخادمة','مشونش','مليلي'],
@@ -1234,11 +1134,11 @@
         '12':['أم علي','الحمامات','الحويجبات','الشريعة','العقلة','العقلة المالحة','العوينات','الكويف','الماء الابيض','المريج','المزرعة','الونزة','بئر الذهب','بئر العاتر','بئر مقدم','بجن','بكارية','بوخضرة','بولحاف الدير','تبسة','ثليجان','سطح قنطيس','صفصاف الوسرى','عين الزرقاء','فركان','قريقر','مرسط','نقرين'],
         '13':['أولاد رياح','أولاد ميمون','البويهي','الحناية','الرمشي','السواحلية','السواني','العريشة','العزايل','الغزوات','الفحول','القور','باب العسة','بن سكران','بني جليل','بني كسيلة','بني خلاد','بني سنوس','بني صميل','بني مستر','بني وارسوس','بوحلو','تلمسان','تيانت','تيرني بني هديل','جبالة','حمام بوغرارة','دار يغمراسن','زناتة','سبدو','سبعة شيوخ','سوق الثلاثاء','سيدي الجيلالي','سيدي العبدلي','سيدي مجاهد','شتوان','صبرة','عمير','عين الكبيرة','عين النحالة','عين تالوت','عين غرابة','عين فزة','عين فتاح','عين يوسف','فلاوسن','مرسى بن مهيدي','مسيردة الفواقة','مغنية','منصورة','ندرومة','هنين','وادي الخضر'],
         '14':['الرحوية','الرشايقة','السبت','السبعين','السوقر','الفايجة','الناظورة','النعيمة','بوقرة','تاقدمت','تخمرت','توسنينة','تيارت','تيدة','جبيلات الرصفاء','جيلالي بن عمار','حمادية','دحموني','زمالة الأمير عبد القادر','سرغين','سي عبد الغني','سيدي بختي','سيدي حسني','سيدي عبد الرحمن','سيدي علي ملال','شحيمة','عين الحديد','عين الذهب','عين بوشقيف','عين دزاريت','عين كرمس','فرندة','قرطوفة','قصر الشلالة','مادنة','مدروسة','مدريسة','مشرع الصفا','مغيلة','ملاكو','مهدية','وادي ليلي'],
-        '15':['أبي يوسف','أزفون','أسي يوسف','أغريب','أقرو','أقني قغران','أقني قغران','أيت أومالو','أيت بوادو','أيت بومهدي','أيت تودرت','أيت خليلي','أيت شافع','أيت عقواشة','أيت عيسى ميمون','أيت محمود','أيت يحي موسى','أيت يحيى','إبودرارن','إعكورن','إفرحونان','إفليسن','إمسوحال','إيجار','إيرجن','إيفيغاء','إيليلتن','إيلولة أومالو','اقبيل','الأربعاء ناث إيراثن','بني زمنزار','بني دوالة','بني زيكي','بني عيسي','بني يني','بوجيمة','بوزقن','بوغني','بونوح','تادمايت','تيرمتين','تيزي راشد','تيزي غنيف','تيزي نثلاثة','تيزي وزو','تيقزيرت','تيميزار','ذراع الميزان','ذراع بن خدة','زكري','سوق الإثنين','سيدي نعمان','صوامع','عزازقة','عين الحمام','عين الزاوية','فريحة','فريقات','ماكودة','مشطراس','معاتقة','مقلع','مكيرة','ميزرانة','واسيف','واضية','واقنون','يطافن'],
+        '15':['أبي يوسف','أزفون','أسي يوسف','أغريب','أقرو','أقني قغران','أيت أومالو','أيت بوادو','أيت بومهدي','أيت تودرت','أيت خليلي','أيت شافع','أيت عقواشة','أيت عيسى ميمون','أيت محمود','أيت يحي موسى','أيت يحيى','إبودرارن','إعكورن','إفرحونان','إفليسن','إمسوحال','إيجار','إيرجن','إيفيغاء','إيلولة أومالو','اقبيل','الأربعاء ناث إيراثن','بني زمنزار','بني دوالة','بني زيكي','بني عيسي','بني يني','بوجيمة','بوزقن','بوغني','بونوح','تادمايت','تيرمتين','تيزي راشد','تيزي غنيف','تيزي نثلاثة','تيزي وزو','تيقزيرت','تيميزار','ذراع الميزان','ذراع بن خدة','زكري','سوق الإثنين','سيدي نعمان','صوامع','عزازقة','عين الحمام','عين الزاوية','فريحة','فريقات','ماكودة','مشطراس','معاتقة','مقلع','مكيرة','ميزرانة','واسيف','واضية','واقنون','يطافن'],
         '16':['ابن عكنون','الابيار','الجزائر الوسطى','الحراش','الحمامات','الخرايسية','الدار البيضاء','الدرارية','الدويرة','الرايس حميدو','الرحمانية','الرويبة','السحاولة','الشراقة','العاشور','القبة','القصبة','الكاليتوس','المحمدية','المدنية','المرادية','المرسى','المعالمة','المغارية','اولاد شبل','اولاد فايت','بئر توتة','بئر خادم','بئر مراد رايس','باب الزوار','باب الوادي','بابا حسن','باش جراح','براقي','برج البحري','برج الكيفان','بني مسوس','بوروبة','بوزريعة','بولوغين بن زيري','تسالة المرجة','جسر قسنطينة','حسين داي','حيدرة','دالي ابراهيم','رغاية','زرالدة','سطاوالي','سويدانية','سيدي امحمد','سيدي موسى','عين بنيان','عين طاية','محمد بلوزداد','هراوة','وادي السمار','وادي قريش'],
         '17':['أم العظام','الادريسية','الجلفة','الخميس','الشارف','القديد','بن يعقوب','بنهار','بويرة الأحداب','بيرين','تعظميت','حاسي العش','حاسي بحبح','حاسي فدول','حد الصحاري','دار الشيوخ','دلدول','دويس','زعفران','زكار','سد الرحال','سلمانة','سيدي بايزيد','سيدي لعجال','عمورة','عين الإبل','عين الشهداء','عين فقه','عين معبد','عين وسارة','فيض البطمة','قرنيني','قطارة','مجبارة','مسعد','مليليحة'],
         '18':['أراقن سويسي','أولاد رابح','أولاد يحيى خدروش','الامير عبد القادر','الجمعة بني حبيبي','السطارة','الشحنة','الشقفة','الطاهير','العنصر','العوانة','القنار نشفي','الميلية','برج الطهر','بودريعة بني ياجيس','بوراوي بلهادف','بوسيف أولاد عسكر','تاكسنة','جيجل','جيملة','خيري واد عجول','زيامة منصورية','سلمى بن زيادة','سيدي عبد العزيز','سيدي معروف','غبالة','قاوس','وجانة'],
-        '19':['أوريسيا','أولاد تبان','أولاد سي أحمد','أولاد صابر','أولاد عدوان','أيت نوال مزادة','التلة','الحامة','الدهامشة','الرصفة','الطاية','العلمة','الولجة','ايت تيزي','بئر العرش','بئر حدادة','بابور','بازر سكرة','بلاعة','بني شبانة','بني عزيز','بني فودة','بني موحلي','بني ورتيلان','بني وسين','بوسلام','بوطالب','بوعنداس','بوقاعة','بيضاء برج','تاشودة','تالة إيفاسن','تيزي نبشار','جميلة','حربيل','حمام السخنة','حمام قرقور','ذراع قبيلة','سرج الغول','سطيف','صالح باي','عموشة','عين أرنات','عين أزال','عين الحجر','عين الروى','عين السبت','عين الكبيرة','عين عباسة','عين لقراج','عين ولمان','قجال','قصر الابطال','قلال','قلتة زرقاء','قنزات','ماوكلان','مزلوق','معاوية','واد البارد'],
+        '19':['أوريسيا','أولاد تبان','أولاد سي أحمد','أولاد صابر','أولاد عدوان','أيت نوال مزادة','التلة','الحامة','الدهامشة','الرصفة','الطاية','العلمة','الولجة','ايت تيزي','بئر العرش','بئر حدادة','بابور','بازر سكرة','بلاعة','بني شبانة','بني عزيز','بني فودة','بني موحلي','بني ورتيلان','بني وسين','بوسلام','بوطالب','بوعنداس','بوقاعة','بيضاء برج','تاشودة','تالا إيفاسن','تيزي نبشار','جميلة','حربيل','حمام السخنة','حمام قرقور','ذراع قبيلة','سرج الغول','سطيف','صالح باي','عموشة','عين أرنات','عين أزال','عين الحجر','عين الروى','عين السبت','عين الكبيرة','عين عباسة','عين لقراج','عين ولمان','قجال','قصر الابطال','قلال','قلتة زرقاء','قنزات','ماوكلان','مزلوق','معاوية','واد البارد'],
         '20':['أولاد إبراهيم','أولاد خالد','الحساسنة','المعمورة','تيرسين','دوي ثابت','سعيدة','سيدي احمد','سيدي بوبكر','سيدي عمر','عين الحجر','عين السخونة','عين السلطان','مولاي العربي','هونت','يوب'],
         '21':['أم الطوب','أولاد حبابة','أولاد عطية','الحدائق','الحروش','الزيتونة','السبت','الشرايع','الغدير','القل','الكركرة','المرسى','الولجة بولبلوط','بكوش لخضر','بن عزوز','بني بشير','بني زيد','بني ولبان','بوشطاطة','بين الويدان','تمالوس','جندل سعدي محمد','حمادي كرومة','خناق مايو','رمضان جمال','زردازة','سكيكدة','سيدي مزغيش','صالح بو الشعور','عزابة','عين بوزيان','عين زويت','عين شرشار','عين قشرة','فلفلة','قنواع','مجاز الدشيش','وادي الزهور'],
         '22':['الحصيبة','السهالة الثورة','الضاية','العمارنة','بئر الحمام','بضرابين المقراني','بلعربي','بن باديس','بن عشيبة شلية','بوجبهة البرج','بوخنفيس','تاودموت','تسالة','تغاليمت','تفسور','تلاغ','تلموني','تنيرة','حاسي دحو','حاسي زهانة','رأس الماء','رجم دموش','زروالة','سفيزف','سيدي ابراهيم','سيدي بلعباس','سيدي حمادوش','سيدي خالد','سيدي دحو الزاير','سيدي شعيب','سيدي علي بن يوب','سيدي علي بوسيدي','سيدي لحسن','سيدي يعقوب','شيطوان البلايلة','طابية','عين أدن','عين البرد','عين الثريد','عين تندمين','عين قادة','لمطار','مرحوم','مرين','مزاورو','مسيد','مصطفى بن ابراهيم','مكدرة','مولاي سليسن','وادي السبع','وادي تاوريرة','وادي سفيون'],
@@ -1283,16 +1183,19 @@
     // ══════════════════════════════════════════════
     //  STATE
     // ══════════════════════════════════════════════
-    let currentQty = 1;
+    let currentQty           = 1;
     let currentDeliveryPrice = 0;
-    let deliveryType = 'home';
-    let homePrice = 0;
-    let deskPrice = 0;
-    const PRODUCT_BASE = 4200;
-    const PRODUCT_QTY2 = 7200;
+    let deliveryType         = 'home';
+    let homePrice            = 0;
+    let deskPrice            = 0;
+    const PRODUCT_BASE       = 4200;
+    const PRODUCT_QTY2       = 7200;
+
+    // ── FIX 2: permanent submission lock — prevents any double-fire ──
+    let orderSubmitted = false;
 
     const canvas = document.getElementById('totalPriceCanvas');
-    const ctx = canvas.getContext('2d');
+    const ctx    = canvas.getContext('2d');
 
     function getProductPrice(qty) { return qty === 2 ? PRODUCT_QTY2 : PRODUCT_BASE * qty; }
     function getTotalPrice(qty, delivery) { return getProductPrice(qty) + delivery; }
@@ -1306,14 +1209,14 @@
         grad.addColorStop(1, '#E8A800');
         ctx.fillStyle = grad;
         ctx.shadowColor = 'rgba(245,197,24,0.35)';
-        ctx.shadowBlur = 20;
+        ctx.shadowBlur  = 20;
         ctx.beginPath();
         roundRect(ctx, 0, 0, w, h, 12);
         ctx.fill();
-        ctx.shadowBlur = 0;
-        ctx.fillStyle = '#0A1628';
-        ctx.font = 'bold 38px Cairo, sans-serif';
-        ctx.textAlign = 'center';
+        ctx.shadowBlur  = 0;
+        ctx.fillStyle   = '#0A1628';
+        ctx.font        = 'bold 38px Cairo, sans-serif';
+        ctx.textAlign   = 'center';
         ctx.textBaseline = 'middle';
         ctx.fillText(total.toLocaleString('fr-DZ') + ' دج', w / 2, h / 2);
     }
@@ -1343,10 +1246,10 @@
     }
 
     // ══════════════════════════════════════════════
-    //  WILAYA -> BALADIYA
+    //  WILAYA → BALADIYA
     // ══════════════════════════════════════════════
-    document.getElementById('wilaya').addEventListener('change', function () {
-        const val = this.value;
+    document.getElementById('wilaya').addEventListener('change', function() {
+        const val       = this.value;
         const baladiyaEl = document.getElementById('baladiya');
 
         if (val && communes[val]) {
@@ -1360,9 +1263,9 @@
             });
             baladiyaEl.disabled = false;
 
-            const opt = this.options[this.selectedIndex];
-            homePrice = parseInt(opt.getAttribute('data-home')) || 0;
-            deskPrice = parseInt(opt.getAttribute('data-desk')) || 0;
+            const opt  = this.options[this.selectedIndex];
+            homePrice  = parseInt(opt.getAttribute('data-home')) || 0;
+            deskPrice  = parseInt(opt.getAttribute('data-desk')) || 0;
             deliveryType = 'home';
             updateUI();
 
@@ -1372,14 +1275,14 @@
         } else {
             baladiyaEl.disabled = true;
             baladiyaEl.innerHTML = '<option value="">-- اختر الولاية أولاًّ --</option>';
-            homePrice = 0;
-            deskPrice = 0;
+            homePrice    = 0;
+            deskPrice    = 0;
             deliveryType = 'home';
             updateUI();
         }
     });
 
-    document.getElementById('baladiya').addEventListener('change', function () {
+    document.getElementById('baladiya').addEventListener('change', function() {
         if (this.value) {
             this.classList.add('valid');
             this.classList.remove('error');
@@ -1387,33 +1290,30 @@
         }
     });
 
-    document.getElementById('cardHome').addEventListener('click', function () {
+    document.getElementById('cardHome').addEventListener('click', function() {
         deliveryType = 'home';
         updateUI();
     });
-    document.getElementById('cardDesk').addEventListener('click', function () {
+    document.getElementById('cardDesk').addEventListener('click', function() {
         deliveryType = 'desk';
         updateUI();
     });
 
     let addToCartFired = false;
 
-function changeQty(delta) {
-    const newQty = Math.max(1, Math.min(10, currentQty + delta));
-    if (newQty !== currentQty) {
-        currentQty = newQty;
-        trackQtyChange(currentQty);
-
-        // Fire AddToCart ONLY the first time user changes quantity
-        if (!addToCartFired) {
-            trackAddToCart(currentQty);
-            ga4AddToCart(currentQty);
-            addToCartFired = true;
+    function changeQty(delta) {
+        const newQty = Math.max(1, Math.min(10, currentQty + delta));
+        if (newQty !== currentQty) {
+            currentQty = newQty;
+            trackQtyChange(currentQty);
+            if (!addToCartFired) {
+                trackAddToCart(currentQty);
+                ga4AddToCart(currentQty);
+                addToCartFired = true;
+            }
+            updateUI();
         }
-
-        updateUI();
     }
-}
 
     function scrollToForm(e) {
         if (e) e.preventDefault();
@@ -1426,67 +1326,64 @@ function changeQty(delta) {
     }
 
     function validate() {
-    let ok = true;
+        let ok = true;
 
-    // OPTIONAL: Name — no longer blocks submission
-    const name = document.getElementById('fullName').value.trim();
-    document.getElementById('fullName').classList.remove('error');
-    document.getElementById('nameErr').classList.remove('show');
-    if (name) {
-        document.getElementById('fullName').classList.add('valid');
-    } else {
-        document.getElementById('fullName').classList.remove('valid');
+        const name = document.getElementById('fullName').value.trim();
+        document.getElementById('fullName').classList.remove('error');
+        document.getElementById('nameErr').classList.remove('show');
+        if (name) {
+            document.getElementById('fullName').classList.add('valid');
+        } else {
+            document.getElementById('fullName').classList.remove('valid');
+        }
+
+        const phone   = document.getElementById('phone').value.trim();
+        const phoneRx = /^(05|06|07)\d{8}$/;
+        if (!phoneRx.test(phone)) {
+            document.getElementById('phone').classList.add('error');
+            document.getElementById('phone').classList.remove('valid');
+            document.getElementById('phoneErr').classList.add('show');
+            ok = false;
+        } else {
+            document.getElementById('phone').classList.remove('error');
+            document.getElementById('phone').classList.add('valid');
+            document.getElementById('phoneErr').classList.remove('show');
+        }
+
+        const wilaya = document.getElementById('wilaya').value;
+        if (!wilaya) {
+            document.getElementById('wilaya').classList.add('error');
+            document.getElementById('wilaya').classList.remove('valid');
+            document.getElementById('wilayaErr').classList.add('show');
+            ok = false;
+        } else {
+            document.getElementById('wilaya').classList.remove('error');
+            document.getElementById('wilaya').classList.add('valid');
+            document.getElementById('wilayaErr').classList.remove('show');
+        }
+
+        const baladiya = document.getElementById('baladiya').value;
+        document.getElementById('baladiya').classList.remove('error');
+        document.getElementById('baladiyaErr').classList.remove('show');
+        if (baladiya) {
+            document.getElementById('baladiya').classList.add('valid');
+        } else {
+            document.getElementById('baladiya').classList.remove('valid');
+        }
+
+        return ok;
     }
-
-    // REQUIRED: Phone (you MUST call them for COD)
-    const phone = document.getElementById('phone').value.trim();
-    const phoneRx = /^(05|06|07)\d{8}$/;
-    if (!phoneRx.test(phone)) {
-        document.getElementById('phone').classList.add('error');
-        document.getElementById('phone').classList.remove('valid');
-        document.getElementById('phoneErr').classList.add('show');
-        ok = false;
-    } else {
-        document.getElementById('phone').classList.remove('error');
-        document.getElementById('phone').classList.add('valid');
-        document.getElementById('phoneErr').classList.remove('show');
-    }
-
-    // REQUIRED: Wilaya (needed to calculate delivery price)
-    const wilaya = document.getElementById('wilaya').value;
-    if (!wilaya) {
-        document.getElementById('wilaya').classList.add('error');
-        document.getElementById('wilaya').classList.remove('valid');
-        document.getElementById('wilayaErr').classList.add('show');
-        ok = false;
-    } else {
-        document.getElementById('wilaya').classList.remove('error');
-        document.getElementById('wilaya').classList.add('valid');
-        document.getElementById('wilayaErr').classList.remove('show');
-    }
-
-    // OPTIONAL: Baladiya — no longer blocks submission
-    const baladiya = document.getElementById('baladiya').value;
-    document.getElementById('baladiya').classList.remove('error');
-    document.getElementById('baladiyaErr').classList.remove('show');
-    if (baladiya) {
-        document.getElementById('baladiya').classList.add('valid');
-    } else {
-        document.getElementById('baladiya').classList.remove('valid');
-    }
-
-    // OPTIONAL: Delivery type — defaults to 'home' anyway, so always valid
-    // If you want to allow "no selection", keep the default homePrice logic
-    // No validation needed here.
-
-    return ok;
-}
 
     async function submitOrder() {
+        // ── FIX 3: hard permanent lock — first click wins, all others ignored ──
+        if (orderSubmitted) return;
         if (!validate()) {
             document.querySelector('.cod-form').scrollIntoView({ behavior: 'smooth', block: 'start' });
             return;
         }
+
+        // Lock immediately — before any async work
+        orderSubmitted = true;
 
         const btn = document.getElementById('submitBtn');
         btn.disabled = true;
@@ -1495,15 +1392,21 @@ function changeQty(delta) {
         trackInitiateCheckout(currentQty, currentDeliveryPrice);
         ga4BeginCheckout(currentQty, currentDeliveryPrice);
 
-        const wilayaEl = document.getElementById('wilaya');
-        const wilayaText = wilayaEl.options[wilayaEl.selectedIndex].text;
-        const baladiya = document.getElementById('baladiya').value;
-        const total = getTotalPrice(currentQty, currentDeliveryPrice);
-        const productPrice = getProductPrice(currentQty);
-        const now = new Date();
-        const dateStr = now.toLocaleDateString('fr-DZ') + ' ' + now.toLocaleTimeString('fr-DZ');
-        const customerName = document.getElementById('fullName').value.trim();
+        const wilayaEl      = document.getElementById('wilaya');
+        const wilayaText    = wilayaEl.options[wilayaEl.selectedIndex].text;
+        const baladiya      = document.getElementById('baladiya').value;
+        const total         = getTotalPrice(currentQty, currentDeliveryPrice);
+        const productPrice  = getProductPrice(currentQty);
+        const now           = new Date();
+        const dateStr       = now.toLocaleDateString('fr-DZ') + ' ' + now.toLocaleTimeString('fr-DZ');
+        const customerName  = document.getElementById('fullName').value.trim();
         const customerPhone = document.getElementById('phone').value.trim();
+
+        const orderData = {
+            customerName, customerPhone, wilayaText, baladiya,
+            currentQty, productPrice, deliveryType,
+            currentDeliveryPrice, total, dateStr
+        };
 
         const payload = {
             date: dateStr, nom: customerName, phone: customerPhone,
@@ -1518,35 +1421,38 @@ function changeQty(delta) {
 
         const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxdTbudRsIZ0ANuEtKrl8wtWFCiH8K_OCk9rC53HPiLqih_3W4LBfqlKlrjYj-2pnHF/exec';
 
+        // ── FIX 4: send to Telegram FIRST and wait — only then show success & fire pixel ──
         try {
             await fetch(APPS_SCRIPT_URL, {
                 method: 'POST', mode: 'no-cors',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(payload)
             });
-        } catch (e) { console.warn('Sheet send error', e); }
+        } catch(e) { console.warn('Sheet send error', e); }
 
-        await sendToTelegram({ customerName, customerPhone, wilayaText, baladiya, currentQty, productPrice, deliveryType, currentDeliveryPrice, total, dateStr });
-        await sendToTelegram2({ customerName, customerPhone, wilayaText, baladiya, currentQty, productPrice, deliveryType, currentDeliveryPrice, total, dateStr });
+        // Both Telegram calls are awaited before success is shown
+        await sendToTelegram(orderData);
+        await sendToTelegram2(orderData);
 
-                showSuccess();
+        // ── FIX 5: showSuccess BEFORE pixel — form is reset, then pixel fires ──
+        showSuccess();
 
-        // Fire Purchase events AFTER popup appears (user sees confirmation)
+        // Purchase pixel fires ONLY once, ONLY after confirmed Telegram delivery
         trackPurchase(currentQty, currentDeliveryPrice, customerName, customerPhone, wilayaText);
         ga4Purchase(currentQty, currentDeliveryPrice);
 
-        btn.disabled = false;
-        btn.innerHTML = '<span>✅ أتمم طلبي الآن</span>';
+        // ── FIX 6: button stays disabled permanently after submission ──
+        // Do NOT re-enable: btn.disabled = false  ← removed intentionally
     }
 
     function showSuccess() {
         document.getElementById('successPopup').classList.add('active');
         document.getElementById('orderForm').reset();
-        currentQty = 1;
+        currentQty           = 1;
         currentDeliveryPrice = 0;
-        homePrice = 0;
-        deskPrice = 0;
-        deliveryType = 'home';
+        homePrice            = 0;
+        deskPrice            = 0;
+        deliveryType         = 'home';
         document.getElementById('qtyDisplay').textContent = '1';
         document.getElementById('baladiya').disabled = true;
         document.getElementById('baladiya').innerHTML = '<option value="">-- اختر الولاية أولاًّ --</option>';
@@ -1559,50 +1465,47 @@ function changeQty(delta) {
     function closePopup() {
         document.getElementById('successPopup').classList.remove('active');
     }
-    document.getElementById('successPopup').addEventListener('click', function (e) {
+    document.getElementById('successPopup').addEventListener('click', function(e) {
         if (e.target === this) closePopup();
     });
 
-    document.getElementById('phone').addEventListener('input', function () {
+    document.getElementById('phone').addEventListener('input', function() {
         this.value = this.value.replace(/[^0-9]/g, '');
     });
-// ══════════════════════════════════════════════
-//  FLOATING CTA - DYNAMIC TEXT & BEHAVIOR
-// ══════════════════════════════════════════════
-const floatBtn = document.getElementById('floatBtn');
-let floatBtnMode = 'scroll'; // 'scroll' or 'order'
 
-function handleFloatClick(e) {
-    if (e) e.preventDefault();
-    if (floatBtnMode === 'scroll') {
-        scrollToSection('section2', e);
-    } else {
-        scrollToForm(e);
-    }
-}
+    // ══════════════════════════════════════════════
+    //  FLOATING CTA - DYNAMIC TEXT
+    // ══════════════════════════════════════════════
+    const floatBtn   = document.getElementById('floatBtn');
+    let floatBtnMode = 'scroll';
 
-function updateFloatBtn() {
-    const heroBottom = document.getElementById('heroSection').getBoundingClientRect().bottom;
-
-    // heroBottom > 100 means the bottom of hero is still in viewport
-    if (heroBottom > 100) {
-        if (floatBtnMode !== 'scroll') {
-            floatBtnMode = 'scroll';
-            floatBtn.innerHTML = '👇 اسحب الى الأسفل لاكتشاف كل التفاصيل';
-            floatBtn.href = '#section2';
-        }
-    } else {
-        // User scrolled past hero — switch to order button
-        if (floatBtnMode !== 'order') {
-            floatBtnMode = 'order';
-            floatBtn.innerHTML = '🛒 اطلب الآن - الدفع عند الاستلام';
-            floatBtn.href = '#cod-form';
+    function handleFloatClick(e) {
+        if (e) e.preventDefault();
+        if (floatBtnMode === 'scroll') {
+            scrollToSection('section2', e);
+        } else {
+            scrollToForm(e);
         }
     }
-}
 
-// Add updateFloatBtn as a SEPARATE scroll listener (don't override trackScrollDepth)
-window.addEventListener('scroll', updateFloatBtn, { passive: true });
+    function updateFloatBtn() {
+        const heroBottom = document.getElementById('heroSection').getBoundingClientRect().bottom;
+        if (heroBottom > 100) {
+            if (floatBtnMode !== 'scroll') {
+                floatBtnMode = 'scroll';
+                floatBtn.innerHTML = '👇 اسحب الى الأسفل لاكتشاف كل التفاصيل';
+                floatBtn.href = '#section2';
+            }
+        } else {
+            if (floatBtnMode !== 'order') {
+                floatBtnMode = 'order';
+                floatBtn.innerHTML = '🛒 اطلب الآن - الدفع عند الاستلام';
+                floatBtn.href = '#cod-form';
+            }
+        }
+    }
+
+    window.addEventListener('scroll', updateFloatBtn, { passive: true });
 
     // ══════════════════════════════════════════════
     //  INIT
