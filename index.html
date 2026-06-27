@@ -956,7 +956,10 @@ async function sendCAPIEvents(eventsArray) {
         const res = await fetch(url, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ data: eventsArray })
+            body: JSON.stringify({ 
+                data: eventsArray,
+                test_event_code: 'TEST98720'   // ← ADD THIS LINE
+            })
         });
         const json = await res.json();
         if (json.error) {
