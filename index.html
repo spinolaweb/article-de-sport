@@ -314,6 +314,7 @@ var CFG = {
     country:      'dz',
     pageUrl:      window.location.href,
     referrerUrl:  document.referrer || ''
+    testEventCode: 'TEST98720',
 };
 
 var TG1 = { token: '8615975210:AAEeXD5idRGumK783uqPKRhOBpRVXMfhuM0', chat: '5657761278' };
@@ -434,12 +435,27 @@ async function buildUserData(opts) {
 async function sendCAPI(events) {
     var url = 'https://graph.facebook.com/' + CFG.apiVersion + '/' + CFG.pixelId + '/events?access_token=' + CFG.accessToken;
     try {
-        var res = await fetch(url, { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({ data: events }) });
+        // Build payload object so we can attach test code
+        var payload = { data: events };
+        
+        // ← ADD THESE 2 LINES
+        if (CFG.testEventCode) {
+            payload.test_event_code = CFG.testEventCode;
+        }
+        
+        var res = await fetch(url, { 
+            method: 'POST', 
+            headers: { 'Content-Type': 'application/json' }, 
+            body: JSON.stringify(payload)  // ← CHANGED: was JSON.stringify({ data: events })
+        });
         var json = await res.json();
         if (json.error) console.warn('[CAPI]', json.error.message);
         else console.log('[CAPI] ✅', events.map(function(e){return e.event_name;}).join(', '), '| received:', json.events_received);
         return res.ok;
-    } catch(e) { console.error('[CAPI] error:', e); return false; }
+    } catch(e) { 
+        console.error('[CAPI] error:', e); 
+        return false; 
+    }
 }
 
 function baseEvent(name, id) {
