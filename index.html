@@ -1250,17 +1250,7 @@ async function capiPurchase(opts) {
     const success = await sendCAPIEvents([capiEvent]);
 
     // Also fire pixel Purchase for deduplication
-    if (window.pixelReady && typeof fbq !== 'undefined') {
-        fbq('track', 'Purchase', {
-            value:        totalUsd,
-            currency:     CAPI_CONFIG.currency,
-            contents:     [{ id: CAPI_CONFIG.productId, quantity: qty }],
-            content_type: 'product',
-            num_items:    qty,
-            order_id:     transactionId
-        }, { eventID: transactionId });
-    }
-
+    
     return success;
 }
 
