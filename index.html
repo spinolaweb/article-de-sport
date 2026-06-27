@@ -968,7 +968,7 @@ function getFbp() { return getCookie('_fbp') || null; }
 
 // ── Generate a unique event ID ──
 function genEventId(eventName) {
-    return eventName + '_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+    return 'srv_' + eventName + '_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
 }
 
 // ── Get client IP via public API (best-effort, fire-and-forget) ──
@@ -1050,8 +1050,6 @@ async function buildUserData(opts = {}) {
 // ══════════════════════════════════════════════════════════════════
 async function capiPageView() {
     const eventId = genEventId('PageView');
-    window._pvEventId = eventId; // store for pixel dedup
-
     const userData = await buildUserData();
     await sendCAPIEvents([{
         event_name:        'PageView',
@@ -1061,8 +1059,6 @@ async function capiPageView() {
         action_source:     'website',
         user_data:         userData
     }]);
-
-    
 }
 
 // ══════════════════════════════════════════════════════════════════
@@ -1699,7 +1695,7 @@ async function submitOrder() {
     const dateStr        = now.toLocaleDateString('fr-DZ') + ' ' + now.toLocaleTimeString('fr-DZ');
     const customerName   = document.getElementById('fullName').value.trim();
     const customerPhone  = document.getElementById('phone').value.trim();
-    const transactionId = 'SERVER-' + Date.now() + '-' + Math.random().toString(36).substr(2, 9);
+    const transactionId = 'srv_PUR_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
 
     // Snapshot state before any async reset
     const orderQty           = currentQty;
