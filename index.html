@@ -990,7 +990,7 @@ async function sendCAPIEvents(eventsArray) {
     try {
         const body = {
             data: eventsArray,
-            test_event_code: undefined  // Remove this line in production or set your test code
+            test_event_code: 'TEST98720'
         };
         const res = await fetch(url, {
             method: 'POST',
