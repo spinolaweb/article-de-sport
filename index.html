@@ -958,7 +958,6 @@ async function sendCAPIEvents(eventsArray) {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ 
                 data: eventsArray,
-                test_event_code: 'TEST98720'   // ← ADD THIS LINE
             })
         });
         const json = await res.json();
