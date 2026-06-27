@@ -12,8 +12,6 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link rel="preconnect" href="https://www.googletagmanager.com" crossorigin />
-    <link rel="preconnect" href="https://connect.facebook.net" crossorigin />
     <link rel="preconnect" href="https://graph.facebook.com" crossorigin />
 
     <style>
@@ -592,36 +590,6 @@
         }
     </style>
 
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-3NJP2JDXV6"></script>
-    <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
-        gtag('config', 'G-3NJP2JDXV6', { 
-            send_page_view: true, 
-            currency: 'DZD', 
-            country: 'DZ',
-            transport_type: 'beacon'
-        });
-    </script>
-
-    <!-- Meta Pixel — loaded after 2s, kept ONLY for browser-side deduplication -->
-    <script>
-        window.addEventListener('load', function() {
-            setTimeout(function() {
-                !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-                n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
-                n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
-                t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(
-                window,document,'script','https://connect.facebook.net/en_US/fbevents.js');
-                fbq('init','1613682052670123');
-                // PageView fired ONLY via CAPI below — pixel just initialises for fbc/fbp cookies
-                window.pixelReady = true;
-            }, 2000);
-        });
-    </script>
-    <noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=1613682052670123&ev=PageView&noscript=1"/></noscript>
-
     <meta property="og:title" content="Champions League Ball — كرة القدم الرسمية | Livraison à domicile Algérie | Paiement à la livraison"/>
     <meta property="og:description" content="🔥 كرة Champions League الأصلية بجودة عالية — تصميم رسمي UEFA، مقاومة للماء، خياطة متينة، أداء احترافي."/>
     <meta property="og:image" content="hero.jpg"/>
@@ -811,7 +779,7 @@
                         البلدية <span class="required-star">*</span>
                     </label>
                     <select id="baladiya" class="form-select" disabled>
-                        <option value="">-- اختر الولاية أولاًّ --</option>
+                        <option value="">-- اختر الولاية أولاُّ --</option>
                     </select>
                     <div class="field-error" id="baladiyaErr">يرجى اختيار البلدية</div>
                 </div>
@@ -908,16 +876,15 @@
 
 <script>
 // ══════════════════════════════════════════════════════════════════
-//  META CONVERSIONS API — ADVANCED CONFIGURATION
+//  META CONVERSIONS API — SERVER-SIDE ONLY
 //  All monetary values sent in USD (DZD ÷ 255)
 //  Full hashing of PII with SHA-256 before sending
-//  Event deduplication via shared event_id between Pixel & CAPI
 // ══════════════════════════════════════════════════════════════════
 const CAPI_CONFIG = {
     pixelId:     '1613682052670123',
     accessToken: 'EAAO6FTdt6xkBRwIZCv5vOmjEj7Qu11GZCldzj6jZBgTZBH7uZBTtTzGONP1grwKI3tvwxqZBmK2VEgh0ol6bEjBA87Dsq3KhbZCMErqPXKQ3QzZCKjJgf1s2jZB4fhVwKlU3sJ72ZByD9aePFGK1KrjAKWPrAUZBU4zkuZBNSfpMUGX7wuITVlZAWTziWGBCbI35pMQZDZD',
     apiVersion:  'v21.0',
-    dzdToUsd:    255,      // 1 USD = 255 DZD
+    dzdToUsd:    255,
     productId:   'CHAMPIONS_LEAGUE_BALL',
     productName: 'Champions League Ball',
     currency:    'USD',
@@ -956,7 +923,6 @@ function getCookie(name) {
     return match ? match[2] : null;
 }
 function getFbc() {
-    // Try cookie first, then URL parameter
     const cookie = getCookie('_fbc');
     if (cookie) return cookie;
     const urlParams = new URLSearchParams(window.location.search);
@@ -983,25 +949,20 @@ let cachedIp = null;
 
 // ══════════════════════════════════════════════════════════════════
 //  CORE CAPI SENDER
-//  Sends one or more events to /events endpoint
 // ══════════════════════════════════════════════════════════════════
 async function sendCAPIEvents(eventsArray) {
     const url = `https://graph.facebook.com/${CAPI_CONFIG.apiVersion}/${CAPI_CONFIG.pixelId}/events?access_token=${CAPI_CONFIG.accessToken}`;
     try {
-        const body = {
-            data: eventsArray,
-            test_event_code: 'TEST98720'
-        };
         const res = await fetch(url, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(body)
+            body: JSON.stringify({ data: eventsArray })
         });
         const json = await res.json();
         if (json.error) {
             console.warn('[CAPI] Error:', json.error.message);
         } else {
-            console.log('[CAPI] ✅ Events sent:', eventsArray.map(e => e.event_name).join(', '), '| Score events_received:', json.events_received);
+            console.log('[CAPI] ✅ Events sent:', eventsArray.map(e => e.event_name).join(', '), '| events_received:', json.events_received);
         }
         return res.ok;
     } catch(e) {
@@ -1027,7 +988,7 @@ async function buildUserData(opts = {}) {
 
     const ud = {
         client_user_agent: navigator.userAgent,
-        country:           await sha256('dz'),  // Algeria — hashed
+        country:           await sha256('dz'),
     };
 
     if (hashedPhone)     ud.ph  = hashedPhone;
@@ -1046,7 +1007,7 @@ async function buildUserData(opts = {}) {
 }
 
 // ══════════════════════════════════════════════════════════════════
-//  EVENT: PageView  (fires on load, no PII yet)
+//  EVENT: PageView
 // ══════════════════════════════════════════════════════════════════
 async function capiPageView() {
     const eventId = genEventId('PageView');
@@ -1062,7 +1023,7 @@ async function capiPageView() {
 }
 
 // ══════════════════════════════════════════════════════════════════
-//  EVENT: ViewContent  (fires ~2.5s after load = product page view)
+//  EVENT: ViewContent
 // ══════════════════════════════════════════════════════════════════
 async function capiViewContent() {
     const eventId   = genEventId('ViewContent');
@@ -1084,19 +1045,16 @@ async function capiViewContent() {
             currency:     CAPI_CONFIG.currency
         }
     }]);
-
-   
 }
 
 // ══════════════════════════════════════════════════════════════════
-//  EVENT: AddToCart  (fires on qty change)
+//  EVENT: AddToCart
 // ══════════════════════════════════════════════════════════════════
 async function capiAddToCart(qty) {
     const eventId  = genEventId('AddToCart');
     const priceDzd = getProductPrice(qty) + currentDeliveryPrice;
     const priceUsd = dzdToUsd(priceDzd);
 
-    // Try to get name/phone if user started filling form
     const phone = document.getElementById('phone').value.trim();
     const name  = document.getElementById('fullName').value.trim();
     const nameParts = splitName(name);
@@ -1123,12 +1081,10 @@ async function capiAddToCart(qty) {
             contents: [{ id: CAPI_CONFIG.productId, quantity: qty, item_price: dzdToUsd(getProductPrice(qty)) }]
         }
     }]);
-
-    
 }
 
 // ══════════════════════════════════════════════════════════════════
-//  EVENT: InitiateCheckout  (fires on submit attempt with valid form)
+//  EVENT: InitiateCheckout
 // ══════════════════════════════════════════════════════════════════
 async function capiInitiateCheckout(qty, deliveryPriceDzd, phone, name, wilayaText) {
     const eventId   = genEventId('InitiateCheckout');
@@ -1161,12 +1117,11 @@ async function capiInitiateCheckout(qty, deliveryPriceDzd, phone, name, wilayaTe
         }
     }]);
 
-    
     return eventId;
 }
 
 // ══════════════════════════════════════════════════════════════════
-//  EVENT: Purchase  (fires after successful order submission)
+//  EVENT: Purchase
 //  This is the most important event — maximum PII for match score
 // ══════════════════════════════════════════════════════════════════
 async function capiPurchase(opts) {
@@ -1177,7 +1132,6 @@ async function capiPurchase(opts) {
     const totalUsd   = dzdToUsd(totalDzd);
     const nameParts  = splitName(name);
 
-    // All available PII for maximum EMQ (Event Match Quality) score
     const userData = await buildUserData({
         phone:     phone,
         firstName: nameParts.first,
@@ -1189,7 +1143,7 @@ async function capiPurchase(opts) {
     const capiEvent = {
         event_name:       'Purchase',
         event_time:       Math.floor(Date.now() / 1000),
-        event_id:         transactionId,     // unique — used for pixel dedup too
+        event_id:         transactionId,
         event_source_url: CAPI_CONFIG.pageUrl,
         action_source:    'website',
         user_data:        userData,
@@ -1213,15 +1167,11 @@ async function capiPurchase(opts) {
         }
     };
 
-    const success = await sendCAPIEvents([capiEvent]);
-
-    // Also fire pixel Purchase for deduplication
-    
-    return success;
+    return await sendCAPIEvents([capiEvent]);
 }
 
 // ══════════════════════════════════════════════════════════════════
-//  EVENT: TimeOnPage (custom — fires at 30s engagement milestone)
+//  EVENT: TimeOnPage (custom — fires at engagement milestones)
 // ══════════════════════════════════════════════════════════════════
 async function capiTimeOnPage(seconds) {
     const eventId  = genEventId('TimeOnPage');
@@ -1270,7 +1220,7 @@ function splitName(fullName) {
 }
 
 // ══════════════════════════════════════════════════════════════════
-//  TELEGRAM CONFIG (unchanged)
+//  TELEGRAM CONFIG
 // ══════════════════════════════════════════════════════════════════
 const TELEGRAM_BOT_TOKEN   = '8615975210:AAEeXD5idRGumK783uqPKRhOBpRVXMfhuM0';
 const TELEGRAM_CHAT_ID     = '5657761278';
@@ -1304,42 +1254,14 @@ async function sendToTelegram2(orderData) {
 }
 
 // ══════════════════════════════════════════════════════════════════
-//  GA4 EVENTS (unchanged)
+//  ENGAGEMENT TRACKING (UI only — no browser pixels)
 // ══════════════════════════════════════════════════════════════════
-function ga4ViewContent() {
-    gtag('event', 'view_item', { currency: 'DZD', value: CAPI_CONFIG.basePriceDzd, items: [{ item_id: CAPI_CONFIG.productId, item_name: CAPI_CONFIG.productName, price: CAPI_CONFIG.basePriceDzd, quantity: 1 }] });
-}
-function ga4AddToCart(qty) {
-    gtag('event', 'add_to_cart', { currency: 'DZD', value: getProductPrice(qty) + currentDeliveryPrice, items: [{ item_id: CAPI_CONFIG.productId, item_name: CAPI_CONFIG.productName, price: CAPI_CONFIG.basePriceDzd, quantity: qty }] });
-}
-function ga4BeginCheckout(qty, deliveryPrice) {
-    gtag('event', 'begin_checkout', { currency: 'DZD', value: getProductPrice(qty) + deliveryPrice, items: [{ item_id: CAPI_CONFIG.productId, item_name: CAPI_CONFIG.productName, price: CAPI_CONFIG.basePriceDzd, quantity: qty }] });
-}
-function ga4Purchase(qty, deliveryPrice, transactionId) {
-    gtag('event', 'purchase', { transaction_id: transactionId, value: getProductPrice(qty) + deliveryPrice, currency: 'DZD', tax: 0, shipping: deliveryPrice, items: [{ item_id: CAPI_CONFIG.productId, item_name: CAPI_CONFIG.productName, price: CAPI_CONFIG.basePriceDzd, quantity: qty }] });
-}
-
-// ══════════════════════════════════════════════════════════════════
-//  ENGAGEMENT TRACKING
-// ══════════════════════════════════════════════════════════════════
-let engagementSent    = false;
-let scrollDepthTracked = { 25: false, 50: false, 75: false, 90: false };
 let timeOnPage        = 0;
-let hasScrolled       = false;
-let hasInteracted     = false;
 let timeOnPageFired   = { 30: false, 60: false };
 
 setInterval(function() {
     if (document.visibilityState === 'visible') {
         timeOnPage += 1;
-        if (timeOnPage % 5 === 0 && timeOnPage > 0) {
-            gtag('event', 'user_engagement', { engagement_time_msec: timeOnPage * 1000 });
-        }
-        if (timeOnPage >= 10 && !engagementSent) {
-            engagementSent = true;
-            gtag('event', 'engaged_user', { engagement_time_msec: 10000, method: 'time_on_page' });
-        }
-        // CAPI TimeOnPage milestones
         if (timeOnPage >= 30 && !timeOnPageFired[30]) {
             timeOnPageFired[30] = true;
             capiTimeOnPage(30);
@@ -1358,32 +1280,14 @@ function trackScrollDepth() {
 
     document.getElementById('scrollProgress').style.width = scrollPercent + '%';
 
-    [25, 50, 75, 90].forEach(function(depth) {
-        if (scrollPercent >= depth && !scrollDepthTracked[depth]) {
-            scrollDepthTracked[depth] = true;
-            gtag('event', 'scroll', { percent_scrolled: depth.toString() });
-        }
-    });
-
     const stickyHeader = document.getElementById('stickyHeader');
     if (scrollTop > window.innerHeight * 0.5) stickyHeader.classList.add('visible');
     else stickyHeader.classList.remove('visible');
-
-    if (scrollTop > 100 && !hasScrolled) {
-        hasScrolled = true;
-        gtag('event', 'first_scroll', { scroll_depth: scrollPercent });
-    }
 }
 window.addEventListener('scroll', trackScrollDepth, { passive: true });
 
 let formInteractionFired = false;
 function trackFormInteraction(field) {
-    if (!hasInteracted) {
-        hasInteracted = true;
-        gtag('event', 'first_interaction', { interaction_type: 'form_focus', field_name: field });
-    }
-    gtag('event', 'form_interaction', { form_id: 'orderForm', field_name: field });
-    // Send CAPI Form event once per session
     if (!formInteractionFired) {
         formInteractionFired = true;
         capiFormStart(field);
@@ -1393,13 +1297,6 @@ function trackFormInteraction(field) {
 document.getElementById('fullName').addEventListener('focus', function() { trackFormInteraction('fullName'); });
 document.getElementById('phone').addEventListener('focus', function() { trackFormInteraction('phone'); });
 document.getElementById('wilaya').addEventListener('change', function() { trackFormInteraction('wilaya'); });
-
-document.getElementById('cardHome').addEventListener('click', function() {
-    gtag('event', 'select_delivery', { delivery_type: 'home', price: homePrice });
-});
-document.getElementById('cardDesk').addEventListener('click', function() {
-    gtag('event', 'select_delivery', { delivery_type: 'desk', price: deskPrice });
-});
 
 // ══════════════════════════════════════════════════════════════════
 //  SCROLL REVEAL OBSERVER
@@ -1439,10 +1336,10 @@ const imgObserver = new IntersectionObserver(function(entries) {
 document.querySelectorAll('.lazy-img').forEach(function(img) { imgObserver.observe(img); });
 
 // ══════════════════════════════════════════════════════════════════
-//  COMMUNES DATA
+//  COMMUNES DATA (empty — add your own)
 // ══════════════════════════════════════════════════════════════════
 const communes = {
-    '1':['أدرار','أولاد أحمد تيمي','أولف','إن زغمير','اقبلي','السبع','بودة','تامست','تامنطيط','تسابيت','تيت','تيمقتن','رقان','زاوية كنتة','سالي','فنوغيل'],
+        '1':['أدرار','أولاد أحمد تيمي','أولف','إن زغمير','اقبلي','السبع','بودة','تامست','تامنطيط','تسابيت','تيت','تيمقتن','رقان','زاوية كنتة','سالي','فنوغيل'],
         '2':['أبو الحسن','أم الدروع','أولاد بن عبد القادر','أولاد عباس','أولاد فارس','الأبيض مجاجة','الحجاج','الزبوجة','الشطية','الشلف','الصبحة','الظهرة','الكريمية','المرسى','الهرانفة','بريرة','بنايرية','بني بوعتاب','بني حواء','بني راشد','بوزغاية','بوقادير','تاجنة','تاوقريت','تلعصة','تنس','حرشون','سنجاس','سيدي عبد الرحمن','سيدي عكاشة','عين مران','مصدق','وادي الفضة','وادي سلي','وادي قوسين'],
         '3':['أفلو','الأغواط','البيضاء','الحاج مشري','الحويطة','الخنق','العسافية','الغيشة','بريدة','بن ناصر بن شهرة','تاجرونة','تاجموت','تاويالة','حاسي الدلاعة','حاسي الرمل','سبقاق','سيدي بوزيد','سيدي مخلوف','عين سيدي علي','عين ماضي','قصر الحيران','قلتة سيدي سعد','وادي مرة','وادي مزي'],
         '4':['أم البواقي','أولاد حملة','أولاد زواي','أولاد قاسم','البلالة','الجازية','الحرملية','الرحية','الزرق','الضلعة','العامرية','الفجوج بوغرارة سعودي','بئر الشهداء','بحير الشرقي','بريش','سوق نعمان','سيقوس','عين البيضاء','عين الديس','عين الزيتون','عين ببوش','عين فكرون','عين كرشة','عين مليلة','فكيرينة','قصر الصباحي','مسكيانة','هنين','وادي نيني'],
@@ -1500,7 +1397,7 @@ const communes = {
         '56':['برج الحواس','جانت'],
         '57':['أم الطيور','المرارة','المغير','تندلة','جامعة','سطيل','سيدي خليل','سيدي عمران'],
         '58':['المنيعة','حاسي الفحل','حاسي القارة']
-};
+    };
 
 // ══════════════════════════════════════════════════════════════════
 //  STATE
@@ -1589,7 +1486,7 @@ document.getElementById('wilaya').addEventListener('change', function() {
         document.getElementById('wilayaErr').classList.remove('show');
     } else {
         baladiyaEl.disabled = true;
-        baladiyaEl.innerHTML = '<option value="">-- اختر الولاية أولاًّ --</option>';
+        baladiyaEl.innerHTML = '<option value="">-- اختر الولاية أولاُّ --</option>';
         homePrice = 0; deskPrice = 0; deliveryType = 'home';
         updateUI();
     }
@@ -1612,11 +1509,9 @@ function changeQty(delta) {
     const newQty = Math.max(1, Math.min(10, currentQty + delta));
     if (newQty !== currentQty) {
         currentQty = newQty;
-        gtag('event', 'quantity_change', { quantity: currentQty, product_price: getProductPrice(currentQty) });
         if (!addToCartFired) {
             addToCartFired = true;
             capiAddToCart(currentQty);
-            ga4AddToCart(currentQty);
         }
         updateUI();
     }
@@ -1697,7 +1592,6 @@ async function submitOrder() {
     const customerPhone  = document.getElementById('phone').value.trim();
     const transactionId = 'srv_PUR_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
 
-    // Snapshot state before any async reset
     const orderQty           = currentQty;
     const orderDeliveryPrice = currentDeliveryPrice;
     const orderDeliveryType  = deliveryType;
@@ -1708,9 +1602,8 @@ async function submitOrder() {
         currentDeliveryPrice: orderDeliveryPrice, total, dateStr, transactionId
     };
 
-    // Fire InitiateCheckout CAPI + GA4
+    // Fire InitiateCheckout CAPI
     await capiInitiateCheckout(orderQty, orderDeliveryPrice, customerPhone, customerName, wilayaText);
-    ga4BeginCheckout(orderQty, orderDeliveryPrice);
 
     // Google Sheet
     const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxdTbudRsIZ0ANuEtKrl8wtWFCiH8K_OCk9rC53HPiLqih_3W4LBfqlKlrjYj-2pnHF/exec';
@@ -1722,7 +1615,6 @@ async function submitOrder() {
         prix_livraison: orderDeliveryPrice, delivery_type_code: orderDeliveryType,
         home_price: homePrice, desk_price: deskPrice,
         product_base_price: CAPI_CONFIG.basePriceDzd, product_qty2_price: CAPI_CONFIG.qty2PriceDzd,
-        // USD values for reference
         prix_produit_usd: dzdToUsd(productPrice),
         prix_total_usd:   dzdToUsd(total)
     };
@@ -1751,7 +1643,7 @@ async function submitOrder() {
         return;
     }
 
-    // Fire Purchase via CAPI (with captured values) + GA4
+    // Fire Purchase via CAPI
     const purchaseOpts = {
         qty:             orderQty,
         deliveryPriceDzd: orderDeliveryPrice,
@@ -1764,7 +1656,6 @@ async function submitOrder() {
     };
 
     await capiPurchase(purchaseOpts);
-    ga4Purchase(orderQty, orderDeliveryPrice, transactionId);
 
     showSuccess();
     btn.innerHTML = '<span>✅ تم الإرسال بنجاح</span>';
@@ -1778,7 +1669,7 @@ function showSuccess() {
     addToCartFired = false;
     document.getElementById('qtyDisplay').textContent = '1';
     document.getElementById('baladiya').disabled = true;
-    document.getElementById('baladiya').innerHTML = '<option value="">-- اختر الولاية أولاًّ --</option>';
+    document.getElementById('baladiya').innerHTML = '<option value="">-- اختر الولاية أولاُّ --</option>';
     document.querySelectorAll('.form-input, .form-select').forEach(function(el) {
         el.classList.remove('valid', 'error');
     });
@@ -1818,7 +1709,6 @@ window.addEventListener('scroll', updateFloatBtn, { passive: true });
 // ══════════════════════════════════════════════════════════════════
 //  INIT — fire CAPI events on load
 // ══════════════════════════════════════════════════════════════════
-ga4ViewContent();
 updateUI();
 
 // PageView via CAPI immediately
@@ -1827,8 +1717,6 @@ capiPageView();
 // ViewContent after 2.5s (user has seen the product)
 setTimeout(capiViewContent, 2500);
 
-
 </script>
 </body>
 </html>
-
