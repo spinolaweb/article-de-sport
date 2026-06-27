@@ -694,35 +694,30 @@ async function buildUserData(opts){
 //  CAPI — ALL VALUES SENT AS 3200 DZD (Algerian Dinar)
 // ════════════════════════════════════════
 async function sendCAPI(events){
-  var TEST_EVENT_CODE = 'TEST98720'; // ← CHANGE THIS to your actual test code
+  var TEST_EVENT_CODE = 'TEST98720';
   var url='https://graph.facebook.com/'+CFG.apiVersion+'/'+CFG.pixelId+'/events?access_token='+CFG.accessToken;
-  try{var res=await fetch(url,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({data:events})});var json=await res.json();if(json.error) console.warn('[CAPI]',json.error.message);else console.log('[CAPI] ✅',events.map(function(e){return e.event_name;}).join(', '),'| received:',json.events_received);return res.ok;}catch(e){console.error('[CAPI] error:',e);return false;}
+  
+  // ✅ BUILD PAYLOAD WITH TEST EVENT CODE
+  var payload = {data: events};
+  if(TEST_EVENT_CODE && TEST_EVENT_CODE !== ''){
+    payload.test_event_code = TEST_EVENT_CODE;
+  }
+  
+  try{
+    var res=await fetch(url,{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify(payload)
+    });
+    var json=await res.json();
+    if(json.error) console.warn('[CAPI]',json.error.message);
+    else console.log('[CAPI] ✅',events.map(function(e){return e.event_name;}).join(', '),'| received:',json.events_received);
+    return res.ok;
+  }catch(e){
+    console.error('[CAPI] error:',e);
+    return false;
+  }
 }
-function baseEvent(name,id){return{event_name:name,event_time:Math.floor(Date.now()/1000),event_id:id||genEventId(name),event_source_url:CFG.pageUrl,referrer_url:CFG.referrerUrl,action_source:'website',data_processing_options:[],data_processing_options_country:0,data_processing_options_state:0};}
-
-async function capiPageView(){var id=genEventId('PageView'),ud=await buildUserData();var ev=baseEvent('PageView',id);ev.user_data=ud;ev.custom_data={content_name:CFG.productName,content_category:CFG.category,referrer:CFG.referrerUrl,utm_source:UTM.source,utm_medium:UTM.medium,utm_campaign:UTM.campaign};await sendCAPI([ev]);ga4('page_view',{page_title:document.title,traffic_source:UTM.source||document.referrer||'direct',device_type:/Mobi|Android/i.test(navigator.userAgent)?'mobile':'desktop'});}
-
-async function capiViewContent(){var id=genEventId('ViewContent'),ud=await buildUserData();var ev=baseEvent('ViewContent',id);ev.user_data=ud;ev.custom_data={content_ids:[CFG.productId],content_name:CFG.productName,content_type:'product',value:getFbPrice(1),currency:CFG.fbCurrency,contents:[{id:CFG.productId,quantity:1,item_price:CFG.fbPriceDzd,title:CFG.productName,brand:CFG.brand,category:CFG.category}]};await sendCAPI([ev]);ga4('view_item',{value:CFG.basePriceDzd,currency:CFG.dzdCurrency,items:[{item_id:CFG.productId,item_name:CFG.productName,item_brand:CFG.brand,item_category:CFG.category,price:CFG.basePriceDzd,quantity:1}]});}
-
-async function capiAddToCart(qty){var id=genEventId('AddToCart'),fbVal=getFbPrice(qty);var phone=document.getElementById('phone').value.trim(),name=document.getElementById('fullName').value.trim(),np=splitName(name);var ud=await buildUserData({phone:phone||null,firstName:np.first,lastName:np.last});var ev=baseEvent('AddToCart',id);ev.user_data=ud;ev.custom_data={content_ids:[CFG.productId],content_name:CFG.productName,content_type:'product',num_items:qty,value:fbVal,currency:CFG.fbCurrency,contents:[{id:CFG.productId,quantity:qty,item_price:CFG.fbPriceDzd,title:CFG.productName,brand:CFG.brand,category:CFG.category}]};await sendCAPI([ev]);ga4('add_to_cart',{value:getProductPrice(qty),currency:CFG.dzdCurrency,items:[{item_id:CFG.productId,item_name:CFG.productName,item_brand:CFG.brand,item_category:CFG.category,price:CFG.basePriceDzd,quantity:qty}]});}
-
-async function capiLead(phone,name){var id=genEventId('Lead'),np=splitName(name);var ud=await buildUserData({phone:phone||null,firstName:np.first,lastName:np.last});var ev=baseEvent('Lead',id);ev.user_data=ud;ev.custom_data={content_name:CFG.productName,content_ids:[CFG.productId],content_type:'product',value:getFbPrice(1),currency:CFG.fbCurrency};await sendCAPI([ev]);ga4('generate_lead',{value:CFG.basePriceDzd,currency:CFG.dzdCurrency});}
-
-async function capiInitiateCheckout(qty,delDzd,phone,name,wilayaText){var id=genEventId('InitiateCheckout'),np=splitName(name),st=wilayaToState(wilayaText);var ud=await buildUserData({phone:phone,firstName:np.first,lastName:np.last,state:st||wilayaText});var totalFb=getFbTotal(qty,delDzd);var ev=baseEvent('InitiateCheckout',id);ev.user_data=ud;ev.custom_data={content_ids:[CFG.productId],content_name:CFG.productName,content_type:'product',num_items:qty,value:totalFb,currency:CFG.fbCurrency,delivery_region:wilayaText,delivery_price:delDzd,contents:[{id:CFG.productId,quantity:qty,item_price:CFG.fbPriceDzd,title:CFG.productName,brand:CFG.brand,category:CFG.category}]};await sendCAPI([ev]);ga4('begin_checkout',{value:getTotalPrice(qty,delDzd),currency:CFG.dzdCurrency,items:[{item_id:CFG.productId,item_name:CFG.productName,item_brand:CFG.brand,item_category:CFG.category,price:getProductPrice(qty),quantity:qty}]});}
-
-async function capiPurchase(opts){
-  var qty=opts.qty,delDzd=opts.delDzd,phone=opts.phone,name=opts.name,wilayaText=opts.wilayaText,commune=opts.commune,txId=opts.txId,delType=opts.delType;
-  var totalFb=getFbTotal(qty,delDzd);
-  var np=splitName(name),st=wilayaToState(wilayaText);
-  var ud=await buildUserData({phone:phone,firstName:np.first,lastName:np.last,city:commune,state:st||wilayaText});
-  var ev=baseEvent('Purchase',txId);ev.user_data=ud;
-  ev.custom_data={order_id:txId,content_ids:[CFG.productId],content_name:CFG.productName,content_type:'product',num_items:qty,value:totalFb,currency:CFG.fbCurrency,delivery_category:delType==='home'?'home_delivery':'in_store',shipping:delDzd,contents:[{id:CFG.productId,quantity:qty,item_price:CFG.fbPriceDzd,title:CFG.productName,brand:CFG.brand,category:CFG.category}]};
-  await sendCAPI([ev]);
-  ga4('purchase',{transaction_id:txId,value:getTotalPrice(qty,delDzd),tax:0,shipping:delDzd,currency:CFG.dzdCurrency,items:[{item_id:CFG.productId,item_name:CFG.productName,item_brand:CFG.brand,item_category:CFG.category,price:getProductPrice(qty),quantity:qty,item_variant:delType==='home'?'home_delivery':'desk_delivery'}]});
-}
-
-async function capiCustom(name,customData){var id=genEventId(name),ud=await buildUserData();var ev=baseEvent(name,id);ev.user_data=ud;ev.custom_data=customData;await sendCAPI([ev]);}
-
 // ════════════════════════════════════════
 //  STATE
 // ════════════════════════════════════════
