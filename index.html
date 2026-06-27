@@ -1062,13 +1062,7 @@ async function capiPageView() {
         user_data:         userData
     }]);
 
-    // Mirror to pixel for dedup (pixel uses same event_id)
-    if (window.pixelReady && typeof fbq !== 'undefined') {
-        fbq('track', 'PageView', {}, { eventID: eventId });
-    } else {
-        // Store for when pixel loads
-        window._pendingPixelPageView = eventId;
-    }
+    
 }
 
 // ══════════════════════════════════════════════════════════════════
@@ -1095,14 +1089,7 @@ async function capiViewContent() {
         }
     }]);
 
-    if (window.pixelReady && typeof fbq !== 'undefined') {
-        fbq('track', 'ViewContent', {
-            content_ids:  [CAPI_CONFIG.productId],
-            content_type: 'product',
-            value:        priceUsd,
-            currency:     CAPI_CONFIG.currency
-        }, { eventID: eventId });
-    }
+   
 }
 
 // ══════════════════════════════════════════════════════════════════
@@ -1141,15 +1128,7 @@ async function capiAddToCart(qty) {
         }
     }]);
 
-    if (window.pixelReady && typeof fbq !== 'undefined') {
-        fbq('track', 'AddToCart', {
-            contents:     [{ id: CAPI_CONFIG.productId, quantity: qty }],
-            content_type: 'product',
-            value:        priceUsd,
-            currency:     CAPI_CONFIG.currency,
-            num_items:    qty
-        }, { eventID: eventId });
-    }
+    
 }
 
 // ══════════════════════════════════════════════════════════════════
@@ -1186,16 +1165,7 @@ async function capiInitiateCheckout(qty, deliveryPriceDzd, phone, name, wilayaTe
         }
     }]);
 
-    if (window.pixelReady && typeof fbq !== 'undefined') {
-        fbq('track', 'InitiateCheckout', {
-            contents:     [{ id: CAPI_CONFIG.productId, quantity: qty }],
-            content_type: 'product',
-            value:        priceUsd,
-            currency:     CAPI_CONFIG.currency,
-            num_items:    qty
-        }, { eventID: eventId });
-    }
-
+    
     return eventId;
 }
 
@@ -1861,13 +1831,7 @@ capiPageView();
 // ViewContent after 2.5s (user has seen the product)
 setTimeout(capiViewContent, 2500);
 
-// If pixel loaded after our CAPI PageView, fire dedup mirror
-setTimeout(function() {
-    if (window._pendingPixelPageView && typeof fbq !== 'undefined') {
-        fbq('track', 'PageView', {}, { eventID: window._pendingPixelPageView });
-        window._pendingPixelPageView = null;
-    }
-}, 2800);
+
 </script>
 </body>
 </html>
