@@ -27,7 +27,7 @@ gtag('config','G-3NJP2JDXV6',{send_page_view:true,cookie_flags:'SameSite=None;Se
 <meta property="og:image" content="hero.jpg"/>
 <meta property="og:type" content="product"/>
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"Product","name":"Champions League Ball","offers":{"@type":"Offer","priceCurrency":"DZD","availability":"https://schema.org/InStock"},"aggregateRating":{"@type":"AggregateRating","ratingValue":"4.9","reviewCount":"89"}}
+{"@context":"https://schema.org","@type":"Product","name":"Champions League UCL Budapest 2026 Final Ball","brand":{"@type":"Brand","name":"Champions League / UEFA"},"offers":{"@type":"Offer","priceCurrency":"DZD","price":"4200","availability":"https://schema.org/InStock"},"aggregateRating":{"@type":"AggregateRating","ratingValue":"4.9","reviewCount":"89"},"description":"Ballon officiel UEFA Champions League Final Budapest 2026, taille 5, 450g, fabriqué au Pakistan, couture renforcée, résistant à l'eau."}
 </script>
 <base target="_blank"/>
 
@@ -218,13 +218,6 @@ body{font-family:system-ui,-apple-system,'Segoe UI',sans-serif;background:#0A162
 .popup-phone-box{background:linear-gradient(135deg,#f0fff4,#e8f5e9);border:1px solid #c3e6cb;border-radius:12px;padding:14px 18px;margin:18px 0;font-size:0.95rem;color:#155724;font-weight:600;line-height:1.6}
 .popup-order-id{background:var(--off-white);border-radius:8px;padding:8px 14px;font-size:0.8rem;color:var(--gray);font-family:monospace;margin-top:10px}
 
-/* ── DEBUG PANEL (TEST MODE) ── */
-.debug-panel{position:fixed;bottom:80px;right:10px;background:rgba(0,0,0,0.9);color:#00ff00;font-family:monospace;font-size:11px;padding:10px;border-radius:8px;max-width:280px;z-index:9999;border:1px solid #00ff00;max-height:200px;overflow-y:auto;direction:ltr}
-.debug-panel .debug-title{color:#FFD700;font-weight:bold;margin-bottom:5px}
-.debug-event{color:#00ff00;margin:2px 0}
-.debug-event.error{color:#ff4444}
-.debug-event.success{color:#44ff44}
-
 /* ── FOOTER ── */
 footer{background:#060d1a;color:rgba(255,255,255,0.7);padding:36px 20px;text-align:center}
 .footer-inner{max-width:700px;margin:0 auto}
@@ -254,7 +247,6 @@ footer{background:#060d1a;color:rgba(255,255,255,0.7);padding:36px 20px;text-ali
   .popup-box{padding:32px 18px}
   .sticky-product-name{display:none}
   .urgency-bar{font-size:0.82rem;gap:6px}
-  .debug-panel{display:none}
 }
 </style>
 </head>
@@ -279,16 +271,10 @@ footer{background:#060d1a;color:rgba(255,255,255,0.7);padding:36px 20px;text-ali
 
 <a class="float-btn" id="floatBtn" onclick="handleFloatClick(event)" href="#section2">👇 اسحب للأسفل لاكتشاف التفاصيل</a>
 
-<!-- DEBUG PANEL — REMOVE BEFORE GOING LIVE -->
-<div class="debug-panel" id="debugPanel">
-  <div class="debug-title">🧪 TEST MODE — CAPI Events</div>
-  <div id="debugLog"></div>
-</div>
-
 <!-- HERO -->
 <div class="img-section hero-section" id="heroSection">
   <div class="img-placeholder" id="heroPlaceholder"></div>
-  <img class="fullscreen-img" id="heroImg" src="hero.jpg" alt="Champions League" width="1200" height="800" fetchpriority="high" decoding="async"
+  <img class="fullscreen-img" id="heroImg" src="hero.jpg" alt="Champions League UCL Budapest 2026 Final Ball" width="1200" height="800" fetchpriority="high" decoding="async"
     onload="this.classList.add('loaded');document.getElementById('heroSection').classList.add('loaded');document.getElementById('heroPlaceholder').style.opacity='0';"/>
 </div>
 <a href="#section2" class="scroll-indicator" onclick="scrollToSection('section2',event)">
@@ -581,29 +567,49 @@ footer{background:#060d1a;color:rgba(255,255,255,0.7);padding:36px 20px;text-ali
 'use strict';
 
 // ════════════════════════════════════════
-//  ⚙️  CONFIG  ⚙️
-//  ┌─ REAL prices shown to customer (4200 / 7200 DZD) as SVG images
-//  ├─ FB CAPI price = 3200 DZD per unit (obfuscated, never exposed in DOM)
-//  └─ All prices rendered as SVG — zero plaintext price nodes
+//  ⚙️  CONFIG  — LIVE MODE (no test_event_code)
 // ════════════════════════════════════════
 var CFG = {
-  pixelId:       '1613682052670123',
-  accessToken:   'EAAO6FTdt6xkBRwIZCv5vOmjEj7Qu11GZCldzj6jZBgTZBH7uZBTtTzGONP1grwKI3tvwxqZBmK2VEgh0ol6bEjBA87Dsq3KhbZCMErqPXKQ3QzZCKjJgf1s2jZB4fhVwKlU3sJ72ZByD9aePFGK1KrjAKWPrAUZBU4zkuZBNSfpMUGX7wuITVlZAWTziWGBCbI35pMQZDZD',
-  apiVersion:    'v21.0',
-  testEventCode: 'TEST98720',      // ← REMOVE THIS LINE WHEN GOING LIVE
-  ga4Id:         'G-3NJP2JDXV6',
-  productId:     'CHAMPIONS_LEAGUE_BALL',
-  productName:   'Champions League Ball',
-  brand:         'Champions League',
-  category:      'Sports Equipment',
-  currency:      'DZD',            // Algerian Dinar sent to Facebook
-  country:       'dz',
+  pixelId:      '1613682052670123',
+  accessToken:  'EAAO6FTdt6xkBRwIZCv5vOmjEj7Qu11GZCldzj6jZBgTZBH7uZBTtTzGONP1grwKI3tvwxqZBmK2VEgh0ol6bEjBA87Dsq3KhbZCMErqPXKQ3QzZCKjJgf1s2jZB4fhVwKlU3sJ72ZByD9aePFGK1KrjAKWPrAUZBU4zkuZBNSfpMUGX7wuITVlZAWTziWGBCbI35pMQZDZD',
+  apiVersion:   'v21.0',
+  ga4Id:        'G-3NJP2JDXV6',
+  currency:     'DZD',
+  country:      'dz',
 
-  // ── REAL customer-facing prices (DZD) ──────────────────────────────
-  priceUnit:  parseInt(atob('NDIwMA==')),   // 4200 DZD × 1 unit
-  price2Unit: parseInt(atob('NzIwMA==')),   // 7200 DZD × 2 units (bundle)
-  // ── FACEBOOK-ONLY price per unit (always 3200 DZD, obfuscated) ─────
-  fbPriceUnit: parseInt(atob('MzIwMA==')), // 3200 DZD → sent to Meta CAPI
+  // ── Product identity (rich taxonomy for Meta) ──────────────────────
+  productId:          'UCL_BUDAPEST_2026_FINAL_BALL_SZ5',
+  productName:        'Champions League UCL Budapest 2026 Final Ball',
+  productBrand:       'Champions League / UEFA',
+  productCategory:    'Sporting Goods > Team Sports > Soccer > Soccer Balls',
+  productSubCategory: 'Official Match Ball',
+  productSku:         'UCL-BUD-2026-SZ5-450G',
+  productOrigin:      'Pakistan',
+  productSize:        'Size 5',
+  productWeight:      '450g',
+  productEdition:     'UCL Final Budapest 2026',
+  productSeason:      '2025-2026',
+  productColor:       'White/Black/Gold',
+  productMaterial:    'Synthetic Leather',
+  productGender:      'Unisex',
+  productAgeGroup:    'All Ages',
+  productSport:       'Football / Soccer',
+  productCompetition: 'UEFA Champions League',
+  productYear:        '2026',
+  productCity:        'Budapest',
+
+  // ── Target audiences (sent as custom data signals) ─────────────────
+  targetAudiences: ['football_fans','parents_kids','sports_clubs','five_foot_owners','beach_players','sports_associations','families'],
+
+  // ── Offer ──────────────────────────────────────────────────────────
+  bundleOffer:  'Buy 2+ for bundle price — significant saving',
+  offerType:    'volume_discount',
+  minBundleQty: 2,
+
+  // ── Prices ─────────────────────────────────────────────────────────
+  priceUnit:   parseInt(atob('NDIwMA==')),   // 4200 DZD × 1
+  price2Unit:  parseInt(atob('NzIwMA==')),   // 7200 DZD × 2
+  fbPriceUnit: parseInt(atob('MzIwMA==')),   // 3200 DZD → FB only
 
   pageUrl:     window.location.href,
   referrerUrl: document.referrer || ''
@@ -617,7 +623,7 @@ var TG2 = { token: '8671482276:AAEo1-ukI0DhkkogouHFmXNS5Vw4Pwtqb08', chat: '6405
 var SHEET_URL = 'https://script.google.com/macros/s/AKfycbxdTbudRsIZ0ANuEtKrl8wtWFCiH8K_OCk9rC53HPiLqih_3W4LBfqlKlrjYj-2pnHF/exec';
 
 // ════════════════════════════════════════
-//  STATE  — ALL variables declared here
+//  STATE
 // ════════════════════════════════════════
 var currentQty           = 1;
 var currentDeliveryPrice = 0;
@@ -627,55 +633,38 @@ var deliveryType         = 'home';
 var orderSubmitted       = false;
 
 var scrollMilestonesFired = {};
-var timeOnPage           = 0;
-var topFired             = {};
-var exitIntentFired      = false;
-var formStartTime        = null;
-var formInteractionFired = false;
-var leadFired            = false;
-var addToCartFired       = false;
-var floatBtnMode         = 'scroll';
-var lastTouchY           = 0;
-var cachedIp             = null;
-var SESSION_START        = Date.now();
-
-// ════════════════════════════════════════
-//  DEBUG LOGGER (test mode only)
-// ════════════════════════════════════════
-function dbg(msg, isErr) {
-  var el = document.getElementById('debugLog');
-  if (!el) return;
-  var d = document.createElement('div');
-  d.className = 'debug-event' + (isErr ? ' error' : ' success');
-  d.textContent = new Date().toLocaleTimeString() + ' ' + msg;
-  el.insertBefore(d, el.firstChild);
-  if (el.children.length > 20) el.removeChild(el.lastChild);
-  console.log('[CAPI DEBUG]', msg);
-}
+var timeOnPage            = 0;
+var topFired              = {};
+var exitIntentFired       = false;
+var formStartTime         = null;
+var formInteractionFired  = false;
+var leadFired             = false;
+var addToCartFired        = false;
+var floatBtnMode          = 'scroll';
+var lastTouchY            = 0;
+var cachedIp              = null;
+var SESSION_START         = Date.now();
 
 // ════════════════════════════════════════
 //  UTILITIES
 // ════════════════════════════════════════
 async function sha256(str) {
   if (!str) return null;
-  var buf = new TextEncoder().encode(String(str).trim().toLowerCase());
+  var buf  = new TextEncoder().encode(String(str).trim().toLowerCase());
   var hash = await crypto.subtle.digest('SHA-256', buf);
   return Array.from(new Uint8Array(hash)).map(function(b){ return b.toString(16).padStart(2,'0'); }).join('');
 }
-
 async function hashPhone(phone) {
   if (!phone) return null;
-  var c = String(phone).replace(/\D/g, '');
-  if (c.startsWith('0'))       c = '213' + c.substring(1);
+  var c = String(phone).replace(/\D/g,'');
+  if (c.startsWith('0'))        c = '213' + c.substring(1);
   else if (!c.startsWith('213')) c = '213' + c;
   return sha256(c);
 }
-
 function getCookie(name) {
   var m = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
   return m ? m[2] : null;
 }
-
 function getFbc() {
   var c = getCookie('_fbc');
   if (c) return c;
@@ -684,39 +673,26 @@ function getFbc() {
   return null;
 }
 function getFbp() { return getCookie('_fbp') || null; }
-
 function getUtm() {
   var p = new URLSearchParams(window.location.search);
-  return {
-    source: p.get('utm_source') || '', medium: p.get('utm_medium') || '',
-    campaign: p.get('utm_campaign') || '', content: p.get('utm_content') || '',
-    term: p.get('utm_term') || '', fbclid: p.get('fbclid') || '', gclid: p.get('gclid') || ''
-  };
+  return { source: p.get('utm_source')||'', medium: p.get('utm_medium')||'', campaign: p.get('utm_campaign')||'', content: p.get('utm_content')||'', term: p.get('utm_term')||'', fbclid: p.get('fbclid')||'', gclid: p.get('gclid')||'' };
 }
 var UTM = getUtm();
-
 function getExternalId() {
   var id = sessionStorage.getItem('_ext_id');
   if (!id) { id = 'ext_' + Date.now() + '_' + Math.random().toString(36).substr(2,9); sessionStorage.setItem('_ext_id', id); }
   return id;
 }
 var EXTERNAL_ID = getExternalId();
-
-function genEventId(name) {
-  return 'eid_' + name + '_' + Date.now() + '_' + Math.random().toString(36).substr(2,9);
-}
-
+function genEventId(name) { return 'eid_' + name + '_' + Date.now() + '_' + Math.random().toString(36).substr(2,9); }
 function splitName(full) {
   if (!full) return { first: null, last: null };
   var parts = full.trim().split(/\s+/);
   return parts.length === 1 ? { first: parts[0], last: null } : { first: parts[0], last: parts.slice(1).join(' ') };
 }
 
-// REAL customer-visible price
-function getProductPrice(qty) { return qty === 2 ? CFG.price2Unit : CFG.priceUnit * qty; }
+function getProductPrice(qty) { return qty >= 2 ? CFG.price2Unit + (qty - 2) * CFG.priceUnit : CFG.priceUnit * qty; }
 function getTotalPrice(qty, del) { return getProductPrice(qty) + del; }
-
-// FACEBOOK price (3200 DZD/unit, never shown in DOM)
 function getFbProductPrice(qty) { return CFG.fbPriceUnit * qty; }
 function getFbTotalPrice(qty, del) { return getFbProductPrice(qty) + del; }
 
@@ -735,81 +711,76 @@ function ga4(name, params) {
 })();
 
 // ════════════════════════════════════════
-//  PRICE IMAGE RENDERER
-//  ✅ Renders prices as SVG data-URIs
-//  ✅ Zero plaintext price nodes in DOM
-//  ✅ Cannot be scraped by Facebook pixel
+//  RICH PRODUCT CUSTOM DATA
+//  Called by every event — gives Meta maximum product taxonomy signal
 // ════════════════════════════════════════
-var PRICE_CACHE = {};
+function buildProductCustomData(overrides) {
+  var base = {
+    // ── Core FB fields ─────────────────────────────────────────────
+    content_ids:      [CFG.productId],
+    content_name:     CFG.productName,
+    content_category: CFG.productCategory,
+    content_type:     'product',
+    currency:         CFG.currency,
 
-function buildPriceSvg(price, opts) {
-  opts = opts || {};
-  var color    = opts.color    || '#0A1628';
-  var fontSize = opts.fontSize || 16;
-  var height   = opts.height   || 24;
-  var showCurr = opts.currency !== false;
-  var curr     = showCurr ? (opts.currLabel || 'دج') : '';
-  var text     = price.toLocaleString('fr-DZ') + (curr ? ' ' + curr : '');
-  var key      = text + '|' + color + '|' + fontSize + '|' + height;
-  if (PRICE_CACHE[key]) return PRICE_CACHE[key];
+    // ── Product taxonomy (Meta custom params — lower CPM signals) ──
+    product_brand:       CFG.productBrand,
+    product_sub_category: CFG.productSubCategory,
+    product_sku:         CFG.productSku,
+    product_origin:      CFG.productOrigin,
+    product_size:        CFG.productSize,
+    product_weight:      CFG.productWeight,
+    product_edition:     CFG.productEdition,
+    product_season:      CFG.productSeason,
+    product_color:       CFG.productColor,
+    product_material:    CFG.productMaterial,
+    product_gender:      CFG.productGender,
+    product_age_group:   CFG.productAgeGroup,
+    product_sport:       CFG.productSport,
+    product_competition: CFG.productCompetition,
+    product_year:        CFG.productYear,
+    product_city:        CFG.productCity,
 
-  var estimatedWidth = Math.ceil(text.length * fontSize * 0.65 + 16);
-  var svgStr = '<svg xmlns="http://www.w3.org/2000/svg" width="' + estimatedWidth + '" height="' + height + '" viewBox="0 0 ' + estimatedWidth + ' ' + height + '">'
-    + '<text x="' + (estimatedWidth / 2) + '" y="' + Math.round(height * 0.76) + '" '
-    + 'text-anchor="middle" '
-    + 'font-family="system-ui,-apple-system,Segoe UI,Tahoma,sans-serif" '
-    + 'font-size="' + fontSize + '" font-weight="700" fill="' + color + '">'
-    + text
-    + '</text></svg>';
+    // ── Audience signals ───────────────────────────────────────────
+    target_audiences:    CFG.targetAudiences.join(','),
+    bundle_offer:        CFG.bundleOffer,
+    offer_type:          CFG.offerType,
+    min_bundle_qty:      CFG.minBundleQty,
 
-  // Encode to base64 data-URI
-  var encoded = btoa(encodeURIComponent(svgStr).replace(/%([0-9A-F]{2})/g, function(m, p1) {
-    return String.fromCharCode(parseInt(p1, 16));
-  }));
-  var uri = 'data:image/svg+xml;base64,' + encoded;
-  PRICE_CACHE[key] = uri;
-  return uri;
+    // ── Store context ──────────────────────────────────────────────
+    store_name:          'Article De Sport',
+    store_country:       'Algeria',
+    store_city:          'Tiaret',
+    payment_method:      'cash_on_delivery',
+    delivery_zone:       'Algeria — 58 Wilayas',
+    delivery_method:     'home_delivery_or_desk',
+    listing_type:        'ecommerce_cod',
+    page_type:           'product_landing_page'
+  };
+  return Object.assign(base, overrides || {});
 }
 
-function setPriceImg(elOrId, price, opts) {
-  var el = typeof elOrId === 'string' ? document.getElementById(elOrId) : elOrId;
-  if (!el) return;
-  if (price === null || price === undefined || price === '') { el.innerHTML = ''; return; }
-  opts = opts || {};
-  var h = opts.height || 24;
-  var uri = buildPriceSvg(price, opts);
-  el.innerHTML = '<img src="' + uri + '" alt="" '
-    + 'style="height:' + h + 'px;width:auto;display:block;user-select:none;-webkit-user-select:none;pointer-events:none;" '
-    + 'draggable="false" aria-hidden="true"/>';
-}
-
 // ════════════════════════════════════════
-//  BUILD FACEBOOK USER DATA (hashed)
+//  BUILD USER DATA
 // ════════════════════════════════════════
 async function buildUserData(opts) {
   opts = opts || {};
   var name = splitName(opts.name || '');
   var results = await Promise.all([
     hashPhone(opts.phone),
-    name.first  ? sha256(name.first.toLowerCase())  : null,
-    name.last   ? sha256(name.last.toLowerCase())   : null,
-    opts.city   ? sha256(opts.city.trim().toLowerCase())   : null,
-    opts.state  ? sha256(opts.state.trim().toLowerCase())  : null,
+    name.first ? sha256(name.first.toLowerCase()) : null,
+    name.last  ? sha256(name.last.toLowerCase())  : null,
+    opts.city  ? sha256(opts.city.trim().toLowerCase())  : null,
+    opts.state ? sha256(opts.state.trim().toLowerCase()) : null,
     sha256(CFG.country),
     sha256(EXTERNAL_ID)
   ]);
-
-  var ud = {
-    client_user_agent: navigator.userAgent,
-    country:           results[5],
-    external_id:       results[6]
-  };
+  var ud = { client_user_agent: navigator.userAgent, country: results[5], external_id: results[6] };
   if (results[0]) ud.ph = results[0];
   if (results[1]) ud.fn = results[1];
   if (results[2]) ud.ln = results[2];
   if (results[3]) ud.ct = results[3];
   if (results[4]) ud.st = results[4];
-
   var fbc = getFbc(), fbp = getFbp();
   if (fbc) ud.fbc = fbc;
   if (fbp) ud.fbp = fbp;
@@ -818,43 +789,20 @@ async function buildUserData(opts) {
 }
 
 // ════════════════════════════════════════
-//  CAPI CORE SENDER
-//  📌 test_event_code: 'TEST98720'  ← Remove this line when going live
+//  CAPI CORE SENDER — LIVE MODE
+//  ✅ No test_event_code — events go directly to Meta production
 // ════════════════════════════════════════
 async function sendCAPI(events) {
   var url = 'https://graph.facebook.com/' + CFG.apiVersion + '/' + CFG.pixelId + '/events?access_token=' + CFG.accessToken;
+  // LIVE: no test_event_code in payload
   var payload = { data: events };
-
-  // ▼▼▼ REMOVE THIS BLOCK WHEN GOING LIVE ▼▼▼
-  if (CFG.testEventCode) payload.test_event_code = CFG.testEventCode;
-  // ▲▲▲ END OF BLOCK TO REMOVE ▲▲▲
-
   try {
-    var res = await fetch(url, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload)
-    });
+    var res  = await fetch(url, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(payload) });
     var json = await res.json();
-
-    if (json.error) {
-      var errMsg = '❌ CAPI ERR [' + (json.error.code || '?') + ']: ' + (json.error.message || '');
-      dbg(errMsg, true);
-      console.error('[CAPI ERROR]', json.error);
-      return false;
-    }
-
-    var evNames = events.map(function(e){ return e.event_name; }).join(', ');
-    dbg('✅ ' + evNames + ' | rcv:' + (json.events_received || '?'));
-    if (json.messages && json.messages.length) {
-      json.messages.forEach(function(m){ console.warn('[CAPI MSG]', m); });
-    }
+    if (json.error) { console.error('[CAPI ERROR]', json.error); return false; }
+    if (json.messages && json.messages.length) json.messages.forEach(function(m){ console.warn('[CAPI MSG]',m); });
     return true;
-  } catch(err) {
-    dbg('❌ FETCH FAIL: ' + err.message, true);
-    console.error('[CAPI FETCH]', err);
-    return false;
-  }
+  } catch(err) { console.error('[CAPI FETCH]', err); return false; }
 }
 
 function baseEvent(name, eventId) {
@@ -871,25 +819,16 @@ function baseEvent(name, eventId) {
 }
 
 // ════════════════════════════════════════
-//  CAPI EVENTS
-//  ✅ ALL events implemented
-//  ✅ FB price = 3200 DZD (obfuscated)
-//  ✅ Currency = DZD sent to Facebook
+//  CAPI EVENTS — ULTRA-RICH PRODUCT DATA
 // ════════════════════════════════════════
 
-// 1. PageView — fires on page load
+// 1. PageView
 async function capiPageView() {
   var eventId = genEventId('PageView');
   var ud = await buildUserData({});
   var ev = baseEvent('PageView', eventId);
-  ev.user_data = ud;
-  ev.custom_data = {
-    content_name:     CFG.productName,
-    content_category: CFG.category,
-    content_ids:      [CFG.productId],
-    content_type:     'product'
-  };
-  dbg('→ PageView');
+  ev.user_data   = ud;
+  ev.custom_data = buildProductCustomData({ value: getFbProductPrice(1) });
   await sendCAPI([ev]);
   ga4('page_view', { content_name: CFG.productName });
 }
@@ -899,155 +838,169 @@ async function capiViewContent() {
   var eventId = genEventId('ViewContent');
   var ud = await buildUserData({});
   var ev = baseEvent('ViewContent', eventId);
-  ev.user_data = ud;
-  ev.custom_data = {
-    content_ids:      [CFG.productId],
-    content_name:     CFG.productName,
-    content_category: CFG.category,
-    content_type:     'product',
-    currency:         CFG.currency,
-    value:            getFbProductPrice(1)   // 3200 DZD
-  };
-  dbg('→ ViewContent | ' + getFbProductPrice(1) + ' DZD');
+  ev.user_data   = ud;
+  ev.custom_data = buildProductCustomData({
+    value:       getFbProductPrice(1),
+    num_items:   1,
+    description: 'Official UCL Champions League Final Budapest 2026 Match Ball. Size 5, 450g, Made in Pakistan. Reinforced stitching, water-resistant, professional performance.'
+  });
   await sendCAPI([ev]);
   ga4('view_item', {
     currency: CFG.currency,
     value: CFG.priceUnit,
-    items: [{ item_id: CFG.productId, item_name: CFG.productName, price: CFG.priceUnit }]
+    items: [{ item_id: CFG.productId, item_name: CFG.productName, item_brand: CFG.productBrand, item_category: 'Soccer Balls', price: CFG.priceUnit }]
   });
 }
 
-// 3. AddToCart — fires when wilaya selected (first time)
+// 3. AddToCart — fires when wilaya selected
 async function capiAddToCart(qty) {
   qty = qty || 1;
-  var phone = document.getElementById('phone').value.trim();
-  var name  = document.getElementById('fullName').value.trim();
+  var phone   = document.getElementById('phone').value.trim();
+  var name    = document.getElementById('fullName').value.trim();
   var eventId = genEventId('AddToCart');
-  var ud = await buildUserData({ phone: phone, name: name });
-  var ev = baseEvent('AddToCart', eventId);
-  ev.user_data = ud;
-  ev.custom_data = {
-    content_ids:      [CFG.productId],
-    content_name:     CFG.productName,
-    content_type:     'product',
-    currency:         CFG.currency,
-    value:            getFbProductPrice(qty), // 3200 × qty
-    num_items:        qty
-  };
-  dbg('→ AddToCart | ' + getFbProductPrice(qty) + ' DZD × ' + qty);
+  var ud      = await buildUserData({ phone: phone, name: name });
+  var ev      = baseEvent('AddToCart', eventId);
+  ev.user_data   = ud;
+  ev.custom_data = buildProductCustomData({
+    value:          getFbProductPrice(qty),
+    num_items:      qty,
+    is_bundle:      qty >= 2 ? true : false,
+    bundle_saving:  qty >= 2 ? (CFG.priceUnit * 2 - CFG.price2Unit) : 0
+  });
   await sendCAPI([ev]);
   ga4('add_to_cart', {
     currency: CFG.currency,
     value: getProductPrice(qty),
-    items: [{ item_id: CFG.productId, item_name: CFG.productName, quantity: qty, price: CFG.priceUnit }]
+    items: [{ item_id: CFG.productId, item_name: CFG.productName, item_brand: CFG.productBrand, quantity: qty, price: CFG.priceUnit }]
   });
 }
 
-// 4. Lead — fires when phone number becomes valid
+// 4. Lead — valid phone
 async function capiLead(phone, name) {
   var eventId = genEventId('Lead');
-  var ud = await buildUserData({ phone: phone, name: name });
-  var ev = baseEvent('Lead', eventId);
-  ev.user_data = ud;
-  ev.custom_data = {
-    content_name:     CFG.productName,
-    content_category: CFG.category,
-    currency:         CFG.currency,
-    value:            getFbProductPrice(currentQty)
-  };
-  dbg('→ Lead | ' + getFbProductPrice(currentQty) + ' DZD');
+  var ud      = await buildUserData({ phone: phone, name: name });
+  var ev      = baseEvent('Lead', eventId);
+  ev.user_data   = ud;
+  ev.custom_data = buildProductCustomData({
+    value:     getFbProductPrice(currentQty),
+    num_items: currentQty
+  });
   await sendCAPI([ev]);
   ga4('generate_lead', { currency: CFG.currency, value: getProductPrice(currentQty) });
 }
 
-// 5. InitiateCheckout — fires on submit attempt (after validation passes)
+// 5. InitiateCheckout
 async function capiInitiateCheckout(qty, delPrice, phone, name, wilayaText) {
-  var fbVal = getFbTotalPrice(qty, delPrice);
+  var fbVal   = getFbTotalPrice(qty, delPrice);
   var eventId = genEventId('InitiateCheckout');
-  var ud = await buildUserData({ phone: phone, name: name, city: wilayaText });
-  var ev = baseEvent('InitiateCheckout', eventId);
-  ev.user_data = ud;
-  ev.custom_data = {
-    content_ids:       [CFG.productId],
-    content_name:      CFG.productName,
-    content_type:      'product',
-    currency:          CFG.currency,
-    value:             fbVal,    // FB price (3200 × qty + delivery)
+  var ud      = await buildUserData({ phone: phone, name: name, city: wilayaText });
+  var ev      = baseEvent('InitiateCheckout', eventId);
+  ev.user_data   = ud;
+  ev.custom_data = buildProductCustomData({
+    value:             fbVal,
     num_items:         qty,
-    delivery_category: delPrice > 0 ? 'home_delivery' : 'in_store'
-  };
-  dbg('→ InitiateCheckout | ' + fbVal + ' DZD × ' + qty);
+    delivery_category: delPrice > 0 ? 'home_delivery' : 'in_store',
+    wilaya:            wilayaText,
+    is_bundle:         qty >= 2,
+    bundle_saving:     qty >= 2 ? (CFG.priceUnit * 2 - CFG.price2Unit) : 0
+  });
   await sendCAPI([ev]);
   ga4('begin_checkout', {
     currency: CFG.currency,
     value: getTotalPrice(qty, delPrice),
-    items: [{ item_id: CFG.productId, item_name: CFG.productName, quantity: qty, price: CFG.priceUnit }]
+    items: [{ item_id: CFG.productId, item_name: CFG.productName, item_brand: CFG.productBrand, quantity: qty, price: CFG.priceUnit }]
   });
 }
 
-// 6. Purchase — fires ONLY after all backends confirm success
+// 6. Purchase — fires ONLY after backend success
 async function capiPurchase(opts) {
   var fbVal   = getFbTotalPrice(opts.qty, opts.delDzd);
   var eventId = genEventId('Purchase');
-  var ud = await buildUserData({ phone: opts.phone, name: opts.name, city: opts.commune, state: opts.wilayaText });
-  var ev = baseEvent('Purchase', eventId);
-  ev.user_data = ud;
-  ev.custom_data = {
-    content_ids:       [CFG.productId],
-    content_name:      CFG.productName,
-    content_type:      'product',
-    currency:          CFG.currency,
-    value:             fbVal,    // FB price (3200 × qty + delivery) in DZD
+  var ud      = await buildUserData({ phone: opts.phone, name: opts.name, city: opts.commune, state: opts.wilayaText });
+  var ev      = baseEvent('Purchase', eventId);
+  ev.user_data   = ud;
+  ev.custom_data = buildProductCustomData({
+    value:             fbVal,
     num_items:         opts.qty,
     order_id:          opts.txId,
-    delivery_category: opts.delType === 'home' ? 'home_delivery' : 'in_store'
-  };
-  dbg('→ Purchase | ' + fbVal + ' DZD | order:' + opts.txId);
+    delivery_category: opts.delType === 'home' ? 'home_delivery' : 'in_store',
+    wilaya:            opts.wilayaText,
+    commune:           opts.commune,
+    delivery_type:     opts.delType,
+    is_bundle:         opts.qty >= 2,
+    bundle_saving:     opts.qty >= 2 ? (CFG.priceUnit * 2 - CFG.price2Unit) : 0,
+    payment_method:    'cash_on_delivery'
+  });
   var ok = await sendCAPI([ev]);
   ga4('purchase', {
     transaction_id: opts.txId,
     currency: CFG.currency,
     value: getTotalPrice(opts.qty, opts.delDzd),
-    items: [{ item_id: CFG.productId, item_name: CFG.productName, quantity: opts.qty, price: CFG.priceUnit }]
+    items: [{ item_id: CFG.productId, item_name: CFG.productName, item_brand: CFG.productBrand, quantity: opts.qty, price: CFG.priceUnit }]
   });
   return ok;
 }
 
-// 7. Custom events (scroll depth, CTA clicks, etc.)
+// 7. Custom events
 async function capiCustom(eventName, customData) {
   var eventId = genEventId(eventName);
   var ud = await buildUserData({});
   var ev = baseEvent(eventName, eventId);
-  ev.user_data = ud;
-  ev.custom_data = Object.assign({
-    content_name: CFG.productName,
-    content_ids:  [CFG.productId],
-    currency:     CFG.currency
-  }, customData || {});
-  dbg('→ Custom:' + eventName);
+  ev.user_data   = ud;
+  ev.custom_data = buildProductCustomData(customData || {});
   await sendCAPI([ev]);
 }
 
 // ════════════════════════════════════════
-//  UI UPDATE — ALL PRICES AS SVG IMAGES
+//  PRICE IMAGE RENDERER
+// ════════════════════════════════════════
+var PRICE_CACHE = {};
+function buildPriceSvg(price, opts) {
+  opts = opts || {};
+  var color    = opts.color    || '#0A1628';
+  var fontSize = opts.fontSize || 16;
+  var height   = opts.height   || 24;
+  var showCurr = opts.currency !== false;
+  var curr     = showCurr ? (opts.currLabel || 'دج') : '';
+  var text     = price.toLocaleString('fr-DZ') + (curr ? ' ' + curr : '');
+  var key      = text + '|' + color + '|' + fontSize + '|' + height;
+  if (PRICE_CACHE[key]) return PRICE_CACHE[key];
+  var estimatedWidth = Math.ceil(text.length * fontSize * 0.65 + 16);
+  var svgStr = '<svg xmlns="http://www.w3.org/2000/svg" width="' + estimatedWidth + '" height="' + height + '" viewBox="0 0 ' + estimatedWidth + ' ' + height + '">'
+    + '<text x="' + (estimatedWidth / 2) + '" y="' + Math.round(height * 0.76) + '" '
+    + 'text-anchor="middle" font-family="system-ui,-apple-system,Segoe UI,Tahoma,sans-serif" '
+    + 'font-size="' + fontSize + '" font-weight="700" fill="' + color + '">' + text + '</text></svg>';
+  var encoded = btoa(encodeURIComponent(svgStr).replace(/%([0-9A-F]{2})/g, function(m, p1){ return String.fromCharCode(parseInt(p1,16)); }));
+  var uri = 'data:image/svg+xml;base64,' + encoded;
+  PRICE_CACHE[key] = uri;
+  return uri;
+}
+function setPriceImg(elOrId, price, opts) {
+  var el = typeof elOrId === 'string' ? document.getElementById(elOrId) : elOrId;
+  if (!el) return;
+  if (price === null || price === undefined || price === '') { el.innerHTML = ''; return; }
+  opts = opts || {};
+  var h = opts.height || 24;
+  var uri = buildPriceSvg(price, opts);
+  el.innerHTML = '<img src="' + uri + '" alt="" style="height:' + h + 'px;width:auto;display:block;user-select:none;-webkit-user-select:none;pointer-events:none;" draggable="false" aria-hidden="true"/>';
+}
+
+// ════════════════════════════════════════
+//  UI UPDATE
 // ════════════════════════════════════════
 function updateUI() {
-  // Delivery price labels (rendered as SVG)
   if (homePrice > 0) {
-    setPriceImg('homePriceVal', homePrice, { color: '#E8132A', fontSize: 13, height: 18 });
-    setPriceImg('deskPriceVal', deskPrice, { color: '#E8132A', fontSize: 13, height: 18 });
+    setPriceImg('homePriceVal', homePrice, { color:'#E8132A', fontSize:13, height:18 });
+    setPriceImg('deskPriceVal', deskPrice, { color:'#E8132A', fontSize:13, height:18 });
   } else {
     document.getElementById('homePriceVal').innerHTML = '<span style="font-size:0.8rem;color:#6C757D">---</span>';
     document.getElementById('deskPriceVal').innerHTML = '<span style="font-size:0.8rem;color:#6C757D">---</span>';
   }
-
-  // Delivery card active state
   currentDeliveryPrice = (deliveryType === 'home') ? homePrice : deskPrice;
   var cardHome = document.getElementById('cardHome');
   var cardDesk = document.getElementById('cardDesk');
   var cmHome   = cardHome.querySelector('.check-mark');
   var cmDesk   = cardDesk.querySelector('.check-mark');
-
   if (deliveryType === 'home') {
     cardHome.classList.add('active'); cardDesk.classList.remove('active');
     if (cmHome) cmHome.textContent = '✓'; if (cmDesk) cmDesk.textContent = '';
@@ -1055,42 +1008,28 @@ function updateUI() {
     cardDesk.classList.add('active'); cardHome.classList.remove('active');
     if (cmDesk) cmDesk.textContent = '✓'; if (cmHome) cmHome.textContent = '';
   }
-
-  // Quantity display
   document.getElementById('qtyDisplay').textContent = currentQty;
-
-  // Qty bonus tag
   var bonusTag = document.getElementById('qtyBonusTag');
   if (currentQty === 1 && homePrice > 0) {
     var saved = (CFG.priceUnit * 2) - CFG.price2Unit;
-    setPriceImg('savingAmount', saved, { fontSize: 12, height: 17 });
+    setPriceImg('savingAmount', saved, { fontSize:12, height:17 });
     bonusTag.classList.add('show');
-  } else {
-    bonusTag.classList.remove('show');
-  }
-
-  // Order summary
+  } else { bonusTag.classList.remove('show'); }
   var prodPrice = getProductPrice(currentQty);
-  setPriceImg('summaryProductPrice', prodPrice, { fontSize: 15, height: 21 });
-
+  setPriceImg('summaryProductPrice', prodPrice, { fontSize:15, height:21 });
   var delEl = document.getElementById('summaryDeliveryPrice');
-  if (homePrice > 0) {
-    setPriceImg('summaryDeliveryPrice', currentDeliveryPrice, { fontSize: 15, height: 21 });
-  } else {
-    delEl.innerHTML = '<span style="font-size:0.85rem;color:#6C757D">-- اختر الولاية --</span>';
-  }
-
+  if (homePrice > 0) { setPriceImg('summaryDeliveryPrice', currentDeliveryPrice, { fontSize:15, height:21 }); }
+  else { delEl.innerHTML = '<span style="font-size:0.85rem;color:#6C757D">-- اختر الولاية --</span>'; }
   var totalEl  = document.getElementById('summaryTotal');
   var summCard = document.getElementById('orderSummary');
   if (homePrice > 0) {
     var total = getTotalPrice(currentQty, currentDeliveryPrice);
-    setPriceImg('summaryTotal', total, { color: '#E8132A', fontSize: 26, height: 34 });
+    setPriceImg('summaryTotal', total, { color:'#E8132A', fontSize:26, height:34 });
     summCard.classList.add('highlight');
   } else {
     totalEl.innerHTML = '<span style="font-size:1.1rem;color:#6C757D">---</span>';
     summCard.classList.remove('highlight');
   }
-
   updateProgress();
 }
 
@@ -1098,32 +1037,24 @@ function updateUI() {
 //  PROGRESS STEPS
 // ════════════════════════════════════════
 function updateProgress() {
-  var name    = document.getElementById('fullName').value.trim();
-  var phone   = document.getElementById('phone').value.trim();
-  var wilaya  = document.getElementById('wilaya').value;
-  var bal     = document.getElementById('baladiya').value;
-  var hasBal  = wilaya && communes[wilaya] && communes[wilaya].length > 0;
-
+  var name   = document.getElementById('fullName').value.trim();
+  var phone  = document.getElementById('phone').value.trim();
+  var wilaya = document.getElementById('wilaya').value;
+  var bal    = document.getElementById('baladiya').value;
+  var hasBal = wilaya && communes[wilaya] && communes[wilaya].length > 0;
   var s1 = name.length >= 3 && /^(05|06|07)\d{8}$/.test(phone);
   var s2 = wilaya && (!hasBal || bal);
   var s3 = homePrice > 0;
-
-  setStep('step1', 'line1', s1, true);
-  setStep('step2', 'line2', s2, s1);
-  setStep('step3', 'line3', s3, s2);
-  setStep('step4', null,    false, s3);
+  setStep('step1','line1',s1,true);
+  setStep('step2','line2',s2,s1);
+  setStep('step3','line3',s3,s2);
+  setStep('step4',null,false,s3);
 }
-
-function setStep(stepId, lineId, done, active) {
-  var s = document.getElementById(stepId);
-  if (!s) return;
+function setStep(stepId,lineId,done,active) {
+  var s = document.getElementById(stepId); if (!s) return;
   s.classList.remove('done','active');
-  if (done) s.classList.add('done');
-  else if (active) s.classList.add('active');
-  if (lineId) {
-    var l = document.getElementById(lineId);
-    if (l) { l.classList.toggle('done', !!done); }
-  }
+  if (done) s.classList.add('done'); else if (active) s.classList.add('active');
+  if (lineId) { var l = document.getElementById(lineId); if (l) l.classList.toggle('done',!!done); }
 }
 
 // ════════════════════════════════════════
@@ -1137,15 +1068,10 @@ var communes={'1':['أدرار','أولاد أحمد تيمي','أولف','إن 
 document.getElementById('wilaya').addEventListener('change', function() {
   var val = this.value;
   var bal = document.getElementById('baladiya');
-
   if (val && communes[val] && communes[val].length) {
     var sorted = communes[val].slice().sort();
     bal.innerHTML = '<option value="">-- اختر البلدية --</option>';
-    sorted.forEach(function(c) {
-      var o = document.createElement('option');
-      o.value = c; o.textContent = c;
-      bal.appendChild(o);
-    });
+    sorted.forEach(function(c){ var o = document.createElement('option'); o.value = c; o.textContent = c; bal.appendChild(o); });
     bal.disabled = false;
   } else if (val) {
     bal.innerHTML = '<option value="">-- لا توجد بلديات --</option>';
@@ -1153,18 +1079,14 @@ document.getElementById('wilaya').addEventListener('change', function() {
   } else {
     bal.disabled = true;
     bal.innerHTML = '<option value="">-- اختر الولاية أولاًّ --</option>';
-    homePrice = 0; deskPrice = 0; deliveryType = 'home'; updateUI();
-    return;
+    homePrice = 0; deskPrice = 0; deliveryType = 'home'; updateUI(); return;
   }
-
   var opt = this.options[this.selectedIndex];
   homePrice    = parseInt(atob(opt.getAttribute('data-h') || 'MA==')) || 0;
   deskPrice    = parseInt(atob(opt.getAttribute('data-d') || 'MA==')) || 0;
   deliveryType = 'home';
-
   this.classList.add('valid'); this.classList.remove('error');
   document.getElementById('wilayaErr').classList.remove('show');
-
   if (!addToCartFired) { addToCartFired = true; capiAddToCart(currentQty); }
   updateUI();
   ga4('wilaya_selected', { wilaya_name: opt.text, wilaya_id: val, home_price: homePrice, desk_price: deskPrice });
@@ -1179,7 +1101,6 @@ document.getElementById('baladiya').addEventListener('change', function() {
   updateProgress();
 });
 
-// Delivery card selection
 document.getElementById('cardHome').addEventListener('click', function() {
   deliveryType = 'home'; updateUI();
   ga4('delivery_type_selected', { delivery_type: 'home', delivery_price: homePrice });
@@ -1200,6 +1121,7 @@ window.changeQty = function(delta) {
     currentQty = n;
     ga4('quantity_change', { quantity: n, direction: delta > 0 ? 'increase' : 'decrease' });
     updateUI();
+    if (n >= 2) capiCustom('BundleQuantitySelect', { quantity: n, is_bundle: true, bundle_saving: CFG.priceUnit * 2 - CFG.price2Unit, value: getFbProductPrice(n) });
   }
 };
 
@@ -1207,28 +1129,22 @@ window.changeQty = function(delta) {
 //  FORM FIELD TRACKING
 // ════════════════════════════════════════
 var fieldFocusTimes = {};
-
 function trackFocus(id) {
   fieldFocusTimes[id] = Date.now();
   if (!formStartTime) formStartTime = Date.now();
   ga4('form_field_focus', { field_name: id });
   if (!formInteractionFired) {
     formInteractionFired = true;
-    capiCustom('FormStart', { field_name: id });
+    capiCustom('FormStart', { field_name: id, value: getFbProductPrice(1) });
     ga4('form_start', { form_id: 'orderForm' });
   }
 }
-
 function trackBlur(id) {
-  if (fieldFocusTimes[id]) {
-    ga4('form_field_complete', { field_name: id, time_spent: Math.round((Date.now() - fieldFocusTimes[id]) / 1000) });
-  }
+  if (fieldFocusTimes[id]) ga4('form_field_complete', { field_name: id, time_spent: Math.round((Date.now() - fieldFocusTimes[id]) / 1000) });
   updateProgress();
 }
-
 ['fullName','phone','wilaya','baladiya'].forEach(function(id) {
-  var el = document.getElementById(id);
-  if (!el) return;
+  var el = document.getElementById(id); if (!el) return;
   el.addEventListener('focus',  function() { trackFocus(id); });
   el.addEventListener('blur',   function() { trackBlur(id); });
   el.addEventListener('change', function() {
@@ -1239,27 +1155,15 @@ function trackBlur(id) {
     }
   });
 });
-
-// Phone — numbers only
 document.getElementById('phone').addEventListener('input', function() {
   this.value = this.value.replace(/[^0-9]/g, '');
-  var valid  = /^(05|06|07)\d{8}$/.test(this.value);
-  if (valid) {
-    this.classList.add('valid'); this.classList.remove('error');
-    document.getElementById('phoneErr').classList.remove('show');
-  } else if (this.value.length === 10) {
-    this.classList.add('error'); this.classList.remove('valid');
-    document.getElementById('phoneErr').classList.add('show');
-  }
+  var valid = /^(05|06|07)\d{8}$/.test(this.value);
+  if (valid) { this.classList.add('valid'); this.classList.remove('error'); document.getElementById('phoneErr').classList.remove('show'); }
+  else if (this.value.length === 10) { this.classList.add('error'); this.classList.remove('valid'); document.getElementById('phoneErr').classList.add('show'); }
   updateProgress();
 });
-
-// Name live validation
 document.getElementById('fullName').addEventListener('input', function() {
-  if (this.value.trim().length >= 3) {
-    this.classList.add('valid'); this.classList.remove('error');
-    document.getElementById('nameErr').classList.remove('show');
-  }
+  if (this.value.trim().length >= 3) { this.classList.add('valid'); this.classList.remove('error'); document.getElementById('nameErr').classList.remove('show'); }
   updateProgress();
 });
 
@@ -1267,62 +1171,29 @@ document.getElementById('fullName').addEventListener('input', function() {
 //  VALIDATION
 // ════════════════════════════════════════
 function validate() {
-  var ok      = true;
+  var ok = true;
   var name    = document.getElementById('fullName').value.trim();
   var phone   = document.getElementById('phone').value.trim();
   var wilayaV = document.getElementById('wilaya').value;
   var balV    = document.getElementById('baladiya').value;
   var hasBal  = wilayaV && communes[wilayaV] && communes[wilayaV].length > 0;
-
-  if (name.length < 3) {
-    document.getElementById('fullName').classList.add('error');
-    document.getElementById('nameErr').classList.add('show');
-    ga4('form_validation_error', { field: 'name' }); ok = false;
-  } else {
-    document.getElementById('fullName').classList.remove('error');
-    document.getElementById('fullName').classList.add('valid');
-    document.getElementById('nameErr').classList.remove('show');
-  }
-
-  if (!/^(05|06|07)\d{8}$/.test(phone)) {
-    document.getElementById('phone').classList.add('error');
-    document.getElementById('phoneErr').classList.add('show');
-    ga4('form_validation_error', { field: 'phone' }); ok = false;
-  } else {
-    document.getElementById('phone').classList.remove('error');
-    document.getElementById('phone').classList.add('valid');
-    document.getElementById('phoneErr').classList.remove('show');
-  }
-
-  if (!wilayaV) {
-    document.getElementById('wilaya').classList.add('error');
-    document.getElementById('wilayaErr').classList.add('show');
-    ga4('form_validation_error', { field: 'wilaya' }); ok = false;
-  } else {
-    document.getElementById('wilaya').classList.remove('error');
-    document.getElementById('wilaya').classList.add('valid');
-    document.getElementById('wilayaErr').classList.remove('show');
-  }
-
-  if (hasBal && !balV) {
-    document.getElementById('baladiya').classList.add('error');
-    document.getElementById('baladiyaErr').classList.add('show');
-    ga4('form_validation_error', { field: 'baladiya' }); ok = false;
-  } else {
-    document.getElementById('baladiya').classList.remove('error');
-    document.getElementById('baladiya').classList.add('valid');
-    document.getElementById('baladiyaErr').classList.remove('show');
-  }
-
+  if (name.length < 3) { document.getElementById('fullName').classList.add('error'); document.getElementById('nameErr').classList.add('show'); ga4('form_validation_error',{field:'name'}); ok = false; }
+  else { document.getElementById('fullName').classList.remove('error'); document.getElementById('fullName').classList.add('valid'); document.getElementById('nameErr').classList.remove('show'); }
+  if (!/^(05|06|07)\d{8}$/.test(phone)) { document.getElementById('phone').classList.add('error'); document.getElementById('phoneErr').classList.add('show'); ga4('form_validation_error',{field:'phone'}); ok = false; }
+  else { document.getElementById('phone').classList.remove('error'); document.getElementById('phone').classList.add('valid'); document.getElementById('phoneErr').classList.remove('show'); }
+  if (!wilayaV) { document.getElementById('wilaya').classList.add('error'); document.getElementById('wilayaErr').classList.add('show'); ga4('form_validation_error',{field:'wilaya'}); ok = false; }
+  else { document.getElementById('wilaya').classList.remove('error'); document.getElementById('wilaya').classList.add('valid'); document.getElementById('wilayaErr').classList.remove('show'); }
+  if (hasBal && !balV) { document.getElementById('baladiya').classList.add('error'); document.getElementById('baladiyaErr').classList.add('show'); ga4('form_validation_error',{field:'baladiya'}); ok = false; }
+  else { document.getElementById('baladiya').classList.remove('error'); document.getElementById('baladiya').classList.add('valid'); document.getElementById('baladiyaErr').classList.remove('show'); }
   return ok;
 }
 
 // ════════════════════════════════════════
-//  TELEGRAM SENDER (sends REAL prices)
+//  TELEGRAM
 // ════════════════════════════════════════
 async function sendTg(bot, d) {
-  var dl = d.delType === 'home' ? 'توصيل للمنزل 🏠' : 'توصيل للمكتب 📦';
-  var msg = '🛒 <b>طلب جديد - Champions League</b>\n\n'
+  var dl  = d.delType === 'home' ? 'توصيل للمنزل 🏠' : 'توصيل للمكتب 📦';
+  var msg = '🛒 <b>طلب جديد - Champions League UCL Budapest 2026</b>\n\n'
     + '👤 <b>الاسم:</b> ' + d.name + '\n'
     + '📱 <b>الهاتف:</b> <code>' + d.phone + '</code>\n'
     + '🗺️ <b>الولاية:</b> ' + d.wilaya + '\n'
@@ -1336,9 +1207,8 @@ async function sendTg(bot, d) {
     + '🆔 <b>معرف الطلب:</b> <code>' + d.txId + '</code>';
   try {
     var r = await fetch('https://api.telegram.org/bot' + bot.token + '/sendMessage', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ chat_id: bot.chat, text: msg.trim(), parse_mode: 'HTML', disable_web_page_preview: true })
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ chat_id: bot.chat, text: msg.trim(), parse_mode:'HTML', disable_web_page_preview:true })
     });
     return r.ok;
   } catch(e) { return false; }
@@ -1346,31 +1216,27 @@ async function sendTg(bot, d) {
 
 // ════════════════════════════════════════
 //  SUBMIT ORDER
-//  Flow: validate → InitiateCheckout → backends → Purchase (on success)
 // ════════════════════════════════════════
 window.submitOrder = async function() {
   if (orderSubmitted) return;
   ga4('form_submit_attempt', { form_id: 'orderForm' });
-
   if (!validate()) {
     var firstErr = document.querySelector('.form-input.error, .form-select.error');
-    if (firstErr) firstErr.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    if (firstErr) firstErr.scrollIntoView({ behavior:'smooth', block:'center' });
     return;
   }
-
   orderSubmitted = true;
   var btn = document.getElementById('submitBtn');
-  btn.disabled = true;
+  btn.disabled  = true;
   btn.innerHTML = '<div><div class="submit-btn-text">⏳ جارٍ إرسال طلبك...</div><span class="submit-btn-sub">ثواني معدودة</span></div>';
 
-  // Gather data
   var wilayaEl   = document.getElementById('wilaya');
   var wilayaText = wilayaEl.options[wilayaEl.selectedIndex].text;
   var commune    = document.getElementById('baladiya').value;
   var custName   = document.getElementById('fullName').value.trim();
   var custPhone  = document.getElementById('phone').value.trim();
-  var prodPrice  = getProductPrice(currentQty);     // REAL price
-  var total      = getTotalPrice(currentQty, currentDeliveryPrice); // REAL total
+  var prodPrice  = getProductPrice(currentQty);
+  var total      = getTotalPrice(currentQty, currentDeliveryPrice);
   var now        = new Date();
   var dateStr    = now.toLocaleDateString('fr-DZ') + ' ' + now.toLocaleTimeString('fr-DZ');
   var txId       = 'ORD_' + Date.now() + '_' + Math.random().toString(36).substr(2,7).toUpperCase();
@@ -1379,80 +1245,55 @@ window.submitOrder = async function() {
   var orderType  = deliveryType;
   var formSec    = formStartTime ? Math.round((Date.now() - formStartTime) / 1000) : 0;
 
-  // 1. Fire InitiateCheckout to FB (uses FB price 3200 DZD)
+  // InitiateCheckout
   await capiInitiateCheckout(orderQty, orderDel, custPhone, custName, wilayaText);
 
-  // 2. Google Sheets (REAL prices for your records)
+  // Google Sheets
   var sheetPayload = {
-    transaction_id:    txId,
-    date:              dateStr,
-    nom:               custName,
-    phone:             custPhone,
-    wilaya:            wilayaText,
-    commune:           commune,
-    produit:           'Champions League (Landing Page)',
-    prix_produit:      prodPrice,
-    quantite:          orderQty,
-    prix_total:        total,
-    livraison:         orderType === 'home' ? 'A Domicile' : 'Point Relais',
-    prix_livraison:    orderDel,
-    delivery_type:     orderType,
-    home_price:        homePrice,
-    desk_price:        deskPrice,
+    transaction_id: txId, date: dateStr, nom: custName, phone: custPhone,
+    wilaya: wilayaText, commune: commune,
+    produit: 'UCL Budapest 2026 Final Ball — Size 5 — 450g — Made in Pakistan',
+    prix_produit: prodPrice, quantite: orderQty, prix_total: total,
+    livraison: orderType === 'home' ? 'A Domicile' : 'Point Relais',
+    prix_livraison: orderDel, delivery_type: orderType,
+    home_price: homePrice, desk_price: deskPrice,
     product_base_price: CFG.priceUnit,
-    utm_source:        UTM.source,
-    utm_medium:        UTM.medium,
-    utm_campaign:      UTM.campaign,
-    device:            /Mobi|Android/i.test(navigator.userAgent) ? 'mobile' : 'desktop',
-    time_on_page:      timeOnPage,
-    form_time_seconds: formSec
+    product_sku: CFG.productSku,
+    is_bundle: orderQty >= 2,
+    utm_source: UTM.source, utm_medium: UTM.medium, utm_campaign: UTM.campaign,
+    device: /Mobi|Android/i.test(navigator.userAgent) ? 'mobile' : 'desktop',
+    time_on_page: timeOnPage, form_time_seconds: formSec
   };
-
   var sheetOk = false;
   try {
-    await fetch(SHEET_URL, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(sheetPayload) });
+    await fetch(SHEET_URL, { method:'POST', mode:'no-cors', headers:{'Content-Type':'application/json'}, body: JSON.stringify(sheetPayload) });
     sheetOk = true;
   } catch(e) { console.warn('Sheet failed:', e); }
 
-  // 3. Telegram (REAL prices)
+  // Telegram
   var tgData = { name: custName, phone: custPhone, wilaya: wilayaText, commune: commune, qty: orderQty, prodPrice: prodPrice, delType: orderType, delPrice: orderDel, total: total, dateStr: dateStr, txId: txId };
-  var tgResults = await Promise.all([ sendTg(TG1, tgData), sendTg(TG2, tgData) ]);
+  var tgResults = await Promise.all([sendTg(TG1, tgData), sendTg(TG2, tgData)]);
 
-  // If ALL backends fail, abort
   if (!sheetOk && !tgResults[0] && !tgResults[1]) {
     btn.innerHTML = '<div><div class="submit-btn-text">❌ فشل الإرسال — اضغط مرة أخرى</div></div>';
-    btn.disabled = false;
-    orderSubmitted = false;
+    btn.disabled = false; orderSubmitted = false;
     ga4('order_error', { reason: 'all_backends_failed' });
     alert('حدث خطأ في إرسال الطلب. يرجى التحقق من اتصالك والمحاولة مرة أخرى.');
     return;
   }
 
-  // 4. ✅ Purchase to Facebook — ONLY fires after backend success
-  await capiPurchase({
-    qty:        orderQty,
-    delDzd:     orderDel,
-    phone:      custPhone,
-    name:       custName,
-    wilayaText: wilayaText,
-    commune:    commune,
-    txId:       txId,
-    delType:    orderType
-  });
+  // Purchase — only after backend success
+  await capiPurchase({ qty: orderQty, delDzd: orderDel, phone: custPhone, name: custName, wilayaText: wilayaText, commune: commune, txId: txId, delType: orderType });
 
   ga4('purchase', {
-    transaction_id: txId,
-    currency: CFG.currency,
-    value: total,
-    items: [{ item_id: CFG.productId, item_name: CFG.productName, quantity: orderQty, price: CFG.priceUnit }]
+    transaction_id: txId, currency: CFG.currency, value: total,
+    items: [{ item_id: CFG.productId, item_name: CFG.productName, item_brand: CFG.productBrand, quantity: orderQty, price: CFG.priceUnit }]
   });
 
-  // Show success
   var popName = document.getElementById('popupCustomerName');
   if (popName) popName.textContent = custName.split(' ')[0];
   var popId = document.getElementById('popupOrderId');
   if (popId) popId.textContent = 'رقم الطلب: ' + txId;
-
   btn.innerHTML = '<div><div class="submit-btn-text">✅ تم إرسال طلبك بنجاح!</div></div>';
   showSuccess();
 };
@@ -1468,14 +1309,11 @@ function showSuccess() {
   document.getElementById('qtyDisplay').textContent = '1';
   document.getElementById('baladiya').disabled = true;
   document.getElementById('baladiya').innerHTML = '<option value="">-- اختر الولاية أولاًّ --</option>';
-  document.querySelectorAll('.form-input,.form-select').forEach(function(el) { el.classList.remove('valid','error'); });
+  document.querySelectorAll('.form-input,.form-select').forEach(function(el){ el.classList.remove('valid','error'); });
   updateUI();
 }
-window.closePopup = function() {
-  document.getElementById('successPopup').classList.remove('active');
-  ga4('popup_closed', { popup_type: 'order_success' });
-};
-document.getElementById('successPopup').addEventListener('click', function(e) { if (e.target === this) window.closePopup(); });
+window.closePopup = function() { document.getElementById('successPopup').classList.remove('active'); ga4('popup_closed',{popup_type:'order_success'}); };
+document.getElementById('successPopup').addEventListener('click', function(e){ if (e.target === this) window.closePopup(); });
 
 // ════════════════════════════════════════
 //  SCROLL & BEHAVIOR TRACKING
@@ -1487,22 +1325,20 @@ function getSectionAt(pct) {
   if (pct < 90) return 'offer';
   return 'order_form';
 }
-
 function checkScrollMilestones() {
   var pct = Math.round(((window.pageYOffset + window.innerHeight) / document.documentElement.scrollHeight) * 100);
-  [25, 50, 75, 90, 100].forEach(function(m) {
+  [25,50,75,90,100].forEach(function(m) {
     if (pct >= m && !scrollMilestonesFired[m]) {
       scrollMilestonesFired[m] = true;
       ga4('scroll', { percent_scrolled: m, page_section: getSectionAt(pct) });
-      if (m === 75) capiCustom('ScrollDepth75', { scroll_depth: 75, time_on_page: timeOnPage });
-      if (m === 100) capiCustom('ScrollDepth100', { scroll_depth: 100, time_on_page: timeOnPage });
+      if (m === 75) capiCustom('ScrollDepth75', { scroll_depth: 75, time_on_page: timeOnPage, value: getFbProductPrice(1) });
+      if (m === 100) capiCustom('ScrollDepth100', { scroll_depth: 100, time_on_page: timeOnPage, value: getFbProductPrice(1) });
     }
   });
 }
-
 function onScroll() {
-  var st = window.pageYOffset || document.documentElement.scrollTop;
-  var dh = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+  var st  = window.pageYOffset || document.documentElement.scrollTop;
+  var dh  = document.documentElement.scrollHeight - document.documentElement.clientHeight;
   var pct = dh > 0 ? Math.round((st / dh) * 100) : 0;
   document.getElementById('scrollProgress').style.width = pct + '%';
   if (st > window.innerHeight * 0.5) document.getElementById('stickyHeader').classList.add('visible');
@@ -1512,156 +1348,99 @@ function onScroll() {
 }
 window.addEventListener('scroll', onScroll, { passive: true });
 
-// Section visibility
 var secObs = new IntersectionObserver(function(entries) {
   entries.forEach(function(e) {
-    if (e.isIntersecting) {
-      ga4('section_view', { section_name: e.target.id, time_since_load: Math.round((Date.now() - SESSION_START) / 1000) });
-      secObs.unobserve(e.target);
-    }
+    if (e.isIntersecting) { ga4('section_view',{section_name:e.target.id,time_since_load:Math.round((Date.now()-SESSION_START)/1000)}); secObs.unobserve(e.target); }
   });
 }, { threshold: 0.5 });
-['section2','section3','section4','cod-form'].forEach(function(id) { var el = document.getElementById(id); if (el) secObs.observe(el); });
+['section2','section3','section4','cod-form'].forEach(function(id){ var el = document.getElementById(id); if (el) secObs.observe(el); });
 
-// Time on page
 setInterval(function() {
   if (document.visibilityState !== 'visible') return;
   timeOnPage++;
-  [10, 20, 30, 60, 120, 180].forEach(function(s) {
+  [10,20,30,60,120,180].forEach(function(s) {
     if (timeOnPage >= s && !topFired[s]) {
       topFired[s] = true;
       ga4('time_on_page_milestone', { seconds: s });
-      if (s === 30 || s === 60) capiCustom('TimeOnPage', { seconds: s });
+      if (s === 30 || s === 60) capiCustom('TimeOnPage', { seconds: s, value: getFbProductPrice(1) });
     }
   });
 }, 1000);
 
-document.addEventListener('visibilitychange', function() {
-  ga4('page_visibility_change', { state: document.visibilityState, time_on_page: timeOnPage });
-});
+document.addEventListener('visibilitychange', function() { ga4('page_visibility_change',{state:document.visibilityState,time_on_page:timeOnPage}); });
 
-// Exit intent (desktop)
 document.addEventListener('mouseleave', function(e) {
   if (e.clientY <= 0 && !exitIntentFired && !orderSubmitted) {
     exitIntentFired = true;
-    ga4('exit_intent', { form_started: formInteractionFired, scroll_depth: Math.max.apply(null, Object.keys(scrollMilestonesFired).map(Number).filter(Boolean).concat([0])) });
-    capiCustom('ExitIntent', { form_started: formInteractionFired ? 1 : 0, time_on_page: timeOnPage });
+    var maxScroll = Math.max.apply(null, Object.keys(scrollMilestonesFired).map(Number).filter(Boolean).concat([0]));
+    ga4('exit_intent',{form_started:formInteractionFired,scroll_depth:maxScroll});
+    capiCustom('ExitIntent',{form_started:formInteractionFired?1:0,time_on_page:timeOnPage,value:getFbProductPrice(1)});
   }
 });
-
-// Mobile exit intent
-document.addEventListener('touchstart', function(e) { lastTouchY = e.touches[0].clientY; }, { passive: true });
+document.addEventListener('touchstart', function(e){ lastTouchY = e.touches[0].clientY; }, { passive:true });
 document.addEventListener('touchmove', function(e) {
   if (!exitIntentFired && !orderSubmitted) {
     var dy = e.touches[0].clientY - lastTouchY;
-    if (dy > 60 && window.pageYOffset < 50) {
-      exitIntentFired = true;
-      ga4('mobile_exit_intent', { form_started: formInteractionFired, time_on_page: timeOnPage });
-    }
+    if (dy > 60 && window.pageYOffset < 50) { exitIntentFired = true; ga4('mobile_exit_intent',{form_started:formInteractionFired,time_on_page:timeOnPage}); }
   }
   lastTouchY = e.touches[0].clientY;
-}, { passive: true });
+}, { passive:true });
 
-// Before unload
 window.addEventListener('beforeunload', function() {
   var maxScroll = Math.max.apply(null, Object.keys(scrollMilestonesFired).map(Number).filter(Boolean).concat([0]));
-  ga4('page_exit', { time_on_page: timeOnPage, scroll_depth: maxScroll, form_started: formInteractionFired, order_placed: orderSubmitted });
+  ga4('page_exit',{time_on_page:timeOnPage,scroll_depth:maxScroll,form_started:formInteractionFired,order_placed:orderSubmitted});
 });
 
-// CTA tracking
-document.getElementById('floatBtn').addEventListener('click', function() {
-  ga4('cta_click', { cta_type: 'floating_button', mode: floatBtnMode });
-  capiCustom('CTAClick', { cta_type: 'floating_button', cta_mode: floatBtnMode });
-});
-document.querySelector('.sticky-btn').addEventListener('click', function() {
-  ga4('cta_click', { cta_type: 'sticky_header_button' });
-});
+document.getElementById('floatBtn').addEventListener('click', function() { ga4('cta_click',{cta_type:'floating_button',mode:floatBtnMode}); capiCustom('CTAClick',{cta_type:'floating_button',cta_mode:floatBtnMode,value:getFbProductPrice(1)}); });
+document.querySelector('.sticky-btn').addEventListener('click', function() { ga4('cta_click',{cta_type:'sticky_header_button'}); });
 
-// Form section visible
 var formSecObs = new IntersectionObserver(function(entries) {
   entries.forEach(function(e) {
-    if (e.isIntersecting) {
-      ga4('form_section_visible', { form_id: 'orderForm' });
-      capiCustom('FormSectionVisible', { product: CFG.productId });
-      formSecObs.disconnect();
-    }
+    if (e.isIntersecting) { ga4('form_section_visible',{form_id:'orderForm'}); capiCustom('FormSectionVisible',{value:getFbProductPrice(1)}); formSecObs.disconnect(); }
   });
-}, { threshold: 0.3 });
-var fEl = document.getElementById('cod-form');
-if (fEl) formSecObs.observe(fEl);
+}, { threshold:0.3 });
+var fEl = document.getElementById('cod-form'); if (fEl) formSecObs.observe(fEl);
 
 // ════════════════════════════════════════
 //  REVEAL + LAZY IMAGES
 // ════════════════════════════════════════
 var revObs = new IntersectionObserver(function(entries) {
-  entries.forEach(function(e) {
-    if (e.isIntersecting) { e.target.classList.add('visible'); revObs.unobserve(e.target); }
-  });
-}, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
-document.querySelectorAll('.reveal').forEach(function(el) { revObs.observe(el); });
+  entries.forEach(function(e){ if (e.isIntersecting){ e.target.classList.add('visible'); revObs.unobserve(e.target); } });
+}, { threshold:0.1, rootMargin:'0px 0px -50px 0px' });
+document.querySelectorAll('.reveal').forEach(function(el){ revObs.observe(el); });
 
 var imgObs = new IntersectionObserver(function(entries) {
   entries.forEach(function(e) {
     if (e.isIntersecting) {
       var img = e.target, src = img.dataset.src;
-      if (src) {
-        img.src = src;
-        img.onload = function() { img.classList.add('loaded'); img.parentElement.classList.add('loaded'); };
-        img.removeAttribute('data-src');
-      }
+      if (src) { img.src = src; img.onload = function(){ img.classList.add('loaded'); img.parentElement.classList.add('loaded'); }; img.removeAttribute('data-src'); }
       imgObs.unobserve(img);
     }
   });
-}, { rootMargin: '200px 0px', threshold: 0 });
-document.querySelectorAll('.lazy-img').forEach(function(img) { imgObs.observe(img); });
+}, { rootMargin:'200px 0px', threshold:0 });
+document.querySelectorAll('.lazy-img').forEach(function(img){ imgObs.observe(img); });
 
 // ════════════════════════════════════════
 //  NAVIGATION
 // ════════════════════════════════════════
-window.scrollToForm = function(e) {
-  if (e) e.preventDefault();
-  document.getElementById('cod-form').scrollIntoView({ behavior: 'smooth', block: 'start' });
-};
-window.scrollToSection = function(id, e) {
-  if (e) e.preventDefault();
-  var el = document.getElementById(id);
-  if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-};
-
+window.scrollToForm = function(e) { if (e) e.preventDefault(); document.getElementById('cod-form').scrollIntoView({ behavior:'smooth', block:'start' }); };
+window.scrollToSection = function(id, e) { if (e) e.preventDefault(); var el = document.getElementById(id); if (el) el.scrollIntoView({ behavior:'smooth', block:'start' }); };
 function updateFloatBtn() {
   var hb = document.getElementById('heroSection').getBoundingClientRect().bottom;
   if (hb > 100) {
-    if (floatBtnMode !== 'scroll') {
-      floatBtnMode = 'scroll';
-      document.getElementById('floatBtn').innerHTML = '👇 اسحب للأسفل لاكتشاف التفاصيل';
-      document.getElementById('floatBtn').href = '#section2';
-    }
+    if (floatBtnMode !== 'scroll') { floatBtnMode = 'scroll'; document.getElementById('floatBtn').innerHTML = '👇 اسحب للأسفل لاكتشاف التفاصيل'; document.getElementById('floatBtn').href = '#section2'; }
   } else {
-    if (floatBtnMode !== 'order') {
-      floatBtnMode = 'order';
-      document.getElementById('floatBtn').innerHTML = '🛒 اطلب الآن — الدفع عند الاستلام';
-      document.getElementById('floatBtn').href = '#cod-form';
-    }
+    if (floatBtnMode !== 'order') { floatBtnMode = 'order'; document.getElementById('floatBtn').innerHTML = '🛒 اطلب الآن — الدفع عند الاستلام'; document.getElementById('floatBtn').href = '#cod-form'; }
   }
 }
-window.handleFloatClick = function(e) {
-  if (e) e.preventDefault();
-  if (floatBtnMode === 'scroll') window.scrollToSection('section2', e);
-  else window.scrollToForm(e);
-};
+window.handleFloatClick = function(e) { if (e) e.preventDefault(); if (floatBtnMode === 'scroll') window.scrollToSection('section2',e); else window.scrollToForm(e); };
 
 // ════════════════════════════════════════
-//  INITIALISE
+//  INITIALISE — LIVE
 // ════════════════════════════════════════
 updateUI();
-
-// PageView immediately
 capiPageView();
-
-// ViewContent after 2.5s (user has seen the product)
 setTimeout(capiViewContent, 2500);
-
-dbg('🚀 Page loaded — TEST MODE active (TEST98720)');
 </script>
 </body>
 </html>
