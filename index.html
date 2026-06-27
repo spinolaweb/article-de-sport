@@ -13,581 +13,120 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link rel="preconnect" href="https://graph.facebook.com" crossorigin />
+    <link rel="preconnect" href="https://www.google-analytics.com" crossorigin />
+
+    <!-- ══ GOOGLE ANALYTICS 4 ══ -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-3NJP2JDXV6"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){ dataLayer.push(arguments); }
+        gtag('js', new Date());
+        gtag('config', 'G-3NJP2JDXV6', {
+            send_page_view: true,
+            cookie_flags: 'SameSite=None;Secure',
+            page_title: 'Champions League Ball — Landing Page',
+            page_location: window.location.href,
+            content_group: 'Product Landing Page',
+            user_properties: { country: 'Algeria', currency: 'DZD', store_name: 'Article De Sport' }
+        });
+    </script>
 
     <style>
-        * { margin:0; padding:0; box-sizing:border-box; }
-        html { scroll-behavior:smooth; }
-        body { 
-            font-family: system-ui, -apple-system, 'Segoe UI', sans-serif; 
-            background:#0A1628; 
-            color:#0A1628; 
-            direction:rtl; 
-            overflow-x:hidden;
-        }
-
-        :root {
-            --gold:#F5C518; --gold-dark:#D4A000;
-            --navy:#0A1628; --navy-mid:#122040;
-            --red:#E8132A; --white:#FFFFFF;
-            --off-white:#F8F9FA; --gray:#6C757D;
-            --light-gray:#E9ECEF; --success:#28A745;
-        }
-
-        .img-section {
-            position: relative;
-            width: 100%;
-            display: block;
-            background: var(--navy);
-            line-height: 0;
-            overflow: hidden;
-        }
-
-        .img-section::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(135deg, #0A1628 0%, #1a3060 50%, #0d2040 100%);
-            z-index: 1;
-            transition: opacity 0.6s ease;
-        }
-
-        .img-section.loaded::before {
-            opacity: 0;
-            pointer-events: none;
-        }
-
-        .fullscreen-img {
-            width: 100%;
-            height: auto;
-            display: block;
-            object-fit: cover;
-            vertical-align: bottom;
-            opacity: 0;
-            transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative;
-            z-index: 2;
-        }
-
-        .fullscreen-img.loaded {
-            opacity: 1;
-        }
-
-        .img-placeholder {
-            position: absolute;
-            inset: 0;
-            background-size: cover;
-            background-position: center;
-            filter: blur(20px) brightness(0.4);
-            transform: scale(1.1);
-            z-index: 1;
-            transition: opacity 0.6s ease, filter 0.6s ease;
-        }
-
-        .img-section.loaded .img-placeholder {
-            opacity: 0;
-            filter: blur(0) brightness(1);
-        }
-
-        .hero-section {
-            position: relative;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-end;
-        }
-
-        .hero-section .fullscreen-img {
-            position: absolute;
-            inset: 0;
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .scroll-indicator {
-            position: relative;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 6px;
-            text-decoration: none;
-            margin-top: -34px;
-            margin-bottom: -34px;
-            z-index: 10;
-            cursor: pointer;
-        }
-
-        .scroll-indicator.hidden {
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.5s ease;
-        }
-
-        .scroll-text {
-            color: #fff;
-            font-size: 0.9rem;
-            font-weight: 900;
-            text-shadow: 0 2px 8px rgba(0,0,0,0.9), 0 0 4px rgba(0,0,0,0.9);
-            letter-spacing: 0.5px;
-            background: rgba(10, 22, 40, 0.85);
-            padding: 6px 16px;
-            border-radius: 20px;
-            white-space: nowrap;
-            animation: textGlow 2s ease-in-out infinite;
-            backdrop-filter: blur(4px);
-            border: 1px solid rgba(245,197,24,0.3);
-        }
-
-        .scroll-arrow {
-            width: 48px;
-            height: 48px;
-            background: linear-gradient(135deg, var(--gold), var(--gold-dark));
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow:
-                0 0 0 3px rgba(245,197,24,0.8),
-                0 0 0 8px rgba(245,197,24,0.2),
-                0 4px 20px rgba(0,0,0,0.5);
-            animation: arrowBounce 1.5s ease-in-out infinite;
-            position: relative;
-        }
-
-        .scroll-arrow::before {
-            content: '';
-            position: absolute;
-            inset: -4px;
-            border-radius: 50%;
-            border: 2px solid rgba(245,197,24,0.3);
-            animation: pulseRing 2s ease-in-out infinite;
-        }
-
-        .scroll-arrow svg {
-            width: 24px;
-            height: 24px;
-            fill: var(--navy);
-        }
-
-        @keyframes textGlow {
-            0%, 100% { opacity: 0.85; }
-            50% { opacity: 1; }
-        }
-
-        @keyframes arrowBounce {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-8px); }
-        }
-
-        @keyframes pulseRing {
-            0%, 100% { transform: scale(1); opacity: 1; }
-            50% { transform: scale(1.15); opacity: 0.5; }
-        }
-
-        .float-btn {
-            position: fixed;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 999;
-            background: linear-gradient(135deg, var(--red), #c0001f);
-            color: white;
-            border: none;
-            padding: 16px 36px;
-            border-radius: 50px;
-            font-size: 1.1rem;
-            font-weight: 900;
-            cursor: pointer;
-            box-shadow: 0 8px 30px rgba(232,19,42,0.5);
-            animation: floatPulse 2s infinite;
-            white-space: nowrap;
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
-            font-family: inherit;
-        }
-
-        .float-btn:hover {
-            transform: translateX(-50%) scale(1.05);
-            box-shadow: 0 12px 40px rgba(232,19,42,0.7);
-        }
-
-        @keyframes floatPulse {
-            0%, 100% { box-shadow: 0 8px 30px rgba(232,19,42,0.5); }
-            50% { box-shadow: 0 8px 50px rgba(232,19,42,0.8); }
-        }
-
-        .reveal {
-            opacity: 0;
-            transform: translateY(40px);
-            transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1), 
-                        transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        .reveal.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .reveal-delay-1 { transition-delay: 0.1s; }
-        .reveal-delay-2 { transition-delay: 0.2s; }
-        .reveal-delay-3 { transition-delay: 0.3s; }
-
-        .cod-section {
-            background: linear-gradient(135deg, var(--navy) 0%, #0d2040 100%);
-            padding: 80px 20px 120px;
-        }
-
-        .form-header { text-align: center; margin-bottom: 48px; }
-        .form-header h2 { color: white; font-size: clamp(1.8rem, 4vw, 2.6rem); font-weight: 900; margin-bottom: 12px; }
-        .form-header h2 span { color: var(--gold); }
-        .form-header p { color: rgba(255,255,255,0.7); font-size: 1rem; }
-
-        .cod-form {
-            background: white;
-            border-radius: 24px;
-            padding: 48px 40px;
-            max-width: 720px;
-            margin: 0 auto;
-            box-shadow: 0 30px 80px rgba(0,0,0,0.3);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .cod-form::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            right: 0;
-            left: 0;
-            height: 6px;
-            background: linear-gradient(90deg, var(--gold), var(--red));
-        }
-
-        .form-group { margin-bottom: 24px; }
-        .form-label {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 0.95rem;
-            font-weight: 700;
-            color: var(--navy);
-            margin-bottom: 10px;
-        }
-        .required-star { color: var(--red); }
-
-        .form-input, .form-select {
-            width: 100%;
-            padding: 14px 18px;
-            border: 2px solid var(--light-gray);
-            border-radius: 12px;
-            font-size: 1rem;
-            color: var(--navy);
-            background: var(--off-white);
-            transition: border-color 0.2s, box-shadow 0.2s;
-            direction: rtl;
-            -webkit-appearance: none;
-            appearance: none;
-            font-family: inherit;
-        }
-
-        .form-input:focus, .form-select:focus {
-            outline: none;
-            border-color: var(--gold);
-            box-shadow: 0 0 0 4px rgba(245,197,24,0.15);
-            background: white;
-        }
-
-        .form-input.error, .form-select.error {
-            border-color: var(--red);
-            box-shadow: 0 0 0 4px rgba(232,19,42,0.1);
-        }
-
-        .form-input.valid, .form-select.valid { border-color: var(--success); }
-
-        .field-error {
-            color: var(--red);
-            font-size: 0.82rem;
-            margin-top: 6px;
-            display: none;
-        }
-        .field-error.show { display: block; }
-
-        .form-select {
-            cursor: pointer;
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' fill='none'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%230A1628' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E");
-            background-repeat: no-repeat;
-            background-position: left 16px center;
-            padding-left: 40px;
-        }
-
-        .delivery-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 4px; }
-        .delivery-card {
-            border: 2px solid var(--light-gray);
-            border-radius: 14px;
-            padding: 16px 14px;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.25s ease;
-            background: var(--off-white);
-            position: relative;
-        }
-        .delivery-card:hover { border-color: var(--gold); background: #fffef5; transform: translateY(-2px); }
-        .delivery-card.active {
-            border-color: var(--gold);
-            background: #fff8e0;
-            box-shadow: 0 0 0 4px rgba(245,197,24,0.15);
-        }
-        .delivery-card .delivery-icon { font-size: 1.6rem; display: block; margin-bottom: 6px; }
-        .delivery-card .delivery-name { font-weight: 700; font-size: 0.95rem; color: var(--navy); }
-        .delivery-card .delivery-price { font-size: 0.85rem; color: var(--gray); margin-top: 2px; }
-        .delivery-card .delivery-price strong { color: var(--red); font-weight: 900; font-size: 1rem; }
-        .delivery-card input[type="radio"] { position: absolute; opacity: 0; width: 0; height: 0; }
-        .delivery-card .check-mark {
-            position: absolute;
-            top: 8px;
-            left: 8px;
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            border: 2px solid var(--light-gray);
-            background: white;
-            transition: 0.2s;
-        }
-        .delivery-card.active .check-mark { border-color: var(--gold); background: var(--gold); }
-        .delivery-card.active .check-mark::after {
-            content: '✓';
-            color: white;
-            font-size: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 100%;
-            height: 100%;
-            font-weight: 700;
-        }
-
-        .qty-control {
-            display: flex;
-            align-items: center;
-            gap: 0;
-            border: 2px solid var(--light-gray);
-            border-radius: 12px;
-            overflow: hidden;
-            background: var(--off-white);
-        }
-        .qty-btn {
-            width: 52px;
-            height: 52px;
-            background: var(--navy);
-            color: white;
-            border: none;
-            font-size: 1.4rem;
-            cursor: pointer;
-            transition: background 0.2s;
-            flex-shrink: 0;
-            font-family: inherit;
-        }
-        .qty-btn:hover { background: #1e3a6e; }
-        .qty-btn:active { transform: scale(0.95); }
-        .qty-display {
-            flex: 1;
-            text-align: center;
-            font-size: 1.3rem;
-            font-weight: 900;
-            color: var(--navy);
-            padding: 12px;
-            min-width: 60px;
-        }
-
-        .total-price-wrap {
-            background: linear-gradient(135deg, #fafbff, #f0f4ff);
-            border-radius: 14px;
-            padding: 18px 20px;
-            border: 2px dashed var(--gold);
-            text-align: center;
-            margin-top: 6px;
-        }
-        .total-price-wrap .label {
-            font-size: 0.85rem;
-            color: var(--gray);
-            font-weight: 600;
-            display: block;
-            margin-bottom: 6px;
-        }
-        #totalPriceCanvas { display: block; margin: 0 auto; max-width: 100%; height: auto; border-radius: 8px; background: transparent; }
-
-        .submit-btn {
-            width: 100%;
-            padding: 18px;
-            background: linear-gradient(135deg, var(--red), #c0001f);
-            color: white;
-            border: none;
-            border-radius: 14px;
-            font-size: 1.2rem;
-            font-weight: 900;
-            cursor: pointer;
-            box-shadow: 0 8px 25px rgba(232,19,42,0.4);
-            transition: all 0.3s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            font-family: inherit;
-        }
-        .submit-btn:hover { transform: translateY(-2px); box-shadow: 0 12px 35px rgba(232,19,42,0.6); }
-        .submit-btn:active { transform: translateY(0); }
-        .submit-btn:disabled { opacity: 0.7; cursor: not-allowed; transform: none; }
-
-        .trust-badges { display: flex; justify-content: center; gap: 24px; margin-top: 24px; flex-wrap: wrap; }
-        .trust-item { display: flex; align-items: center; gap: 6px; font-size: 0.82rem; color: rgba(255,255,255,0.7); }
-
-        .popup-overlay {
-            position: fixed;
-            inset: 0;
-            background: rgba(0,0,0,0.7);
-            z-index: 10000;
-            display: none;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-        }
-        .popup-overlay.active { display: flex; }
-        .popup-box {
-            background: white;
-            border-radius: 24px;
-            padding: 48px 40px;
-            max-width: 480px;
-            width: 100%;
-            text-align: center;
-            position: relative;
-            animation: popIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-        }
-        @keyframes popIn { from { transform: scale(0.7); opacity: 0; } to { transform: scale(1); opacity: 1; } }
-        .popup-check {
-            width: 80px;
-            height: 80px;
-            background: linear-gradient(135deg, #28A745, #1e7e34);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 2.5rem;
-            margin: 0 auto 24px;
-            color: white;
-            animation: checkPop 0.5s 0.3s both;
-        }
-        @keyframes checkPop { from { transform: scale(0); } to { transform: scale(1); } }
-        .popup-box h2 { font-size: 1.6rem; font-weight: 900; color: var(--navy); margin-bottom: 12px; }
-        .popup-box p { color: var(--gray); font-size: 0.95rem; line-height: 1.8; margin-bottom: 8px; }
-        .popup-box .highlight { color: var(--red); font-weight: 700; }
-        .popup-close {
-            position: absolute;
-            top: 16px;
-            left: 16px;
-            background: var(--light-gray);
-            border: none;
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            font-size: 1.2rem;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--gray);
-        }
-        .popup-phone {
-            background: linear-gradient(135deg, #f0fff4, #e8f5e9);
-            border: 1px solid #c3e6cb;
-            border-radius: 12px;
-            padding: 14px 20px;
-            margin: 20px 0;
-            font-size: 1rem;
-            color: #155724;
-            font-weight: 600;
-        }
-
-        footer { background: #060d1a; color: rgba(255,255,255,0.7); padding: 40px 20px; text-align: center; }
-        .footer-inner { max-width: 800px; margin: 0 auto; }
-        .footer-logo {
-            width: 80px;
-            height: 80px;
-            background: linear-gradient(135deg, #1a3060, #0d2040);
-            border-radius: 16px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 20px;
-            overflow: hidden;
-            border: 2px solid rgba(245,197,24,0.3);
-        }
-        .footer-logo img { width: 100%; height: 100%; object-fit: contain; }
-        .footer-name { color: white; font-size: 1.2rem; font-weight: 700; margin-bottom: 8px; }
-        .footer-info { font-size: 0.9rem; line-height: 1.8; opacity: 0.6; }
-        .footer-info a { color: inherit; }
-        .footer-divider { border-color: rgba(255,255,255,0.1); margin: 24px 0; }
-        .footer-copy { font-size: 0.8rem; opacity: 0.4; }
-
-        .scroll-progress {
-            position: fixed;
-            top: 0;
-            left: 0;
-            height: 3px;
-            background: linear-gradient(90deg, var(--gold), var(--red));
-            z-index: 10001;
-            width: 0%;
-            transition: width 0.1s linear;
-        }
-
-        .sticky-header {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            background: rgba(10, 22, 40, 0.95);
-            backdrop-filter: blur(10px);
-            z-index: 998;
-            padding: 12px 20px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            transform: translateY(-100%);
-            transition: transform 0.3s ease;
-        }
-        .sticky-header.visible { transform: translateY(0); }
-        .sticky-header .sticky-title { color: white; font-weight: 700; font-size: 0.9rem; }
-        .sticky-header .sticky-price { color: var(--gold); font-weight: 900; font-size: 1rem; }
-        .sticky-header .sticky-btn {
-            background: var(--red);
-            color: white;
-            border: none;
-            padding: 8px 20px;
-            border-radius: 20px;
-            font-weight: 700;
-            font-size: 0.85rem;
-            cursor: pointer;
-            font-family: inherit;
-        }
-
-        @media (max-width: 768px) {
-            .float-btn { padding: 14px 24px; font-size: 1rem; width: calc(100% - 40px); text-align: center; justify-content: center; }
-            .cod-form { padding: 32px 20px; }
-            .delivery-grid { gap: 10px; }
-            .delivery-card { padding: 12px 10px; }
-            .trust-badges { gap: 12px; }
-            .scroll-arrow { width: 48px; height: 48px; }
-            .scroll-arrow svg { width: 24px; height: 24px; }
-        }
-        @media (max-width: 480px) {
-            .cod-section { padding: 60px 12px 100px; }
-            .cod-form { padding: 24px 14px; border-radius: 18px; }
-            .delivery-card .delivery-name { font-size: 0.82rem; }
-            .popup-box { padding: 36px 20px; }
-            .scroll-text { font-size: 0.85rem; padding: 4px 12px; }
-        }
+        *{margin:0;padding:0;box-sizing:border-box}
+        html{scroll-behavior:smooth}
+        body{font-family:system-ui,-apple-system,'Segoe UI',sans-serif;background:#0A1628;color:#0A1628;direction:rtl;overflow-x:hidden}
+        :root{--gold:#F5C518;--gold-dark:#D4A000;--navy:#0A1628;--navy-mid:#122040;--red:#E8132A;--white:#FFFFFF;--off-white:#F8F9FA;--gray:#6C757D;--light-gray:#E9ECEF;--success:#28A745}
+        .img-section{position:relative;width:100%;display:block;background:var(--navy);line-height:0;overflow:hidden}
+        .img-section::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,#0A1628 0%,#1a3060 50%,#0d2040 100%);z-index:1;transition:opacity 0.6s ease}
+        .img-section.loaded::before{opacity:0;pointer-events:none}
+        .fullscreen-img{width:100%;height:auto;display:block;object-fit:cover;vertical-align:bottom;opacity:0;transition:opacity 0.8s cubic-bezier(0.4,0,0.2,1);position:relative;z-index:2}
+        .fullscreen-img.loaded{opacity:1}
+        .img-placeholder{position:absolute;inset:0;background-size:cover;background-position:center;filter:blur(20px) brightness(0.4);transform:scale(1.1);z-index:1;transition:opacity 0.6s ease,filter 0.6s ease}
+        .img-section.loaded .img-placeholder{opacity:0;filter:blur(0) brightness(1)}
+        .hero-section{position:relative;min-height:100vh;display:flex;flex-direction:column;justify-content:flex-end}
+        .hero-section .fullscreen-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+        .scroll-indicator{position:relative;display:flex;flex-direction:column;align-items:center;gap:6px;text-decoration:none;margin-top:-34px;margin-bottom:-34px;z-index:10;cursor:pointer}
+        .scroll-text{color:#fff;font-size:0.9rem;font-weight:900;text-shadow:0 2px 8px rgba(0,0,0,0.9);background:rgba(10,22,40,0.85);padding:6px 16px;border-radius:20px;white-space:nowrap;animation:textGlow 2s ease-in-out infinite;backdrop-filter:blur(4px);border:1px solid rgba(245,197,24,0.3)}
+        .scroll-arrow{width:48px;height:48px;background:linear-gradient(135deg,var(--gold),var(--gold-dark));border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 0 0 3px rgba(245,197,24,0.8),0 0 0 8px rgba(245,197,24,0.2),0 4px 20px rgba(0,0,0,0.5);animation:arrowBounce 1.5s ease-in-out infinite;position:relative}
+        .scroll-arrow::before{content:'';position:absolute;inset:-4px;border-radius:50%;border:2px solid rgba(245,197,24,0.3);animation:pulseRing 2s ease-in-out infinite}
+        .scroll-arrow svg{width:24px;height:24px;fill:var(--navy)}
+        @keyframes textGlow{0%,100%{opacity:0.85}50%{opacity:1}}
+        @keyframes arrowBounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+        @keyframes pulseRing{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.15);opacity:0.5}}
+        .float-btn{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);z-index:999;background:linear-gradient(135deg,var(--red),#c0001f);color:white;border:none;padding:16px 36px;border-radius:50px;font-size:1.1rem;font-weight:900;cursor:pointer;box-shadow:0 8px 30px rgba(232,19,42,0.5);animation:floatPulse 2s infinite;white-space:nowrap;text-decoration:none;display:inline-flex;align-items:center;gap:8px;transition:transform 0.2s ease,box-shadow 0.2s ease;font-family:inherit}
+        .float-btn:hover{transform:translateX(-50%) scale(1.05);box-shadow:0 12px 40px rgba(232,19,42,0.7)}
+        @keyframes floatPulse{0%,100%{box-shadow:0 8px 30px rgba(232,19,42,0.5)}50%{box-shadow:0 8px 50px rgba(232,19,42,0.8)}}
+        .reveal{opacity:0;transform:translateY(40px);transition:opacity 0.8s cubic-bezier(0.4,0,0.2,1),transform 0.8s cubic-bezier(0.4,0,0.2,1)}
+        .reveal.visible{opacity:1;transform:translateY(0)}
+        .reveal-delay-1{transition-delay:0.1s}
+        .cod-section{background:linear-gradient(135deg,var(--navy) 0%,#0d2040 100%);padding:80px 20px 120px}
+        .form-header{text-align:center;margin-bottom:48px}
+        .form-header h2{color:white;font-size:clamp(1.8rem,4vw,2.6rem);font-weight:900;margin-bottom:12px}
+        .form-header h2 span{color:var(--gold)}
+        .form-header p{color:rgba(255,255,255,0.7);font-size:1rem}
+        .cod-form{background:white;border-radius:24px;padding:48px 40px;max-width:720px;margin:0 auto;box-shadow:0 30px 80px rgba(0,0,0,0.3);position:relative;overflow:hidden}
+        .cod-form::before{content:'';position:absolute;top:0;right:0;left:0;height:6px;background:linear-gradient(90deg,var(--gold),var(--red))}
+        .form-group{margin-bottom:24px}
+        .form-label{display:flex;align-items:center;gap:8px;font-size:0.95rem;font-weight:700;color:var(--navy);margin-bottom:10px}
+        .required-star{color:var(--red)}
+        .form-input,.form-select{width:100%;padding:14px 18px;border:2px solid var(--light-gray);border-radius:12px;font-size:1rem;color:var(--navy);background:var(--off-white);transition:border-color 0.2s,box-shadow 0.2s;direction:rtl;-webkit-appearance:none;appearance:none;font-family:inherit}
+        .form-input:focus,.form-select:focus{outline:none;border-color:var(--gold);box-shadow:0 0 0 4px rgba(245,197,24,0.15);background:white}
+        .form-input.error,.form-select.error{border-color:var(--red);box-shadow:0 0 0 4px rgba(232,19,42,0.1)}
+        .form-input.valid,.form-select.valid{border-color:var(--success)}
+        .field-error{color:var(--red);font-size:0.82rem;margin-top:6px;display:none}
+        .field-error.show{display:block}
+        .form-select{cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' fill='none'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%230A1628' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:left 16px center;padding-left:40px}
+        .delivery-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:4px}
+        .delivery-card{border:2px solid var(--light-gray);border-radius:14px;padding:16px 14px;text-align:center;cursor:pointer;transition:all 0.25s ease;background:var(--off-white);position:relative}
+        .delivery-card:hover{border-color:var(--gold);background:#fffef5;transform:translateY(-2px)}
+        .delivery-card.active{border-color:var(--gold);background:#fff8e0;box-shadow:0 0 0 4px rgba(245,197,24,0.15)}
+        .delivery-card .delivery-icon{font-size:1.6rem;display:block;margin-bottom:6px}
+        .delivery-card .delivery-name{font-weight:700;font-size:0.95rem;color:var(--navy)}
+        .delivery-card .delivery-price{font-size:0.85rem;color:var(--gray);margin-top:2px}
+        .delivery-card .delivery-price strong{color:var(--red);font-weight:900;font-size:1rem}
+        .delivery-card input[type="radio"]{position:absolute;opacity:0;width:0;height:0}
+        .delivery-card .check-mark{position:absolute;top:8px;left:8px;width:20px;height:20px;border-radius:50%;border:2px solid var(--light-gray);background:white;transition:0.2s}
+        .delivery-card.active .check-mark{border-color:var(--gold);background:var(--gold)}
+        .delivery-card.active .check-mark::after{content:'✓';color:white;font-size:12px;display:flex;align-items:center;justify-content:center;width:100%;height:100%;font-weight:700}
+        .qty-control{display:flex;align-items:center;border:2px solid var(--light-gray);border-radius:12px;overflow:hidden;background:var(--off-white)}
+        .qty-btn{width:52px;height:52px;background:var(--navy);color:white;border:none;font-size:1.4rem;cursor:pointer;transition:background 0.2s;flex-shrink:0;font-family:inherit}
+        .qty-btn:hover{background:#1e3a6e}
+        .qty-display{flex:1;text-align:center;font-size:1.3rem;font-weight:900;color:var(--navy);padding:12px;min-width:60px}
+        .total-price-wrap{background:linear-gradient(135deg,#fafbff,#f0f4ff);border-radius:14px;padding:18px 20px;border:2px dashed var(--gold);text-align:center;margin-top:6px}
+        .total-price-wrap .label{font-size:0.85rem;color:var(--gray);font-weight:600;display:block;margin-bottom:6px}
+        #totalPriceCanvas{display:block;margin:0 auto;max-width:100%;height:auto;border-radius:8px;background:transparent}
+        .submit-btn{width:100%;padding:18px;background:linear-gradient(135deg,var(--red),#c0001f);color:white;border:none;border-radius:14px;font-size:1.2rem;font-weight:900;cursor:pointer;box-shadow:0 8px 25px rgba(232,19,42,0.4);transition:all 0.3s;display:flex;align-items:center;justify-content:center;gap:10px;font-family:inherit}
+        .submit-btn:hover{transform:translateY(-2px);box-shadow:0 12px 35px rgba(232,19,42,0.6)}
+        .submit-btn:disabled{opacity:0.7;cursor:not-allowed;transform:none}
+        .trust-badges{display:flex;justify-content:center;gap:24px;margin-top:24px;flex-wrap:wrap}
+        .trust-item{display:flex;align-items:center;gap:6px;font-size:0.82rem;color:rgba(255,255,255,0.7)}
+        .popup-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:10000;display:none;align-items:center;justify-content:center;padding:20px}
+        .popup-overlay.active{display:flex}
+        .popup-box{background:white;border-radius:24px;padding:48px 40px;max-width:480px;width:100%;text-align:center;position:relative;animation:popIn 0.4s cubic-bezier(0.34,1.56,0.64,1)}
+        @keyframes popIn{from{transform:scale(0.7);opacity:0}to{transform:scale(1);opacity:1}}
+        .popup-check{width:80px;height:80px;background:linear-gradient(135deg,#28A745,#1e7e34);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:2.5rem;margin:0 auto 24px;color:white;animation:checkPop 0.5s 0.3s both}
+        @keyframes checkPop{from{transform:scale(0)}to{transform:scale(1)}}
+        .popup-box h2{font-size:1.6rem;font-weight:900;color:var(--navy);margin-bottom:12px}
+        .popup-box p{color:var(--gray);font-size:0.95rem;line-height:1.8;margin-bottom:8px}
+        .popup-box .highlight{color:var(--red);font-weight:700}
+        .popup-close{position:absolute;top:16px;left:16px;background:var(--light-gray);border:none;width:36px;height:36px;border-radius:50%;font-size:1.2rem;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--gray)}
+        .popup-phone{background:linear-gradient(135deg,#f0fff4,#e8f5e9);border:1px solid #c3e6cb;border-radius:12px;padding:14px 20px;margin:20px 0;font-size:1rem;color:#155724;font-weight:600}
+        footer{background:#060d1a;color:rgba(255,255,255,0.7);padding:40px 20px;text-align:center}
+        .footer-inner{max-width:800px;margin:0 auto}
+        .footer-logo{width:80px;height:80px;background:linear-gradient(135deg,#1a3060,#0d2040);border-radius:16px;display:flex;align-items:center;justify-content:center;margin:0 auto 20px;overflow:hidden;border:2px solid rgba(245,197,24,0.3)}
+        .footer-logo img{width:100%;height:100%;object-fit:contain}
+        .footer-name{color:white;font-size:1.2rem;font-weight:700;margin-bottom:8px}
+        .footer-info{font-size:0.9rem;line-height:1.8;opacity:0.6}
+        .footer-info a{color:inherit}
+        .footer-divider{border-color:rgba(255,255,255,0.1);margin:24px 0}
+        .footer-copy{font-size:0.8rem;opacity:0.4}
+        .scroll-progress{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,var(--gold),var(--red));z-index:10001;width:0%;transition:width 0.1s linear}
+        .sticky-header{position:fixed;top:0;left:0;right:0;background:rgba(10,22,40,0.95);backdrop-filter:blur(10px);z-index:998;padding:12px 20px;display:flex;align-items:center;justify-content:space-between;transform:translateY(-100%);transition:transform 0.3s ease}
+        .sticky-header.visible{transform:translateY(0)}
+        .sticky-header .sticky-price{color:var(--gold);font-weight:900;font-size:1rem}
+        .sticky-header .sticky-btn{background:var(--red);color:white;border:none;padding:8px 20px;border-radius:20px;font-weight:700;font-size:0.85rem;cursor:pointer;font-family:inherit}
+        @media(max-width:768px){.float-btn{padding:14px 24px;font-size:1rem;width:calc(100% - 40px);text-align:center;justify-content:center}.cod-form{padding:32px 20px}.delivery-grid{gap:10px}.delivery-card{padding:12px 10px}.trust-badges{gap:12px}}
+        @media(max-width:480px){.cod-section{padding:60px 12px 100px}.cod-form{padding:24px 14px;border-radius:18px}.delivery-card .delivery-name{font-size:0.82rem}.popup-box{padding:36px 20px}.scroll-text{font-size:0.85rem;padding:4px 12px}}
     </style>
 
     <meta property="og:title" content="Champions League Ball — كرة القدم الرسمية | Livraison à domicile Algérie | Paiement à la livraison"/>
@@ -596,854 +135,431 @@
     <meta property="og:type" content="product"/>
     <meta property="product:price:amount" content="2900"/>
     <meta property="product:price:currency" content="DZD"/>
-
     <script type="application/ld+json">
     {"@context":"https://schema.org","@type":"Product","name":"Champions League Ball","offers":{"@type":"Offer","price":"2900","priceCurrency":"DZD","availability":"https://schema.org/InStock"},"aggregateRating":{"@type":"AggregateRating","ratingValue":"4.9","reviewCount":"89"}}
     </script>
     <base target="_blank">
 </head>
 <body>
-    <div class="scroll-progress" id="scrollProgress"></div>
 
-    <div class="sticky-header" id="stickyHeader">
-        <span class="sticky-price">التوصيل 69 ولاية الدفع عند الاستلام</span>
-        <button class="sticky-btn" onclick="scrollToForm(event)">اطلب الآن</button>
-    </div>
+<div class="scroll-progress" id="scrollProgress"></div>
+<div class="sticky-header" id="stickyHeader">
+    <span class="sticky-price">التوصيل 69 ولاية الدفع عند الاستلام</span>
+    <button class="sticky-btn" onclick="scrollToForm(event)">اطلب الآن</button>
+</div>
+<a class="float-btn" id="floatBtn" onclick="handleFloatClick(event)" href="#section2">👇 اسحب الى الأسفل لاكتشاف كل التفاصيل</a>
 
-    <a class="float-btn" id="floatBtn" onclick="handleFloatClick(event)" href="#section2">👇 اسحب الى الأسفل لاكتشاف كل التفاصيل</a>
+<!-- HERO -->
+<div class="img-section hero-section" id="heroSection">
+    <div class="img-placeholder" id="heroPlaceholder"></div>
+    <img class="fullscreen-img" id="heroImg" src="hero.jpg" alt="Champions League" width="1200" height="800" fetchpriority="high" decoding="async"
+        onload="this.classList.add('loaded');document.getElementById('heroSection').classList.add('loaded');document.getElementById('heroPlaceholder').style.opacity='0';" />
+</div>
+<a href="#section2" class="scroll-indicator" onclick="scrollToSection('section2',event)">
+    <span class="scroll-text">👇 اسحب للأسفل</span>
+    <div class="scroll-arrow"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/></svg></div>
+</a>
 
-    <!-- HERO -->
-    <div class="img-section hero-section" id="heroSection">
-        <div class="img-placeholder" id="heroPlaceholder"></div>
-        <img class="fullscreen-img" id="heroImg" src="hero.jpg" alt="Champions League" width="1200" height="800" fetchpriority="high" decoding="async"
-            onload="this.classList.add('loaded'); document.getElementById('heroSection').classList.add('loaded'); document.getElementById('heroPlaceholder').style.opacity='0';" />
-    </div>
+<!-- SECTION 2 -->
+<div class="img-section reveal" id="section2">
+    <div class="img-placeholder"></div>
+    <img class="fullscreen-img lazy-img" data-src="ProblemSolution.jpg" alt="المشكلة والحل" width="1200" height="800" loading="lazy" decoding="async" />
+</div>
+<a href="#section3" class="scroll-indicator" onclick="scrollToSection('section3',event)">
+    <span class="scroll-text">استمر في التمرير</span>
+    <div class="scroll-arrow"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/></svg></div>
+</a>
 
-    <a href="#section2" class="scroll-indicator" onclick="scrollToSection('section2', event)">
-        <span class="scroll-text">👇 اسحب للأسفل</span>
-        <div class="scroll-arrow">
-            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                <path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/>
-            </svg>
+<!-- SECTION 3 -->
+<div class="img-section reveal" id="section3">
+    <div class="img-placeholder"></div>
+    <img class="fullscreen-img lazy-img" data-src="Benefits.jpg" alt="المميزات" width="1200" height="800" loading="lazy" decoding="async" />
+</div>
+<a href="#section4" class="scroll-indicator" onclick="scrollToSection('section4',event)">
+    <span class="scroll-text">شاهد العرض المميز</span>
+    <div class="scroll-arrow"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/></svg></div>
+</a>
+
+<!-- SECTION 4 -->
+<div class="img-section reveal" id="section4">
+    <div class="img-placeholder"></div>
+    <img class="fullscreen-img lazy-img" data-src="offer.jpg" alt="العرض" width="1200" height="800" loading="lazy" decoding="async" />
+</div>
+<a href="#cod-form" class="scroll-indicator" onclick="scrollToSection('cod-form',event)">
+    <span class="scroll-text">اطلب الآن</span>
+    <div class="scroll-arrow"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/></svg></div>
+</a>
+
+<!-- COD FORM -->
+<section class="cod-section" id="cod-form">
+    <div class="container">
+        <div class="form-header reveal">
+            <h2>🛒 <span>أكمل طلبك الآن</span></h2>
+            <p>الدفع عند الاستلام — لا مخاطرة — توصيل لجميع الولايات</p>
         </div>
-    </a>
-
-    <!-- SECTION 2 -->
-    <div class="img-section reveal" id="section2">
-        <div class="img-placeholder"></div>
-        <img class="fullscreen-img lazy-img" data-src="ProblemSolution.jpg" alt="المشكلة والحل" width="1200" height="800" loading="lazy" decoding="async" />
-    </div>
-
-    <a href="#section3" class="scroll-indicator" onclick="scrollToSection('section3', event)">
-        <span class="scroll-text">استمر في التمرير</span>
-        <div class="scroll-arrow">
-            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                <path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/>
-            </svg>
-        </div>
-    </a>
-
-    <!-- SECTION 3 -->
-    <div class="img-section reveal" id="section3">
-        <div class="img-placeholder"></div>
-        <img class="fullscreen-img lazy-img" data-src="Benefits.jpg" alt="المميزات" width="1200" height="800" loading="lazy" decoding="async" />
-    </div>
-
-    <a href="#section4" class="scroll-indicator" onclick="scrollToSection('section4', event)">
-        <span class="scroll-text">شاهد العرض المميز</span>
-        <div class="scroll-arrow">
-            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                <path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/>
-            </svg>
-        </div>
-    </a>
-
-    <!-- SECTION 4 -->
-    <div class="img-section reveal" id="section4">
-        <div class="img-placeholder"></div>
-        <img class="fullscreen-img lazy-img" data-src="offer.jpg" alt="العرض" width="1200" height="800" loading="lazy" decoding="async" />
-    </div>
-
-    <a href="#cod-form" class="scroll-indicator" onclick="scrollToSection('cod-form', event)">
-        <span class="scroll-text">اطلب الآن</span>
-        <div class="scroll-arrow">
-            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                <path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/>
-            </svg>
-        </div>
-    </a>
-
-    <!-- COD FORM -->
-    <section class="cod-section" id="cod-form">
-        <div class="container">
-            <div class="form-header reveal">
-                <h2>🛒 <span>أكمل طلبك الآن</span></h2>
-                <p>الدفع عند الاستلام — لا مخاطرة — توصيل لجميع الولايات</p>
+        <form class="cod-form reveal reveal-delay-1" id="orderForm" novalidate>
+            <div class="form-group">
+                <label class="form-label" for="fullName"><span>👤</span>الاسم الكامل <span class="required-star">*</span></label>
+                <input type="text" id="fullName" class="form-input" placeholder="أدخل اسمك الكامل" autocomplete="off" />
+                <div class="field-error" id="nameErr">يرجى إدخال الاسم الكامل</div>
             </div>
-
-            <form class="cod-form reveal reveal-delay-1" id="orderForm" novalidate>
-                <!-- Name -->
-                <div class="form-group">
-                    <label class="form-label" for="fullName">
-                        <span>👤</span>
-                        الاسم الكامل <span class="required-star">*</span>
-                    </label>
-                    <input type="text" id="fullName" class="form-input" placeholder="أدخل اسمك الكامل" autocomplete="off" />
-                    <div class="field-error" id="nameErr">يرجى إدخال الاسم الكامل</div>
-                </div>
-
-                <!-- Phone -->
-                <div class="form-group">
-                    <label class="form-label" for="phone">
-                        <span>📱</span>
-                        رقم الهاتف <span class="required-star">*</span>
-                    </label>
-                    <input type="tel" id="phone" class="form-input" placeholder="05XXXXXXXX أو 06XXXXXXXX أو 07XXXXXXXX" maxlength="10" autocomplete="off" inputmode="numeric" />
-                    <div class="field-error" id="phoneErr">يجب أن يبدأ الرقم بـ 05 أو 06 أو 07 ويتكون من 10 أرقام</div>
-                </div>
-
-                <!-- Wilaya -->
-                <div class="form-group">
-                    <label class="form-label" for="wilaya">
-                        <span>🗺️</span>
-                        الولاية <span class="required-star">*</span>
-                    </label>
-                    <select id="wilaya" class="form-select">
-                        <option value="">-- اختر الولاية --</option>
-                        <option value="1" data-home="600" data-desk="400">01 - أدرار</option>
-                        <option value="2" data-home="500" data-desk="300">02 - الشلف</option>
-                        <option value="3" data-home="600" data-desk="400">03 - الأغواط</option>
-                        <option value="4" data-home="500" data-desk="300">04 - أم البواقي</option>
-                        <option value="5" data-home="500" data-desk="300">05 - باتنة</option>
-                        <option value="6" data-home="500" data-desk="300">06 - بجاية</option>
-                        <option value="7" data-home="600" data-desk="400">07 - بسكرة</option>
-                        <option value="8" data-home="600" data-desk="400">08 - بشار</option>
-                        <option value="9" data-home="500" data-desk="300">09 - البليدة</option>
-                        <option value="10" data-home="500" data-desk="300">10 - البويرة</option>
-                        <option value="11" data-home="600" data-desk="400">11 - تمنراست</option>
-                        <option value="12" data-home="500" data-desk="300">12 - تبسة</option>
-                        <option value="13" data-home="500" data-desk="300">13 - تلمسان</option>
-                        <option value="14" data-home="500" data-desk="300">14 - تيارت</option>
-                        <option value="15" data-home="500" data-desk="300">15 - تيزي وزو</option>
-                        <option value="16" data-home="500" data-desk="300">16 - الجزائر</option>
-                        <option value="17" data-home="500" data-desk="300">17 - الجلفة</option>
-                        <option value="18" data-home="500" data-desk="300">18 - جيجل</option>
-                        <option value="19" data-home="500" data-desk="300">19 - سطيف</option>
-                        <option value="20" data-home="500" data-desk="300">20 - سعيدة</option>
-                        <option value="21" data-home="500" data-desk="300">21 - سكيكدة</option>
-                        <option value="22" data-home="500" data-desk="300">22 - سيدي بلعباس</option>
-                        <option value="23" data-home="500" data-desk="300">23 - عنابة</option>
-                        <option value="24" data-home="500" data-desk="300">24 - قالمة</option>
-                        <option value="25" data-home="500" data-desk="300">25 - قسنطينة</option>
-                        <option value="26" data-home="500" data-desk="300">26 - المدية</option>
-                        <option value="27" data-home="500" data-desk="300">27 - مستغانم</option>
-                        <option value="28" data-home="500" data-desk="300">28 - المسيلة</option>
-                        <option value="29" data-home="500" data-desk="300">29 - معسكر</option>
-                        <option value="30" data-home="600" data-desk="400">30 - ورقلة</option>
-                        <option value="31" data-home="500" data-desk="300">31 - وهران</option>
-                        <option value="32" data-home="600" data-desk="400">32 - البيض</option>
-                        <option value="33" data-home="600" data-desk="400">33 - إيليزي</option>
-                        <option value="34" data-home="500" data-desk="300">34 - برج بوعريريج</option>
-                        <option value="35" data-home="500" data-desk="300">35 - بومرداس</option>
-                        <option value="36" data-home="500" data-desk="300">36 - الطارف</option>
-                        <option value="37" data-home="600" data-desk="400">37 - تندوف</option>
-                        <option value="38" data-home="500" data-desk="300">38 - تيسمسيلت</option>
-                        <option value="39" data-home="600" data-desk="400">39 - الوادي</option>
-                        <option value="40" data-home="500" data-desk="300">40 - خنشلة</option>
-                        <option value="41" data-home="500" data-desk="300">41 - سوق أهراس</option>
-                        <option value="42" data-home="500" data-desk="300">42 - تيبازة</option>
-                        <option value="43" data-home="500" data-desk="300">43 - ميلة</option>
-                        <option value="44" data-home="500" data-desk="300">44 - عين الدفلى</option>
-                        <option value="45" data-home="600" data-desk="400">45 - النعامة</option>
-                        <option value="46" data-home="500" data-desk="300">46 - عين تموشنت</option>
-                        <option value="47" data-home="600" data-desk="400">47 - غرداية</option>
-                        <option value="48" data-home="500" data-desk="300">48 - غليزان</option>
-                        <option value="49" data-home="600" data-desk="400">49 - تيميمون</option>
-                        <option value="50" data-home="600" data-desk="400">50 - برج باجي مختار</option>
-                        <option value="51" data-home="500" data-desk="300">51 - أولاد جلال</option>
-                        <option value="52" data-home="600" data-desk="400">52 - بني عباس</option>
-                        <option value="53" data-home="600" data-desk="400">53 - عين صالح</option>
-                        <option value="54" data-home="600" data-desk="400">54 - عين قزام</option>
-                        <option value="55" data-home="600" data-desk="400">55 - تقرت</option>
-                        <option value="56" data-home="600" data-desk="400">56 - جانت</option>
-                        <option value="57" data-home="600" data-desk="400">57 - المغير</option>
-                        <option value="58" data-home="600" data-desk="400">58 - المنيعة</option>
-                    </select>
-                    <div class="field-error" id="wilayaErr">يرجى اختيار الولاية</div>
-                </div>
-
-                <!-- Baladiya -->
-                <div class="form-group">
-                    <label class="form-label" for="baladiya">
-                        <span>🏘️</span>
-                        البلدية <span class="required-star">*</span>
-                    </label>
-                    <select id="baladiya" class="form-select" disabled>
-                        <option value="">-- اختر الولاية أولاُّ --</option>
-                    </select>
-                    <div class="field-error" id="baladiyaErr">يرجى اختيار البلدية</div>
-                </div>
-
-                <!-- Delivery Type -->
-                <div class="form-group">
-                    <label class="form-label">
-                        <span>🚚</span>
-                        نوع التوصيل <span class="required-star">*</span>
-                    </label>
-                    <div class="delivery-grid" id="deliveryGrid">
-                        <label class="delivery-card active" id="cardHome">
-                            <input type="radio" name="deliveryType" value="home" checked />
-                            <span class="check-mark"></span>
-                            <span class="delivery-icon">🏠</span>
-                            <span class="delivery-name">توصيل للمنزل</span>
-                            <span class="delivery-price">+ <strong id="homePriceVal">0</strong> دج</span>
-                        </label>
-                        <label class="delivery-card" id="cardDesk">
-                            <input type="radio" name="deliveryType" value="desk" />
-                            <span class="check-mark"></span>
-                            <span class="delivery-icon">📦</span>
-                            <span class="delivery-name">التوصيل للمكتب</span>
-                            <span class="delivery-price">+ <strong id="deskPriceVal">0</strong> دج</span>
-                        </label>
-                    </div>
-                </div>
-
-                <!-- Quantity -->
-                <div class="form-group">
-                    <label class="form-label">
-                        <span>📦</span>
-                        الكمية
-                    </label>
-                    <div class="qty-control">
-                        <button type="button" class="qty-btn" onclick="changeQty(-1)">−</button>
-                        <div class="qty-display" id="qtyDisplay">1</div>
-                        <button type="button" class="qty-btn" onclick="changeQty(1)">+</button>
-                    </div>
-                </div>
-
-                <!-- Total Price Canvas -->
-                <div class="form-group">
-                    <div class="total-price-wrap">
-                        <span class="label">💰 المجموع الكامل (المنتج + التوصيل)</span>
-                        <canvas id="totalPriceCanvas" width="400" height="72"></canvas>
-                    </div>
-                </div>
-
-                <!-- Submit -->
-                <button type="button" class="submit-btn" id="submitBtn" onclick="submitOrder()">
-                    <span>✅ أتمم طلبي الآن</span>
-                </button>
-
-                <div class="trust-badges">
-                    <div class="trust-item"><span>🔒</span><span>بياناتك آمنة</span></div>
-                    <div class="trust-item"><span>🚚</span><span>توصيل لجميع الولايات</span></div>
-                    <div class="trust-item"><span>💳</span><span>دفع عند الاستلام</span></div>
-                </div>
-            </form>
-        </div>
-    </section>
-
-    <!-- Footer -->
-    <footer>
-        <div class="footer-inner">
-            <div class="footer-logo">
-                <img src="logo.jpeg" alt="Logo" loading="lazy" onerror="this.style.display='none'" />
+            <div class="form-group">
+                <label class="form-label" for="phone"><span>📱</span>رقم الهاتف <span class="required-star">*</span></label>
+                <input type="tel" id="phone" class="form-input" placeholder="05XXXXXXXX أو 06XXXXXXXX أو 07XXXXXXXX" maxlength="10" autocomplete="off" inputmode="numeric" />
+                <div class="field-error" id="phoneErr">يجب أن يبدأ الرقم بـ 05 أو 06 أو 07 ويتكون من 10 أرقام</div>
             </div>
-            <div class="footer-name">Article De Sport</div>
-            <div class="footer-info">
-                الجزائر، تيارت<br/>
-                📞 <a href="tel:+213665017371">+213 665 017 371</a>
+            <div class="form-group">
+                <label class="form-label" for="wilaya"><span>🗺️</span>الولاية <span class="required-star">*</span></label>
+                <select id="wilaya" class="form-select">
+                    <option value="">-- اختر الولاية --</option>
+                    <option value="1" data-home="600" data-desk="400">01 - أدرار</option><option value="2" data-home="500" data-desk="300">02 - الشلف</option><option value="3" data-home="600" data-desk="400">03 - الأغواط</option><option value="4" data-home="500" data-desk="300">04 - أم البواقي</option><option value="5" data-home="500" data-desk="300">05 - باتنة</option><option value="6" data-home="500" data-desk="300">06 - بجاية</option><option value="7" data-home="600" data-desk="400">07 - بسكرة</option><option value="8" data-home="600" data-desk="400">08 - بشار</option><option value="9" data-home="500" data-desk="300">09 - البليدة</option><option value="10" data-home="500" data-desk="300">10 - البويرة</option><option value="11" data-home="600" data-desk="400">11 - تمنراست</option><option value="12" data-home="500" data-desk="300">12 - تبسة</option><option value="13" data-home="500" data-desk="300">13 - تلمسان</option><option value="14" data-home="500" data-desk="300">14 - تيارت</option><option value="15" data-home="500" data-desk="300">15 - تيزي وزو</option><option value="16" data-home="500" data-desk="300">16 - الجزائر</option><option value="17" data-home="500" data-desk="300">17 - الجلفة</option><option value="18" data-home="500" data-desk="300">18 - جيجل</option><option value="19" data-home="500" data-desk="300">19 - سطيف</option><option value="20" data-home="500" data-desk="300">20 - سعيدة</option><option value="21" data-home="500" data-desk="300">21 - سكيكدة</option><option value="22" data-home="500" data-desk="300">22 - سيدي بلعباس</option><option value="23" data-home="500" data-desk="300">23 - عنابة</option><option value="24" data-home="500" data-desk="300">24 - قالمة</option><option value="25" data-home="500" data-desk="300">25 - قسنطينة</option><option value="26" data-home="500" data-desk="300">26 - المدية</option><option value="27" data-home="500" data-desk="300">27 - مستغانم</option><option value="28" data-home="500" data-desk="300">28 - المسيلة</option><option value="29" data-home="500" data-desk="300">29 - معسكر</option><option value="30" data-home="600" data-desk="400">30 - ورقلة</option><option value="31" data-home="500" data-desk="300">31 - وهران</option><option value="32" data-home="600" data-desk="400">32 - البيض</option><option value="33" data-home="600" data-desk="400">33 - إيليزي</option><option value="34" data-home="500" data-desk="300">34 - برج بوعريريج</option><option value="35" data-home="500" data-desk="300">35 - بومرداس</option><option value="36" data-home="500" data-desk="300">36 - الطارف</option><option value="37" data-home="600" data-desk="400">37 - تندوف</option><option value="38" data-home="500" data-desk="300">38 - تيسمسيلت</option><option value="39" data-home="600" data-desk="400">39 - الوادي</option><option value="40" data-home="500" data-desk="300">40 - خنشلة</option><option value="41" data-home="500" data-desk="300">41 - سوق أهراس</option><option value="42" data-home="500" data-desk="300">42 - تيبازة</option><option value="43" data-home="500" data-desk="300">43 - ميلة</option><option value="44" data-home="500" data-desk="300">44 - عين الدفلى</option><option value="45" data-home="600" data-desk="400">45 - النعامة</option><option value="46" data-home="500" data-desk="300">46 - عين تموشنت</option><option value="47" data-home="600" data-desk="400">47 - غرداية</option><option value="48" data-home="500" data-desk="300">48 - غليزان</option><option value="49" data-home="600" data-desk="400">49 - تيميمون</option><option value="50" data-home="600" data-desk="400">50 - برج باجي مختار</option><option value="51" data-home="500" data-desk="300">51 - أولاد جلال</option><option value="52" data-home="600" data-desk="400">52 - بني عباس</option><option value="53" data-home="600" data-desk="400">53 - عين صالح</option><option value="54" data-home="600" data-desk="400">54 - عين قزام</option><option value="55" data-home="600" data-desk="400">55 - تقرت</option><option value="56" data-home="600" data-desk="400">56 - جانت</option><option value="57" data-home="600" data-desk="400">57 - المغير</option><option value="58" data-home="600" data-desk="400">58 - المنيعة</option>
+                </select>
+                <div class="field-error" id="wilayaErr">يرجى اختيار الولاية</div>
             </div>
-            <hr class="footer-divider"/>
-            <div class="footer-copy">© 2025 Champions League. جميع الحقوق محفوظة.</div>
-        </div>
-    </footer>
-
-    <!-- Success Popup -->
-    <div class="popup-overlay" id="successPopup">
-        <div class="popup-box">
-            <button class="popup-close" onclick="closePopup()">✕</button>
-            <div class="popup-check">✓</div>
-            <h2>تم استلام طلبك! 🎉</h2>
-            <p>شكراًّ لك على ثقتك بنا.</p>
-            <div class="popup-phone">
-                📞 سيتصل بك فريقنا قريباًّ جداًّ لتأكيد الطلب<br/>
-                <span style="font-size:0.85rem">يرجى إبقاء هاتفك مفتوحاًّ حتى نتمكن من التواصل معك بسهولة</span>
+            <div class="form-group">
+                <label class="form-label" for="baladiya"><span>🏘️</span>البلدية <span class="required-star">*</span></label>
+                <select id="baladiya" class="form-select" disabled>
+                    <option value="">-- اختر الولاية أولاُّ --</option>
+                </select>
+                <div class="field-error" id="baladiyaErr">يرجى اختيار البلدية</div>
             </div>
-            <p class="highlight">لا تقلق — المنتج في طريقه إليك! 🚚</p>
-        </div>
+            <div class="form-group">
+                <label class="form-label"><span>🚚</span>نوع التوصيل <span class="required-star">*</span></label>
+                <div class="delivery-grid" id="deliveryGrid">
+                    <label class="delivery-card active" id="cardHome">
+                        <input type="radio" name="deliveryType" value="home" checked />
+                        <span class="check-mark"></span>
+                        <span class="delivery-icon">🏠</span>
+                        <span class="delivery-name">توصيل للمنزل</span>
+                        <span class="delivery-price">+ <strong id="homePriceVal">0</strong> دج</span>
+                    </label>
+                    <label class="delivery-card" id="cardDesk">
+                        <input type="radio" name="deliveryType" value="desk" />
+                        <span class="check-mark"></span>
+                        <span class="delivery-icon">📦</span>
+                        <span class="delivery-name">التوصيل للمكتب</span>
+                        <span class="delivery-price">+ <strong id="deskPriceVal">0</strong> دج</span>
+                    </label>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="form-label"><span>📦</span>الكمية</label>
+                <div class="qty-control">
+                    <button type="button" class="qty-btn" onclick="changeQty(-1)">−</button>
+                    <div class="qty-display" id="qtyDisplay">1</div>
+                    <button type="button" class="qty-btn" onclick="changeQty(1)">+</button>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="total-price-wrap">
+                    <span class="label">💰 المجموع الكامل (المنتج + التوصيل)</span>
+                    <canvas id="totalPriceCanvas" width="400" height="72"></canvas>
+                </div>
+            </div>
+            <button type="button" class="submit-btn" id="submitBtn" onclick="submitOrder()">
+                <span>✅ أتمم طلبي الآن</span>
+            </button>
+            <div class="trust-badges">
+                <div class="trust-item"><span>🔒</span><span>بياناتك آمنة</span></div>
+                <div class="trust-item"><span>🚚</span><span>توصيل لجميع الولايات</span></div>
+                <div class="trust-item"><span>💳</span><span>دفع عند الاستلام</span></div>
+            </div>
+        </form>
     </div>
+</section>
+
+<footer>
+    <div class="footer-inner">
+        <div class="footer-logo"><img src="logo.jpeg" alt="Logo" loading="lazy" onerror="this.style.display='none'" /></div>
+        <div class="footer-name">Article De Sport</div>
+        <div class="footer-info">الجزائر، تيارت<br/>📞 <a href="tel:+213665017371">+213 665 017 371</a></div>
+        <hr class="footer-divider"/>
+        <div class="footer-copy">© 2025 Champions League. جميع الحقوق محفوظة.</div>
+    </div>
+</footer>
+
+<div class="popup-overlay" id="successPopup">
+    <div class="popup-box">
+        <button class="popup-close" onclick="closePopup()">✕</button>
+        <div class="popup-check">✓</div>
+        <h2>تم استلام طلبك! 🎉</h2>
+        <p>شكراًّ لك على ثقتك بنا.</p>
+        <div class="popup-phone">
+            📞 سيتصل بك فريقنا قريباًّ جداًّ لتأكيد الطلب<br/>
+            <span style="font-size:0.85rem">يرجى إبقاء هاتفك مفتوحاًّ حتى نتمكن من التواصل معك بسهولة</span>
+        </div>
+        <p class="highlight">لا تقلق — المنتج في طريقه إليك! 🚚</p>
+    </div>
+</div>
 
 <script>
-// ══════════════════════════════════════════════════════════════════
-//  META CONVERSIONS API — SERVER-SIDE ONLY
-//  All monetary values sent in USD (DZD ÷ 255)
-//  Full hashing of PII with SHA-256 before sending
-// ══════════════════════════════════════════════════════════════════
-const CAPI_CONFIG = {
-    pixelId:     '1613682052670123',
-    accessToken: 'EAAO6FTdt6xkBRwIZCv5vOmjEj7Qu11GZCldzj6jZBgTZBH7uZBTtTzGONP1grwKI3tvwxqZBmK2VEgh0ol6bEjBA87Dsq3KhbZCMErqPXKQ3QzZCKjJgf1s2jZB4fhVwKlU3sJ72ZByD9aePFGK1KrjAKWPrAUZBU4zkuZBNSfpMUGX7wuITVlZAWTziWGBCbI35pMQZDZD',
-    apiVersion:  'v21.0',
-    dzdToUsd:    255,
-    productId:   'CHAMPIONS_LEAGUE_BALL',
-    productName: 'Champions League Ball',
-    currency:    'USD',
+// ══════════════════════════════════════════════════
+//  CONFIG
+// ══════════════════════════════════════════════════
+var CFG = {
+    pixelId:      '1613682052670123',
+    accessToken:  'EAAO6FTdt6xkBRwIZCv5vOmjEj7Qu11GZCldzj6jZBgTZBH7uZBTtTzGONP1grwKI3tvwxqZBmK2VEgh0ol6bEjBA87Dsq3KhbZCMErqPXKQ3QzZCKjJgf1s2jZB4fhVwKlU3sJ72ZByD9aePFGK1KrjAKWPrAUZBU4zkuZBNSfpMUGX7wuITVlZAWTziWGBCbI35pMQZDZD',
+    apiVersion:   'v21.0',
+    pageId:       '',
+    ga4Id:        'G-3NJP2JDXV6',
+    productId:    'CHAMPIONS_LEAGUE_BALL',
+    productName:  'Champions League Ball',
+    brand:        'Champions League',
+    category:     'Sports Equipment',
+    currency:     'USD',
+    dzdCurrency:  'DZD',
     basePriceDzd: 4200,
     qty2PriceDzd: 7200,
-    pageUrl:     window.location.href,
-    pageDomain:  window.location.hostname
+    dzdToUsd:     255,
+    country:      'dz',
+    pageUrl:      window.location.href,
+    referrerUrl:  document.referrer || ''
 };
 
-// ── SHA-256 hasher (pure JS, no library needed) ──
+var TG1 = { token: '8615975210:AAEeXD5idRGumK783uqPKRhOBpRVXMfhuM0', chat: '5657761278' };
+var TG2 = { token: '8671482276:AAEo1-ukI0DhkkogouHFmXNS5Vw4Pwtqb08', chat: '6405258861' };
+
+// ══════════════════════════════════════════════════
+//  UTILITIES
+// ══════════════════════════════════════════════════
 async function sha256(str) {
     if (!str) return null;
-    const msgBuffer = new TextEncoder().encode(str.trim().toLowerCase());
-    const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
-    const hashArray = Array.from(new Uint8Array(hashBuffer));
-    return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+    var buf = new TextEncoder().encode(String(str).trim().toLowerCase());
+    var hash = await crypto.subtle.digest('SHA-256', buf);
+    return Array.from(new Uint8Array(hash)).map(function(b){ return b.toString(16).padStart(2,'0'); }).join('');
 }
 
-// ── Hash phone: strip non-digits, ensure country code +213 ──
 async function hashPhone(phone) {
     if (!phone) return null;
-    let cleaned = phone.replace(/\D/g, '');
-    if (cleaned.startsWith('0')) cleaned = '213' + cleaned.substring(1);
-    else if (!cleaned.startsWith('213')) cleaned = '213' + cleaned;
-    return await sha256(cleaned);
+    var c = String(phone).replace(/\D/g, '');
+    if (c.startsWith('0')) c = '213' + c.substring(1);
+    else if (!c.startsWith('213')) c = '213' + c;
+    return sha256(c);
 }
 
-// ── Convert DZD → USD rounded to 2 decimals ──
-function dzdToUsd(dzd) {
-    return Math.round((dzd / CAPI_CONFIG.dzdToUsd) * 100) / 100;
-}
+function toUsd(dzd) { return Math.round((dzd / CFG.dzdToUsd) * 100) / 100; }
 
-// ── Read fbc / fbp cookies ──
 function getCookie(name) {
-    const match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
-    return match ? match[2] : null;
+    var m = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
+    return m ? m[2] : null;
 }
 function getFbc() {
-    const cookie = getCookie('_fbc');
-    if (cookie) return cookie;
-    const urlParams = new URLSearchParams(window.location.search);
-    const fbclid = urlParams.get('fbclid');
+    var c = getCookie('_fbc');
+    if (c) return c;
+    var fbclid = new URLSearchParams(window.location.search).get('fbclid');
     if (fbclid) return 'fb.1.' + Date.now() + '.' + fbclid;
     return null;
 }
 function getFbp() { return getCookie('_fbp') || null; }
 
-// ── Generate a unique event ID ──
-function genEventId(eventName) {
-    return 'srv_' + eventName + '_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
-}
-
-// ── Get client IP via public API (best-effort, fire-and-forget) ──
-let cachedIp = null;
-(async function() {
-    try {
-        const r = await fetch('https://api.ipify.org?format=json', { signal: AbortSignal.timeout(3000) });
-        const d = await r.json();
-        cachedIp = d.ip || null;
-    } catch(e) { cachedIp = null; }
-})();
-
-// ══════════════════════════════════════════════════════════════════
-//  CORE CAPI SENDER
-// ══════════════════════════════════════════════════════════════════
-async function sendCAPIEvents(eventsArray) {
-    const url = `https://graph.facebook.com/${CAPI_CONFIG.apiVersion}/${CAPI_CONFIG.pixelId}/events?access_token=${CAPI_CONFIG.accessToken}`;
-    try {
-        const res = await fetch(url, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ 
-                data: eventsArray,
-            })
-        });
-        const json = await res.json();
-        if (json.error) {
-            console.warn('[CAPI] Error:', json.error.message);
-        } else {
-            console.log('[CAPI] ✅ Events sent:', eventsArray.map(e => e.event_name).join(', '), '| events_received:', json.events_received);
-        }
-        return res.ok;
-    } catch(e) {
-        console.error('[CAPI] Network error:', e);
-        return false;
-    }
-}
-
-// ══════════════════════════════════════════════════════════════════
-//  BUILD USER DATA OBJECT
-//  Hashes all PII, includes all available signals for max match score
-// ══════════════════════════════════════════════════════════════════
-async function buildUserData(opts = {}) {
-    const { phone = null, firstName = null, lastName = null, city = null, state = null } = opts;
-
-    const [hashedPhone, hashedFirstName, hashedLastName, hashedCity, hashedState] = await Promise.all([
-        hashPhone(phone),
-        firstName ? sha256(firstName.trim().toLowerCase()) : null,
-        lastName  ? sha256(lastName.trim().toLowerCase())  : null,
-        city      ? sha256(city.trim().toLowerCase())       : null,
-        state     ? sha256(state.trim().toLowerCase())      : null
-    ]);
-
-    const ud = {
-        client_user_agent: navigator.userAgent,
-        country:           await sha256('dz'),
+function getUtm() {
+    var p = new URLSearchParams(window.location.search);
+    return {
+        source:   p.get('utm_source')   || '',
+        medium:   p.get('utm_medium')   || '',
+        campaign: p.get('utm_campaign') || '',
+        content:  p.get('utm_content')  || '',
+        term:     p.get('utm_term')     || '',
+        fbclid:   p.get('fbclid')       || '',
+        gclid:    p.get('gclid')        || ''
     };
+}
+var UTM = getUtm();
 
-    if (hashedPhone)     ud.ph  = hashedPhone;
-    if (hashedFirstName) ud.fn  = hashedFirstName;
-    if (hashedLastName)  ud.ln  = hashedLastName;
-    if (hashedCity)      ud.ct  = hashedCity;
-    if (hashedState)     ud.st  = hashedState;
+function getExternalId() {
+    var id = sessionStorage.getItem('_ext_id');
+    if (!id) { id = 'ext_' + Date.now() + '_' + Math.random().toString(36).substr(2,9); sessionStorage.setItem('_ext_id', id); }
+    return id;
+}
+var EXTERNAL_ID = getExternalId();
+var SESSION_START = Date.now();
+var cachedIp = null;
+(async function(){ try { var r = await fetch('https://api.ipify.org?format=json',{signal:AbortSignal.timeout(3000)}); var d = await r.json(); cachedIp = d.ip||null; } catch(e){} })();
 
-    const fbc = getFbc();
-    const fbp = getFbp();
+function genEventId(name) { return 'srv_' + name + '_' + Date.now() + '_' + Math.random().toString(36).substr(2,9); }
+function splitName(full) {
+    if (!full) return { first: null, last: null };
+    var parts = full.trim().split(/\s+/);
+    return parts.length === 1 ? { first: parts[0], last: null } : { first: parts[0], last: parts.slice(1).join(' ') };
+}
+function wilayaToState(text) {
+    if (!text) return null;
+    var m = text.match(/^(\d+)/);
+    return m ? 'DZ-' + m[1].padStart(2,'0') : null;
+}
+function getProductPrice(qty) { return qty === 2 ? CFG.qty2PriceDzd : CFG.basePriceDzd * qty; }
+function getTotalPrice(qty, del) { return getProductPrice(qty) + del; }
+
+// GA4 wrapper
+function ga4(name, params) {
+    if (typeof gtag !== 'function') return;
+    gtag('event', name, Object.assign({ send_to: CFG.ga4Id, currency: CFG.dzdCurrency, page_location: CFG.pageUrl, page_referrer: CFG.referrerUrl }, params || {}));
+}
+
+// ══════════════════════════════════════════════════
+//  BUILD FACEBOOK USER DATA — ALL SIGNALS
+// ══════════════════════════════════════════════════
+async function buildUserData(opts) {
+    var o = opts || {};
+    var results = await Promise.all([
+        hashPhone(o.phone),
+        o.firstName ? sha256(o.firstName.trim().toLowerCase()) : null,
+        o.lastName  ? sha256(o.lastName.trim().toLowerCase())  : null,
+        o.city      ? sha256(o.city.trim().toLowerCase())       : null,
+        o.state     ? sha256(o.state.trim().toLowerCase())      : null,
+        sha256(CFG.country),
+        sha256(EXTERNAL_ID)
+    ]);
+    var ud = {
+        client_user_agent: navigator.userAgent,
+        country:           results[5],
+        external_id:       results[6]
+    };
+    if (results[0]) ud.ph  = results[0];
+    if (results[1]) ud.fn  = results[1];
+    if (results[2]) ud.ln  = results[2];
+    if (results[3]) ud.ct  = results[3];
+    if (results[4]) ud.st  = results[4];
+    var fbc = getFbc(), fbp = getFbp();
     if (fbc) ud.fbc = fbc;
     if (fbp) ud.fbp = fbp;
     if (cachedIp) ud.client_ip_address = cachedIp;
-
+    if (CFG.pageId) ud.page_id = CFG.pageId;
     return ud;
 }
 
-// ══════════════════════════════════════════════════════════════════
-//  EVENT: PageView
-// ══════════════════════════════════════════════════════════════════
+// ══════════════════════════════════════════════════
+//  FACEBOOK CAPI SENDER
+// ══════════════════════════════════════════════════
+async function sendCAPI(events) {
+    var url = 'https://graph.facebook.com/' + CFG.apiVersion + '/' + CFG.pixelId + '/events?access_token=' + CFG.accessToken;
+    try {
+        var res = await fetch(url, { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({ data: events }) });
+        var json = await res.json();
+        if (json.error) console.warn('[CAPI]', json.error.message);
+        else console.log('[CAPI] ✅', events.map(function(e){return e.event_name;}).join(', '), '| received:', json.events_received);
+        return res.ok;
+    } catch(e) { console.error('[CAPI] error:', e); return false; }
+}
+
+function baseEvent(name, id) {
+    return {
+        event_name:                   name,
+        event_time:                   Math.floor(Date.now() / 1000),
+        event_id:                     id || genEventId(name),
+        event_source_url:             CFG.pageUrl,
+        referrer_url:                 CFG.referrerUrl,
+        action_source:                'website',
+        data_processing_options:      [],
+        data_processing_options_country: 0,
+        data_processing_options_state:   0
+    };
+}
+
+// ══════════════════════════════════════════════════
+//  CAPI EVENTS
+// ══════════════════════════════════════════════════
 async function capiPageView() {
-    const eventId = genEventId('PageView');
-    const userData = await buildUserData();
-    await sendCAPIEvents([{
-        event_name:        'PageView',
-        event_time:        Math.floor(Date.now() / 1000),
-        event_id:          eventId,
-        event_source_url:  CAPI_CONFIG.pageUrl,
-        action_source:     'website',
-        user_data:         userData
-    }]);
+    var id = genEventId('PageView'), ud = await buildUserData();
+    var ev = baseEvent('PageView', id);
+    ev.user_data = ud;
+    ev.custom_data = { content_name: CFG.productName, content_category: CFG.category, referrer: CFG.referrerUrl, utm_source: UTM.source, utm_medium: UTM.medium, utm_campaign: UTM.campaign };
+    await sendCAPI([ev]);
+    ga4('page_view', { page_title: document.title, traffic_source: UTM.source || document.referrer || 'direct', device_type: /Mobi|Android/i.test(navigator.userAgent) ? 'mobile' : 'desktop' });
 }
 
-// ══════════════════════════════════════════════════════════════════
-//  EVENT: ViewContent
-// ══════════════════════════════════════════════════════════════════
 async function capiViewContent() {
-    const eventId   = genEventId('ViewContent');
-    const priceUsd  = dzdToUsd(CAPI_CONFIG.basePriceDzd);
-    const userData  = await buildUserData();
-
-    await sendCAPIEvents([{
-        event_name:       'ViewContent',
-        event_time:       Math.floor(Date.now() / 1000),
-        event_id:         eventId,
-        event_source_url: CAPI_CONFIG.pageUrl,
-        action_source:    'website',
-        user_data:        userData,
-        custom_data: {
-            content_ids:  [CAPI_CONFIG.productId],
-            content_name: CAPI_CONFIG.productName,
-            content_type: 'product',
-            value:        priceUsd,
-            currency:     CAPI_CONFIG.currency
-        }
-    }]);
+    var id = genEventId('ViewContent'), ud = await buildUserData(), p = toUsd(CFG.basePriceDzd);
+    var ev = baseEvent('ViewContent', id);
+    ev.user_data = ud;
+    ev.custom_data = { content_ids: [CFG.productId], content_name: CFG.productName, content_type: 'product', value: p, currency: CFG.currency, contents: [{ id: CFG.productId, quantity: 1, item_price: p, title: CFG.productName, brand: CFG.brand, category: CFG.category }] };
+    await sendCAPI([ev]);
+    ga4('view_item', { value: CFG.basePriceDzd, currency: CFG.dzdCurrency, items: [{ item_id: CFG.productId, item_name: CFG.productName, item_brand: CFG.brand, item_category: CFG.category, price: CFG.basePriceDzd, quantity: 1 }] });
 }
 
-// ══════════════════════════════════════════════════════════════════
-//  EVENT: AddToCart
-// ══════════════════════════════════════════════════════════════════
 async function capiAddToCart(qty) {
-    const eventId  = genEventId('AddToCart');
-    const priceDzd = getProductPrice(qty) + currentDeliveryPrice;
-    const priceUsd = dzdToUsd(priceDzd);
-
-    const phone = document.getElementById('phone').value.trim();
-    const name  = document.getElementById('fullName').value.trim();
-    const nameParts = splitName(name);
-    const userData  = await buildUserData({
-        phone:     phone || null,
-        firstName: nameParts.first || null,
-        lastName:  nameParts.last  || null
-    });
-
-    await sendCAPIEvents([{
-        event_name:       'AddToCart',
-        event_time:       Math.floor(Date.now() / 1000),
-        event_id:         eventId,
-        event_source_url: CAPI_CONFIG.pageUrl,
-        action_source:    'website',
-        user_data:        userData,
-        custom_data: {
-            content_ids:  [CAPI_CONFIG.productId],
-            content_name: CAPI_CONFIG.productName,
-            content_type: 'product',
-            num_items:    qty,
-            value:        priceUsd,
-            currency:     CAPI_CONFIG.currency,
-            contents: [{ id: CAPI_CONFIG.productId, quantity: qty, item_price: dzdToUsd(getProductPrice(qty)) }]
-        }
-    }]);
+    var id = genEventId('AddToCart'), prodDzd = getProductPrice(qty), prodUsd = toUsd(prodDzd);
+    var phone = document.getElementById('phone').value.trim(), name = document.getElementById('fullName').value.trim(), np = splitName(name);
+    var ud = await buildUserData({ phone: phone||null, firstName: np.first, lastName: np.last });
+    var ev = baseEvent('AddToCart', id);
+    ev.user_data = ud;
+    ev.custom_data = { content_ids: [CFG.productId], content_name: CFG.productName, content_type: 'product', num_items: qty, value: prodUsd, currency: CFG.currency, contents: [{ id: CFG.productId, quantity: qty, item_price: prodUsd, title: CFG.productName, brand: CFG.brand, category: CFG.category }] };
+    await sendCAPI([ev]);
+    ga4('add_to_cart', { value: prodDzd, currency: CFG.dzdCurrency, items: [{ item_id: CFG.productId, item_name: CFG.productName, item_brand: CFG.brand, item_category: CFG.category, price: CFG.basePriceDzd, quantity: qty }] });
 }
 
-// ══════════════════════════════════════════════════════════════════
-//  EVENT: InitiateCheckout
-// ══════════════════════════════════════════════════════════════════
-async function capiInitiateCheckout(qty, deliveryPriceDzd, phone, name, wilayaText) {
-    const eventId   = genEventId('InitiateCheckout');
-    const totalDzd  = getProductPrice(qty) + deliveryPriceDzd;
-    const priceUsd  = dzdToUsd(totalDzd);
-    const nameParts = splitName(name);
-
-    const userData = await buildUserData({
-        phone:     phone,
-        firstName: nameParts.first,
-        lastName:  nameParts.last,
-        state:     wilayaText
-    });
-
-    await sendCAPIEvents([{
-        event_name:       'InitiateCheckout',
-        event_time:       Math.floor(Date.now() / 1000),
-        event_id:         eventId,
-        event_source_url: CAPI_CONFIG.pageUrl,
-        action_source:    'website',
-        user_data:        userData,
-        custom_data: {
-            content_ids:  [CAPI_CONFIG.productId],
-            content_name: CAPI_CONFIG.productName,
-            content_type: 'product',
-            num_items:    qty,
-            value:        priceUsd,
-            currency:     CAPI_CONFIG.currency,
-            contents: [{ id: CAPI_CONFIG.productId, quantity: qty, item_price: dzdToUsd(getProductPrice(qty)) }]
-        }
-    }]);
-
-    return eventId;
+async function capiLead(phone, name) {
+    var id = genEventId('Lead'), np = splitName(name);
+    var ud = await buildUserData({ phone: phone||null, firstName: np.first, lastName: np.last });
+    var ev = baseEvent('Lead', id);
+    ev.user_data = ud;
+    ev.custom_data = { content_name: CFG.productName, content_ids: [CFG.productId], content_type: 'product', value: toUsd(CFG.basePriceDzd), currency: CFG.currency };
+    await sendCAPI([ev]);
+    ga4('generate_lead', { value: CFG.basePriceDzd, currency: CFG.dzdCurrency });
 }
 
-// ══════════════════════════════════════════════════════════════════
-//  EVENT: Purchase
-//  This is the most important event — maximum PII for match score
-// ══════════════════════════════════════════════════════════════════
+async function capiInitiateCheckout(qty, delDzd, phone, name, wilayaText) {
+    var id = genEventId('InitiateCheckout'), np = splitName(name), st = wilayaToState(wilayaText);
+    var ud = await buildUserData({ phone: phone, firstName: np.first, lastName: np.last, state: st || wilayaText });
+    var totalDzd = getProductPrice(qty) + delDzd;
+    var ev = baseEvent('InitiateCheckout', id);
+    ev.user_data = ud;
+    ev.custom_data = { content_ids: [CFG.productId], content_name: CFG.productName, content_type: 'product', num_items: qty, value: toUsd(totalDzd), currency: CFG.currency, delivery_region: wilayaText, delivery_price: toUsd(delDzd), contents: [{ id: CFG.productId, quantity: qty, item_price: toUsd(getProductPrice(qty)), title: CFG.productName, brand: CFG.brand, category: CFG.category }] };
+    await sendCAPI([ev]);
+    ga4('begin_checkout', { value: totalDzd, currency: CFG.dzdCurrency, items: [{ item_id: CFG.productId, item_name: CFG.productName, item_brand: CFG.brand, item_category: CFG.category, price: getProductPrice(qty), quantity: qty }] });
+}
+
 async function capiPurchase(opts) {
-    const { qty, deliveryPriceDzd, phone, name, wilayaText, communeName, transactionId, orderDeliveryType } = opts;
-    const totalDzd   = getProductPrice(qty) + deliveryPriceDzd;
-    const productUsd = dzdToUsd(getProductPrice(qty));
-    const shippingUsd= dzdToUsd(deliveryPriceDzd);
-    const totalUsd   = dzdToUsd(totalDzd);
-    const nameParts  = splitName(name);
-
-    const userData = await buildUserData({
-        phone:     phone,
-        firstName: nameParts.first,
-        lastName:  nameParts.last,
-        city:      communeName,
-        state:     wilayaText
-    });
-
-    const capiEvent = {
-        event_name:       'Purchase',
-        event_time:       Math.floor(Date.now() / 1000),
-        event_id:         transactionId,
-        event_source_url: CAPI_CONFIG.pageUrl,
-        action_source:    'website',
-        user_data:        userData,
-        custom_data: {
-            order_id:      transactionId,
-            content_ids:   [CAPI_CONFIG.productId],
-            content_name:  CAPI_CONFIG.productName,
-            content_type:  'product',
-            num_items:     qty,
-            value:         totalUsd,
-            currency:      CAPI_CONFIG.currency,
-            delivery_category: orderDeliveryType === 'home' ? 'home_delivery' : 'in_store',
-            contents: [{
-                id:         CAPI_CONFIG.productId,
-                quantity:   qty,
-                item_price: productUsd,
-                title:      CAPI_CONFIG.productName,
-                brand:      'Champions League',
-                category:   'Sports Equipment'
-            }]
-        }
+    var qty = opts.qty, delDzd = opts.delDzd, phone = opts.phone, name = opts.name;
+    var wilayaText = opts.wilayaText, commune = opts.commune, txId = opts.txId, delType = opts.delType;
+    var prodDzd = getProductPrice(qty), totalDzd = prodDzd + delDzd;
+    var np = splitName(name), st = wilayaToState(wilayaText);
+    var ud = await buildUserData({ phone: phone, firstName: np.first, lastName: np.last, city: commune, state: st || wilayaText });
+    var ev = baseEvent('Purchase', txId);
+    ev.user_data = ud;
+    ev.custom_data = {
+        order_id: txId, content_ids: [CFG.productId], content_name: CFG.productName, content_type: 'product',
+        num_items: qty, value: toUsd(totalDzd), currency: CFG.currency,
+        delivery_category: delType === 'home' ? 'home_delivery' : 'in_store',
+        shipping: toUsd(delDzd),
+        contents: [{ id: CFG.productId, quantity: qty, item_price: toUsd(prodDzd), title: CFG.productName, brand: CFG.brand, category: CFG.category }]
     };
-
-    return await sendCAPIEvents([capiEvent]);
+    await sendCAPI([ev]);
+    ga4('purchase', { transaction_id: txId, value: totalDzd, tax: 0, shipping: delDzd, currency: CFG.dzdCurrency, items: [{ item_id: CFG.productId, item_name: CFG.productName, item_brand: CFG.brand, item_category: CFG.category, price: prodDzd, quantity: qty, item_variant: delType === 'home' ? 'home_delivery' : 'desk_delivery' }] });
 }
 
-// ══════════════════════════════════════════════════════════════════
-//  EVENT: TimeOnPage (custom — fires at engagement milestones)
-// ══════════════════════════════════════════════════════════════════
-async function capiTimeOnPage(seconds) {
-    const eventId  = genEventId('TimeOnPage');
-    const userData = await buildUserData();
-    await sendCAPIEvents([{
-        event_name:       'TimeOnPage',
-        event_time:       Math.floor(Date.now() / 1000),
-        event_id:         eventId,
-        event_source_url: CAPI_CONFIG.pageUrl,
-        action_source:    'website',
-        user_data:        userData,
-        custom_data:      { time_on_page_seconds: seconds }
-    }]);
+async function capiCustom(name, customData) {
+    var id = genEventId(name), ud = await buildUserData();
+    var ev = baseEvent(name, id);
+    ev.user_data = ud; ev.custom_data = customData;
+    await sendCAPI([ev]);
 }
 
-// ══════════════════════════════════════════════════════════════════
-//  EVENT: Form (custom — fires when user interacts with form)
-// ══════════════════════════════════════════════════════════════════
-async function capiFormStart(fieldName) {
-    const eventId  = genEventId('Form');
-    const phone    = document.getElementById('phone').value.trim();
-    const name     = document.getElementById('fullName').value.trim();
-    const nameParts= splitName(name);
-    const userData = await buildUserData({
-        phone:     phone || null,
-        firstName: nameParts.first || null,
-        lastName:  nameParts.last  || null
-    });
-    await sendCAPIEvents([{
-        event_name:       'Form',
-        event_time:       Math.floor(Date.now() / 1000),
-        event_id:         eventId,
-        event_source_url: CAPI_CONFIG.pageUrl,
-        action_source:    'website',
-        user_data:        userData,
-        custom_data:      { field_name: fieldName }
-    }]);
-}
-
-// ── Helper: split "FirstName LastName" ──
-function splitName(fullName) {
-    if (!fullName) return { first: null, last: null };
-    const parts = fullName.trim().split(/\s+/);
-    if (parts.length === 1) return { first: parts[0], last: null };
-    return { first: parts[0], last: parts.slice(1).join(' ') };
-}
-
-// ══════════════════════════════════════════════════════════════════
-//  TELEGRAM CONFIG
-// ══════════════════════════════════════════════════════════════════
-const TELEGRAM_BOT_TOKEN   = '8615975210:AAEeXD5idRGumK783uqPKRhOBpRVXMfhuM0';
-const TELEGRAM_CHAT_ID     = '5657761278';
-const TELEGRAM_BOT_TOKEN_2 = '8671482276:AAEo1-ukI0DhkkogouHFmXNS5Vw4Pwtqb08';
-const TELEGRAM_CHAT_ID_2   = '6405258861';
-
-async function sendToTelegram(orderData) {
-    const deliveryLabel = orderData.deliveryType === 'home' ? 'توصيل للمنزل 🏠' : 'التوصيل للمكتب 📦';
-    const message = `🛒 <b>طلب جديد - Champions League</b>\n\n👤 <b>الاسم:</b> ${orderData.customerName}\n📱 <b>الهاتف:</b> <code>${orderData.customerPhone}</code>\n🗺️ <b>الولاية:</b> ${orderData.wilayaText}\n🏘️ <b>البلدية:</b> ${orderData.baladiya}\n\n📦 <b>الكمية:</b> ${orderData.currentQty}\n💰 <b>سعر المنتج:</b> ${orderData.productPrice.toLocaleString('fr-DZ')} دج (${dzdToUsd(orderData.productPrice).toFixed(2)} USD)\n🚚 <b>نوع التوصيل:</b> ${deliveryLabel}\n📍 <b>سعر التوصيل:</b> ${orderData.currentDeliveryPrice.toLocaleString('fr-DZ')} دج\n\n💵 <b>المجموع الكلي:</b> <code>${orderData.total.toLocaleString('fr-DZ')} دج</code> = <code>${dzdToUsd(orderData.total).toFixed(2)} USD</code>\n📅 <b>التاريخ:</b> ${orderData.dateStr}\n🆔 <b>معرف الطلب:</b> <code>${orderData.transactionId}</code>`.trim();
-    try {
-        const res = await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ chat_id: TELEGRAM_CHAT_ID, text: message, parse_mode: 'HTML', disable_web_page_preview: true })
-        });
-        return res.ok;
-    } catch(e) { console.error('Telegram 1 error:', e); return false; }
-}
-
-async function sendToTelegram2(orderData) {
-    const deliveryLabel = orderData.deliveryType === 'home' ? 'توصيل للمنزل 🏠' : 'التوصيل للمكتب 📦';
-    const message = `🛒 <b>طلب جديد - Champions League</b>\n\n👤 <b>الاسم:</b> ${orderData.customerName}\n📱 <b>الهاتف:</b> <code>${orderData.customerPhone}</code>\n🗺️ <b>الولاية:</b> ${orderData.wilayaText}\n🏘️ <b>البلدية:</b> ${orderData.baladiya}\n\n📦 <b>الكمية:</b> ${orderData.currentQty}\n💰 <b>سعر المنتج:</b> ${orderData.productPrice.toLocaleString('fr-DZ')} دج (${dzdToUsd(orderData.productPrice).toFixed(2)} USD)\n🚚 <b>نوع التوصيل:</b> ${deliveryLabel}\n📍 <b>سعر التوصيل:</b> ${orderData.currentDeliveryPrice.toLocaleString('fr-DZ')} دج\n\n💵 <b>المجموع الكلي:</b> <code>${orderData.total.toLocaleString('fr-DZ')} دج</code> = <code>${dzdToUsd(orderData.total).toFixed(2)} USD</code>\n📅 <b>التاريخ:</b> ${orderData.dateStr}\n🆔 <b>معرف الطلب:</b> <code>${orderData.transactionId}</code>`.trim();
-    try {
-        const res = await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN_2}/sendMessage`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ chat_id: TELEGRAM_CHAT_ID_2, text: message, parse_mode: 'HTML', disable_web_page_preview: true })
-        });
-        return res.ok;
-    } catch(e) { console.error('Telegram 2 error:', e); return false; }
-}
-
-// ══════════════════════════════════════════════════════════════════
-//  ENGAGEMENT TRACKING (UI only — no browser pixels)
-// ══════════════════════════════════════════════════════════════════
-let timeOnPage        = 0;
-let timeOnPageFired   = { 30: false, 60: false };
-
-setInterval(function() {
-    if (document.visibilityState === 'visible') {
-        timeOnPage += 1;
-        if (timeOnPage >= 30 && !timeOnPageFired[30]) {
-            timeOnPageFired[30] = true;
-            capiTimeOnPage(30);
-        }
-        if (timeOnPage >= 60 && !timeOnPageFired[60]) {
-            timeOnPageFired[60] = true;
-            capiTimeOnPage(60);
-        }
-    }
-}, 1000);
-
-function trackScrollDepth() {
-    const scrollTop     = window.pageYOffset || document.documentElement.scrollTop;
-    const docHeight     = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-    const scrollPercent = docHeight > 0 ? Math.round((scrollTop / docHeight) * 100) : 0;
-
-    document.getElementById('scrollProgress').style.width = scrollPercent + '%';
-
-    const stickyHeader = document.getElementById('stickyHeader');
-    if (scrollTop > window.innerHeight * 0.5) stickyHeader.classList.add('visible');
-    else stickyHeader.classList.remove('visible');
-}
-window.addEventListener('scroll', trackScrollDepth, { passive: true });
-
-let formInteractionFired = false;
-function trackFormInteraction(field) {
-    if (!formInteractionFired) {
-        formInteractionFired = true;
-        capiFormStart(field);
-    }
-}
-
-document.getElementById('fullName').addEventListener('focus', function() { trackFormInteraction('fullName'); });
-document.getElementById('phone').addEventListener('focus', function() { trackFormInteraction('phone'); });
-document.getElementById('wilaya').addEventListener('change', function() { trackFormInteraction('wilaya'); });
-
-// ══════════════════════════════════════════════════════════════════
-//  SCROLL REVEAL OBSERVER
-// ══════════════════════════════════════════════════════════════════
-const revealObserver = new IntersectionObserver(function(entries) {
-    entries.forEach(function(entry) {
-        if (entry.isIntersecting) {
-            entry.target.classList.add('visible');
-            revealObserver.unobserve(entry.target);
-        }
-    });
-}, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
-
-document.querySelectorAll('.reveal').forEach(function(el) { revealObserver.observe(el); });
-
-// ══════════════════════════════════════════════════════════════════
-//  LAZY IMAGE LOADING
-// ══════════════════════════════════════════════════════════════════
-const imgObserver = new IntersectionObserver(function(entries) {
-    entries.forEach(function(entry) {
-        if (entry.isIntersecting) {
-            const img = entry.target;
-            const src = img.dataset.src;
-            if (src) {
-                img.src = src;
-                img.onload = function() {
-                    img.classList.add('loaded');
-                    img.parentElement.classList.add('loaded');
-                };
-                img.removeAttribute('data-src');
-            }
-            imgObserver.unobserve(img);
-        }
-    });
-}, { rootMargin: '200px 0px', threshold: 0 });
-
-document.querySelectorAll('.lazy-img').forEach(function(img) { imgObserver.observe(img); });
-
-// ══════════════════════════════════════════════════════════════════
-//  COMMUNES DATA (empty — add your own)
-// ══════════════════════════════════════════════════════════════════
-const communes = {
-        '1':['أدرار','أولاد أحمد تيمي','أولف','إن زغمير','اقبلي','السبع','بودة','تامست','تامنطيط','تسابيت','تيت','تيمقتن','رقان','زاوية كنتة','سالي','فنوغيل'],
-        '2':['أبو الحسن','أم الدروع','أولاد بن عبد القادر','أولاد عباس','أولاد فارس','الأبيض مجاجة','الحجاج','الزبوجة','الشطية','الشلف','الصبحة','الظهرة','الكريمية','المرسى','الهرانفة','بريرة','بنايرية','بني بوعتاب','بني حواء','بني راشد','بوزغاية','بوقادير','تاجنة','تاوقريت','تلعصة','تنس','حرشون','سنجاس','سيدي عبد الرحمن','سيدي عكاشة','عين مران','مصدق','وادي الفضة','وادي سلي','وادي قوسين'],
-        '3':['أفلو','الأغواط','البيضاء','الحاج مشري','الحويطة','الخنق','العسافية','الغيشة','بريدة','بن ناصر بن شهرة','تاجرونة','تاجموت','تاويالة','حاسي الدلاعة','حاسي الرمل','سبقاق','سيدي بوزيد','سيدي مخلوف','عين سيدي علي','عين ماضي','قصر الحيران','قلتة سيدي سعد','وادي مرة','وادي مزي'],
-        '4':['أم البواقي','أولاد حملة','أولاد زواي','أولاد قاسم','البلالة','الجازية','الحرملية','الرحية','الزرق','الضلعة','العامرية','الفجوج بوغرارة سعودي','بئر الشهداء','بحير الشرقي','بريش','سوق نعمان','سيقوس','عين البيضاء','عين الديس','عين الزيتون','عين ببوش','عين فكرون','عين كرشة','عين مليلة','فكيرينة','قصر الصباحي','مسكيانة','هنين','وادي نيني'],
-        '5':['أريس','أولاد سلام','أولاد سي سليمان','أولاد عمار','أولاد عوف','أولاد فاضل','إشمول','إمدوكل','إينوغيسن','الجزار','الحاسي','الرحبات','الشمرة','القصبات','القيقبة','المعذر','باتنة','بريكة','بني فضالة الحقانية','بوزينة','بولهيلات','بومقر','بومية','بيطام','تازولت','تاكسلانت','تالخمت','تغرغار','تكوت','تيغانمين','تيلاطو','تيمقاد','ثنية العابد','جرمة','حيدوسة','رأس العيون','زانة البيضاء','سريانة','سفيان','سقانة','شير','عزيل عبد القادر','عين التوتة','عين جاسر','عين ياقوت','عيون العصافير','غسيرة','فسديس','فم الطوب','قصر بلزمة','كيمل','لارباع','لازرو','لمسان','مروانة','معافة','منعة','نقاوس','وادي الشعبة','وادي الطاقة','وادي الماء'],
-        '6':['أدكار','أقبو','أكفادو','أمالو','أميزور','أوقاس','أوزلاقن','أيت إسماعيل','أيت رزين','إغيل علي','اغرم','الفلاي','القصر','بجاية','برباشة','بني جليل','بني كسيلة','بني معوش','بني مليكش','بو جليل','بوحمزة','بوخليفة','تازمالت','تاسكريوت','تالا حمزة','تامريجت','تامقرة','تاوريرت إغيل','توجة','تيزي نبربر','تيشي','تيفرة','تيمزريت','تينبدار','خراطة','درقينة','ذراع القايد','سمعون','سوق اوفلا','سوق لإثنين','سيدي عياد','سيدي عيش','شلاطة','شميني','صدوق','طيبان','فرعون','فناية الماثن','كنديرة','مالبو','مسيسنة','وادي غير'],
-        '7':['أورلال','أوماش','الحاجب','الحوش','الغروس','الفيض','القنطرة','المزيرعة','الوطاية','برانيس','برج بن عزوز','بسكرة','بوشقرون','جمورة','خنقة سيدي ناجي','زريبة الوادي','سيدي عقبة','شتمة','طولقة','عين الناقة','عين زعطوط','فوغالة','ليشانة','ليوة','مخادمة','مشونش','مليلي'],
-        '8':['العبادلة','القنادسة','المريجة','بشار','بني ونيف','بوكايس','تاغيت','تبلبالة','عرق فراج','لحمر','مشرع هواري بومدين','موغل'],
-        '9':['أولاد يعيش','الأربعاء','البليدة','الشبلي','الشريعة','الشفة','الصومعة','العفرون','اولاد سلامة','بن خليل','بني تامو','بني مراد','بوعرفة','بوعينان','بوفاريك','بوقرة','جبابرة','حمام ملوان','صوحان','عين الرمانة','قرواو','مفتاح','موزاية','وادي العلايق','وادي جر'],
-        '10':['آث منصور','أعمر','أغبالو','أمشدالة','أهل القصر','أولاد راشد','أيت لعزيز','الأخضرية','الأسنام','البويرة','الحاكمية','الحجرة الزرقاء','الخبوزية','الدشمية','العجيبة','المعمورة','المقراني','الهاشمية','بئر غبالو','برج أوخريص','بشلول','بودربالة','بوكرم','تاغزوت','تاقديت','جباحية','حنيف','حيزر','ديرة','روراوة','ريدان','زبربر','سحاريج','سور الغزلان','سوق الخميس','شرفة','عين الترك','عين الحجر','عين العلوي','عين بسام','قادرية','قرومة','مزدور','معلة','وادي البردي'],
-        '11':['أدلس','ابلسة','تاظروك','تمنراست','عين امقل'],
-        '12':['أم علي','الحمامات','الحويجبات','الشريعة','العقلة','العقلة المالحة','العوينات','الكويف','الماء الابيض','المريج','المزرعة','الونزة','بئر الذهب','بئر العاتر','بئر مقدم','بجن','بكارية','بوخضرة','بولحاف الدير','تبسة','ثليجان','سطح قنطيس','صفصاف الوسرى','عين الزرقاء','فركان','قريقر','مرسط','نقرين'],
-        '13':['أولاد رياح','أولاد ميمون','البويهي','الحناية','الرمشي','السواحلية','السواني','العريشة','العزايل','الغزوات','الفحول','القور','باب العسة','بن سكران','بني جليل','بني كسيلة','بني خلاد','بني سنوس','بني صميل','بني مستر','بني وارسوس','بوحلو','تلمسان','تيانت','تيرني بني هديل','جبالة','حمام بوغرارة','دار يغمراسن','زناتة','سبدو','سبعة شيوخ','سوق الثلاثاء','سيدي الجيلالي','سيدي العبدلي','سيدي مجاهد','شتوان','صبرة','عمير','عين الكبيرة','عين النحالة','عين تالوت','عين غرابة','عين فزة','عين فتاح','عين يوسف','فلاوسن','مرسى بن مهيدي','مسيردة الفواقة','مغنية','منصورة','ندرومة','هنين','وادي الخضر'],
-        '14':['الرحوية','الرشايقة','السبت','السبعين','السوقر','الفايجة','الناظورة','النعيمة','بوقرة','تاقدمت','تخمرت','توسنينة','تيارت','تيدة','جبيلات الرصفاء','جيلالي بن عمار','حمادية','دحموني','زمالة الأمير عبد القادر','سرغين','سي عبد الغني','سيدي بختي','سيدي حسني','سيدي عبد الرحمن','سيدي علي ملال','شحيمة','عين الحديد','عين الذهب','عين بوشقيف','عين دزاريت','عين كرمس','فرندة','قرطوفة','قصر الشلالة','مادنة','مدروسة','مدريسة','مشرع الصفا','مغيلة','ملاكو','مهدية','وادي ليلي'],
-        '15':['أبي يوسف','أزفون','أسي يوسف','أغريب','أقرو','أقني قغران','أيت أومالو','أيت بوادو','أيت بومهدي','أيت تودرت','أيت خليلي','أيت شافع','أيت عقواشة','أيت عيسى ميمون','أيت محمود','أيت يحي موسى','أيت يحيى','إبودرارن','إعكورن','إفرحونان','إفليسن','إمسوحال','إيجار','إيرجن','إيفيغاء','إيلولة أومالو','اقبيل','الأربعاء ناث إيراثن','بني زمنزار','بني دوالة','بني زيكي','بني عيسي','بني يني','بوجيمة','بوزقن','بوغني','بونوح','تادمايت','تيرمتين','تيزي راشد','تيزي غنيف','تيزي نثلاثة','تيزي وزو','تيقزيرت','تيميزار','ذراع الميزان','ذراع بن خدة','زكري','سوق الإثنين','سيدي نعمان','صوامع','عزازقة','عين الحمام','عين الزاوية','فريحة','فريقات','ماكودة','مشطراس','معاتقة','مقلع','مكيرة','ميزرانة','واسيف','واضية','واقنون','يطافن'],
-        '16':['ابن عكنون','الابيار','الجزائر الوسطى','الحراش','الحمامات','الخرايسية','الدار البيضاء','الدرارية','الدويرة','الرايس حميدو','الرحمانية','الرويبة','السحاولة','الشراقة','العاشور','القبة','القصبة','الكاليتوس','المحمدية','المدنية','المرادية','المرسى','المعالمة','المغارية','اولاد شبل','اولاد فايت','بئر توتة','بئر خادم','بئر مراد رايس','باب الزوار','باب الوادي','بابا حسن','باش جراح','براقي','برج البحري','برج الكيفان','بني مسوس','بوروبة','بوزريعة','بولوغين بن زيري','تسالة المرجة','جسر قسنطينة','حسين داي','حيدرة','دالي ابراهيم','رغاية','زرالدة','سطاوالي','سويدانية','سيدي امحمد','سيدي موسى','عين بنيان','عين طاية','محمد بلوزداد','هراوة','وادي السمار','وادي قريش'],
-        '17':['أم العظام','الادريسية','الجلفة','الخميس','الشارف','القديد','بن يعقوب','بنهار','بويرة الأحداب','بيرين','تعظميت','حاسي العش','حاسي بحبح','حاسي فدول','حد الصحاري','دار الشيوخ','دلدول','دويس','زعفران','زكار','سد الرحال','سلمانة','سيدي بايزيد','سيدي لعجال','عمورة','عين الإبل','عين الشهداء','عين فقه','عين معبد','عين وسارة','فيض البطمة','قرنيني','قطارة','مجبارة','مسعد','مليليحة'],
-        '18':['أراقن سويسي','أولاد رابح','أولاد يحيى خدروش','الامير عبد القادر','الجمعة بني حبيبي','السطارة','الشحنة','الشقفة','الطاهير','العنصر','العوانة','القنار نشفي','الميلية','برج الطهر','بودريعة بني ياجيس','بوراوي بلهادف','بوسيف أولاد عسكر','تاكسنة','جيجل','جيملة','خيري واد عجول','زيامة منصورية','سلمى بن زيادة','سيدي عبد العزيز','سيدي معروف','غبالة','قاوس','وجانة'],
-        '19':['أوريسيا','أولاد تبان','أولاد سي أحمد','أولاد صابر','أولاد عدوان','أيت نوال مزادة','التلة','الحامة','الدهامشة','الرصفة','الطاية','العلمة','الولجة','ايت تيزي','بئر العرش','بئر حدادة','بابور','بازر سكرة','بلاعة','بني شبانة','بني عزيز','بني فودة','بني موحلي','بني ورتيلان','بني وسين','بوسلام','بوطالب','بوعنداس','بوقاعة','بيضاء برج','تاشودة','تالا إيفاسن','تيزي نبشار','جميلة','حربيل','حمام السخنة','حمام قرقور','ذراع قبيلة','سرج الغول','سطيف','صالح باي','عموشة','عين أرنات','عين أزال','عين الحجر','عين الروى','عين السبت','عين الكبيرة','عين عباسة','عين لقراج','عين ولمان','قجال','قصر الابطال','قلال','قلتة زرقاء','قنزات','ماوكلان','مزلوق','معاوية','واد البارد'],
-        '20':['أولاد إبراهيم','أولاد خالد','الحساسنة','المعمورة','تيرسين','دوي ثابت','سعيدة','سيدي احمد','سيدي بوبكر','سيدي عمر','عين الحجر','عين السخونة','عين السلطان','مولاي العربي','هونت','يوب'],
-        '21':['أم الطوب','أولاد حبابة','أولاد عطية','الحدائق','الحروش','الزيتونة','السبت','الشرايع','الغدير','القل','الكركرة','المرسى','الولجة بولبلوط','بكوش لخضر','بن عزوز','بني بشير','بني زيد','بني ولبان','بوشطاطة','بين الويدان','تمالوس','جندل سعدي محمد','حمادي كرومة','خناق مايو','رمضان جمال','زردازة','سكيكدة','سيدي مزغيش','صالح بو الشعور','عزابة','عين بوزيان','عين زويت','عين شرشار','عين قشرة','فلفلة','قنواع','مجاز الدشيش','وادي الزهور'],
-        '22':['الحصيبة','السهالة الثورة','الضاية','العمارنة','بئر الحمام','بضرابين المقراني','بلعربي','بن باديس','بن عشيبة شلية','بوجبهة البرج','بوخنفيس','تاودموت','تسالة','تغاليمت','تفسور','تلاغ','تلموني','تنيرة','حاسي دحو','حاسي زهانة','رأس الماء','رجم دموش','زروالة','سفيزف','سيدي ابراهيم','سيدي بلعباس','سيدي حمادوش','سيدي خالد','سيدي دحو الزاير','سيدي شعيب','سيدي علي بن يوب','سيدي علي بوسيدي','سيدي لحسن','سيدي يعقوب','شيطوان البلايلة','طابية','عين أدن','عين البرد','عين الثريد','عين تندمين','عين قادة','لمطار','مرحوم','مرين','مزاورو','مسيد','مصطفى بن ابراهيم','مكدرة','مولاي سليسن','وادي السبع','وادي تاوريرة','وادي سفيون'],
-        '23':['البوني','التريعات','الحجار','الشرفة','العلمة','برحال','سرايدي','سيدي عمار','شطايبي','عنابة','عين الباردة','واد العنب'],
-        '24':['الدهوارة','الركنية','الفجوج','برج صباط','بلخير','بن جراح','بني مزلين','بوحشانة','بوحمدان','بوشقوف','بوعاتي محمود','بومهرة أحمد','تاملوكة','جبالة الخميسي','حمام النبايل','حمام دباغ','رأس العقبة','سلاوة عنونة','عين العربي','عين بن بيضاء','عين رقادة','عين صندل','عين مخلوف','قالمة','قلعة بوصبع','لخزارة','مجاز الصفاء','مجاز عمار','نشماية','هواري بومدين','هيليوبوليس','وادي الزناتي','وادي الشحم','وادي فراغة'],
-        '25':['أبن باديس الهرية','أولاد رحمون','ابن زياد','الخروب','بني حميدان','بوجريو مسعود','حامة بوزيان','ديدوش مراد','زيغود يوسف','عين السمارة','عين عبيد','قسنطينة'],
-        '26':['أم الجليل','أولاد إبراهيم','أولاد امعرف','أولاد بوعشرة','أولاد دايد','أولاد عنتر','أولاد هلال','البرواقية','الحمدانية','الحوضان','الربعية','الزبيرية','السانق','السواقي','الشهبونية','العزيزية','العمارية','العوينات','العيساوية','القلب الكبير','الكاف الاخضر','المدية','بئر بن عابد','بعطة','بن شكاو','بني سليمان','بوسكن','بوشراحيل','بوعيش','بوعيشون','بوغار','بوغزول','تابلاط','تفراوت','تمسقيدة','تيزي مهدي','ثلاث دوائر','جواب','حناشة','خمس جوامع','دراق','ذراع السمار','سدراية','سغوان','سي المحجوب','سيدي الربيع','سيدي دامد','سيدي زهار','سيدي زيان','سيدي نعمان','شلالة العذاورة','شنيقل','عزيز','عوامري','عين اقصير','عين بوسيف','قصر البخاري','مجبر','مزغنة','مغراوة','مفاتحة','ميهوب','وادي حربيل','وزرة'],
-        '27':['أولد بوغالم','أولد مع الله','الحسيان بني ياحي','السوافلية','الطواهرية','بن عبد المالك رمضان','بوقيراط','تزقايت','حاسي ماماش','حجاج','خضرة','خير الدين','ستيدية','سور','سيدي بلعطار','سيدي علي','سيدي لخضر','سيرات','صفصاف','صيادة','عين بودينار','عين تادلس','عين سيدي الشريف','عين نويسي','فرناقة','ماسرة','مزغران','مستغانم','منصورة','نكمارية','وادي الخير'],
-        '28':['أولاد دراج','أولاد سليمان','أولاد سيدي ابراهيم','أولاد عدي لقبالة','أولاد ماضي','أولاد منصور','الحوامد','السوامع','المسيلة','المطارفة','المعاضيد','الهامل','امجدل','بئر فضة','برهوم','بلعايبة','بن زوه','بن سرور','بني يلمان','بوسعادة','بوطي السايح','تارمونت','تامسة','جبل مساعد','حمام الضلعة','خبانة','خطوطي سد الجير','دهاهنة','زرزور','سليم','سيدي امحمد','سيدي عامر','سيدي عيسى','سيدي هجرس','شلال','عين الحجل','عين الخضراء','عين الريش','عين الملح','عين فارس','محمد بوضياف','مسيف','معاريف','مقرة','مناعة','ولتام','ونوغة'],
-        '29':['البرج','الحشم','السهايلية','الشرفاء','العلايمية','الغمري','القرط','القطنة','القعدة','المأمونية','المحمدية','المطمور','المنور','بنيان','بوحنيفية','بوهني','تيزي','تيغنيف','حسين','خلوية','رأس عين عميروش','زلامطة','زهانة','سجرارة','سيدي بوسعيد','سيدي عبد الجبار','سيدي عبد المومن','سيدي قادة','سيق','عقاز','عوف','عين أفرص','عين فارس','عين فراح','عين فكان','غروس','غريس','فراقيق','فروحة','قرجوم','ماقضة','ماوسة','معسكر','مقطع الدوز','نسمط','وادي الأبطال','وادي التاغية'],
-        '30':['البرمة','الرويسات','انقوسة','حاسي بن عبد الله','حاسي مسعود','سيدي خويلد','عين البيضاء','ورقلة'],
-        '31':['أرزيو','البراية','السانية','العنصر','الكرمة','المرسى الكبير','بئر الجير','بطيوة','بن فريحة','بوتليليس','بوسفر','بوفاتيس','حاسي بن عقبة','حاسي بونيف','حاسي مفسوخ','سيدي الشحمي','سيدي بن يبقى','طفراوي','عين البية','عين الترك','عين الكرمة','قديل','مرسى الحجاج','مسرغين','وادي تليلات','وهران'],
-        '32':['اربوات','الأبيض سيدي الشيخ','البنود','البيض','الخيثر','الشقيق','الغاسول','الكاف الأحمر','المحرة','بريزينة','بوسمغون','بوعلام','بوقطب','توسمولين','رقاصة','ستيتن','سيدي سليمان','سيدي طيفور','سيدي عامر','شلالة','عين العراك','كراكدة'],
-        '33':['إن أمناس','إيليزي','برج عمر إدريس','دبداب'],
-        '34':['أولاد أبراهم','أولاد دحمان','أولاد سيدي ابراهيم','الحمادية','الرابطة','العش','العناصر','القصور','القلة','الماين','المنصورة','المهير','الياشير','بئر قاصد علي','برج الغدير','برج بوعريريج','برج زمورة','بليمور','بن داود','تسامرت','تفرق','تقلعيت','تيكستار','ثنية النصر','جعافرة','حرازة','حسناوة','خليل','رأس الوادي','سيدي أمبارك','عين تاغروت','عين تسرة','غيلاسة','مجانة'],
-        '35':['أعفير','أولاد عيسى','أولاد موسى','أولاد هداج','الاربعطاش','الثنية','الخروبة','الناصرية','برج منايل','بغلية','بن شود','بني عمران','بودواو','بودواو البحري','بوزقزة قدارة','بومرداس','تاورقة','تيجلابين','تيمزريت','جنات','حمادي','خميس الخشنة','دلس','زموري','سوق الحد','سي مصطفى','سيدي داود','شعبة العامر','عمال','قورصو','لقاطة','يسر'],
-        '36':['البسباس','الذرعان','الزيتونة','السوارخ','الشافية','الشط','الطارف','العيون','القالة','بحيرة الطيور','بريحان','بن مهيدي','بوثلجة','بوحجار','بوقوس','حمام بني صالح','رمل السوق','زريزر','شبيطة مختار','شحاني','عصفور','عين العسل','عين الكرمة','وادي الزيتون'],
-        '37':['أم العسل','تندوف'],
-        '38':['أولاد بسام','الأربعاء','الأزهرية','العيون','المعاصم','الملعب','اليوسفية','برج الأمير عبد القادر','برج بونعامة','بني شعيب','بني لحسن','بوقائد','تملاحت','تيسمسيلت','ثنية الاحد','خميستي','سيدي العنتري','سيدي بوتوشنت','سيدي سليمان','سيدي عابد','عماري','لرجام'],
-        '39':['البياضة','الحمراية','الدبيلة','الرباح','الرقيبة','الطالب العربي','الطريفاوي','العقلة','المقرن','النخلة','الوادي','اميه وانسة','بن قشة','تغزوت','حاسي خليفة','حساني عبد الكريم','دوار الماء','سيدي عون','قمار','كوينين','وادي العلندة','ورماس'],
-        '40':['أولاد رشاش','الحامة','الرميلة','المحمل','الولجة','انسيغة','بابار','بغاي','بوحمامة','تاوزيانت','جلال','خنشلة','خيران','ششار','شلية','طامزة','عين الطويلة','قايس','متوسة','مصارة','يابوس'],
-        '41':['أم العظايم','أولاد إدريس','أولاد مومن','الحدادة','الحنانشة','الخضارة','الدريعة','الراقوبة','الزعرورية','الزوابي','المراهنة','المشروحة','بئر بوحوش','تاورة','ترقالت','تيفاش','خميسة','سافل الويدان','سدراتة','سوق أهراس','سيدي فرج','عين الزانة','عين سلطان','مداوروش','وادي الكبريت','ويلان'],
-        '42':['أحمر العين','أغبال','الأرهاط','الداموس','الشعيبة','القليعة','الناظور','بني ميلك','بواسماعيل','بورقيقة','بوهارون','تيبازة','حجرة النص','حجوط','خميستي','دواودة','سيدي راشد','سيدي سميان','سيدي عامر','سيدي غيلاس','شرشال','عين تاقورايت','فوكة','قوراية','مراد','مسلمون','مناصر'],
-        '43':['عين البيضاء أحريش','أحمد راشدي','أولاد اخلوف','اعميرة اراس','التلاغمة','الرواشد','الشيقارة','العياضي برباس','القرارم قوقة','بن يحي عبد الرحمن','بوحاتم','تاجنانت','ترعي باينان','تسالة لمطاعي','تسدان حدادة','تيبرقنت','حمالة','دراحي بوصلاح','زغاية','سيدي خليفة','سيدي مروان','شلغوم العيد','عين التين','عين الملوك','فرجيوة','مشيرة','ميلة','مينار زارزة','وادي العثمانية','وادي النجاء','وادي سقان','يحي بني قشة'],
-        '44':['الحسانية','الحسينية','الروينة','العامرة','العبادية','العطاف','الماين','المخاطرية','بئر ولد خليفة','بربوش','برج الأمير خالد','بطحية','بلعاص','بن علال','بوراشد','بومدفع','تاشتة زقاغة','تبركانين','جليدة','جمعة أولاد الشيخ','جندل','حمام ريغة','خميس مليانة','زدين','سيدي الأخضر','طارق بن زياد','عريب','عين الاشياخ','عين البنيان','عين التركي','عين الدفلى','عين السلطان','عين بويحيى','مليانة','واد الجمعة','وادي الشرفاء'],
-        '45':['البيوض','القصدير','المشرية','النعامة','تيوت','جنين بورزق','سفيسيفة','عسلة','عين الصفراء','عين بن خليل','مغرار','مكمن بن عمار'],
-        '46':['أغلال','أولاد الكيحل','أولاد بوجمعة','الأمير عبد القادر','الحساسنة','العامرية','المالح','المساعيد','بني صاف','بوزجار','تارقة','تامزورة','حاسي الغلة','حمام بوحجر','سيدي بن عدة','سيدي بومدين','سيدي صافي','سيدي ورياش','شعبة اللحم','شنتوف','عقب الليل','عين الأربعاء','عين الطلبة','عين الكيحل','عين تموشنت','وادي الصباح','وادي برقش','ولهاصة الغرابة'],
-        '47':['العطف','القرارة','المنصورة','بريان','بونورة','زلفانة','سبسب','ضاية بن ضحوة','غرداية','متليلي'],
-        '48':['أولاد سيدي الميهوب','أولاد يعيش','الحاسي','الحمادنة','الرمكة','القطار','القلعة','المطمر','الولجة','بلعسل بوزقزة','بن داود','بني درقن','بني زنطيس','جديوية','حد الشكالة','حمري','دار بن عبد الله','زمورة','سوق الحد','سيدي خطاب','سيدي أمحمد بن علي','سيدي امحمد بن عودة','سيدي سعادة','سيدي لزرق','عمي موسى','عين الرحمة','عين طارق','غليزان','لحلاف','مازونة','مديونة','مرجة سيدي عابد','منداس','وادي الجمعة','وادي السلام','وادي رهيو','واريزان','يلل'],
-        '49':['أوقروت','أولاد السعيد','أولاد عيسى','المطارفة','تنركوك','تيميمون','دلدول','شروين','طالمين','قصر قدور'],
-        '50':['برج باجي مختار','تيمياوين'],
-        '51':['أولاد جلال','الدوسن','الشعيبة','بسباس','رأس الميعاد','سيدي خالد'],
-        '52':['أولاد خضير','إقلي','القصابي','الواتة','بن يخلف','بني عباس','تامترت','تيمودي','كرزاز'],
-        '53':['إينغر','عين صالح','فقارة الزوى'],
-        '54':['تين زواتين','عين قزام'],
-        '55':['الحجيرة','الزاوية العابدية','الطيبات','العالية','المقارين','المنقر','النزلة','بلدة اعمر','بن ناصر','تبسبست','تقرت','تماسين','سيدي سليمان'],
-        '56':['برج الحواس','جانت'],
-        '57':['أم الطيور','المرارة','المغير','تندلة','جامعة','سطيل','سيدي خليل','سيدي عمران'],
-        '58':['المنيعة','حاسي الفحل','حاسي القارة']
-    };
-
-// ══════════════════════════════════════════════════════════════════
+// ══════════════════════════════════════════════════
 //  STATE
-// ══════════════════════════════════════════════════════════════════
-let currentQty           = 1;
-let currentDeliveryPrice = 0;
-let deliveryType         = 'home';
-let homePrice            = 0;
-let deskPrice            = 0;
-let orderSubmitted       = false;
+// ══════════════════════════════════════════════════
+var currentQty = 1, currentDeliveryPrice = 0, deliveryType = 'home';
+var homePrice = 0, deskPrice = 0, orderSubmitted = false, addToCartFired = false;
+var formStartTime = null, formInteractionFired = false, leadFired = false;
+var timeOnPage = 0, topFired = {}, scrollMilestonesFired = {};
+var exitIntentFired = false;
 
-const canvas = document.getElementById('totalPriceCanvas');
-const ctx    = canvas.getContext('2d');
-
-function getProductPrice(qty) { return qty === 2 ? CAPI_CONFIG.qty2PriceDzd : CAPI_CONFIG.basePriceDzd * qty; }
-function getTotalPrice(qty, delivery) { return getProductPrice(qty) + delivery; }
+// ══════════════════════════════════════════════════
+//  CANVAS RENDER
+// ══════════════════════════════════════════════════
+var canvas = document.getElementById('totalPriceCanvas');
+var ctx = canvas.getContext('2d');
 
 function renderTotalPrice() {
-    const total = getTotalPrice(currentQty, currentDeliveryPrice);
-    const w = canvas.width, h = canvas.height;
-    ctx.clearRect(0, 0, w, h);
-    const grad = ctx.createLinearGradient(0, 0, w, 0);
-    grad.addColorStop(0, '#F5C518');
-    grad.addColorStop(1, '#E8A800');
-    ctx.fillStyle = grad;
-    ctx.shadowColor = 'rgba(245,197,24,0.35)';
-    ctx.shadowBlur  = 20;
-    ctx.beginPath();
-    roundRect(ctx, 0, 0, w, h, 12);
-    ctx.fill();
-    ctx.shadowBlur  = 0;
-    ctx.fillStyle   = '#0A1628';
-    ctx.font        = 'bold 38px Cairo, sans-serif';
-    ctx.textAlign   = 'center';
-    ctx.textBaseline = 'middle';
-    ctx.fillText(total.toLocaleString('fr-DZ') + ' دج', w / 2, h / 2);
-}
-
-function roundRect(c, x, y, w, h, r) {
-    c.moveTo(x + r, y);
-    c.arcTo(x + w, y, x + w, y + h, r);
-    c.arcTo(x + w, y + h, x, y + h, r);
-    c.arcTo(x, y + h, x, y, r);
-    c.arcTo(x, y, x + w, y, r);
+    var total = getTotalPrice(currentQty, currentDeliveryPrice);
+    var w = canvas.width, h = canvas.height;
+    ctx.clearRect(0,0,w,h);
+    var g = ctx.createLinearGradient(0,0,w,0);
+    g.addColorStop(0,'#F5C518'); g.addColorStop(1,'#E8A800');
+    ctx.fillStyle = g; ctx.shadowColor = 'rgba(245,197,24,0.35)'; ctx.shadowBlur = 20;
+    ctx.beginPath(); ctx.moveTo(12,0); ctx.arcTo(w,0,w,h,12); ctx.arcTo(w,h,0,h,12); ctx.arcTo(0,h,0,0,12); ctx.arcTo(0,0,w,0,12); ctx.fill();
+    ctx.shadowBlur = 0; ctx.fillStyle = '#0A1628'; ctx.font = 'bold 38px Cairo,sans-serif'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.fillText(total.toLocaleString('fr-DZ') + ' دج', w/2, h/2);
 }
 
 function updateUI() {
@@ -1462,263 +578,346 @@ function updateUI() {
     renderTotalPrice();
 }
 
-// ── Wilaya → Baladiya ──
+// ══════════════════════════════════════════════════
+//  COMMUNES
+// ══════════════════════════════════════════════════
+var communes = {'1':['أدرار','أولاد أحمد تيمي','أولف','إن زغمير','اقبلي','السبع','بودة','تامست','تامنطيط','تسابيت','تيت','تيمقتن','رقان','زاوية كنتة','سالي','فنوغيل'],'2':['أبو الحسن','أم الدروع','أولاد بن عبد القادر','أولاد عباس','أولاد فارس','الأبيض مجاجة','الحجاج','الزبوجة','الشطية','الشلف','الصبحة','الظهرة','الكريمية','المرسى','الهرانفة','بريرة','بنايرية','بني بوعتاب','بني حواء','بني راشد','بوزغاية','بوقادير','تاجنة','تاوقريت','تلعصة','تنس','حرشون','سنجاس','سيدي عبد الرحمن','سيدي عكاشة','عين مران','مصدق','وادي الفضة','وادي سلي','وادي قوسين'],'3':['أفلو','الأغواط','البيضاء','الحاج مشري','الحويطة','الخنق','العسافية','الغيشة','بريدة','بن ناصر بن شهرة','تاجرونة','تاجموت','تاويالة','حاسي الدلاعة','حاسي الرمل','سبقاق','سيدي بوزيد','سيدي مخلوف','عين سيدي علي','عين ماضي','قصر الحيران','قلتة سيدي سعد','وادي مرة','وادي مزي'],'4':['أم البواقي','أولاد حملة','أولاد زواي','أولاد قاسم','البلالة','الجازية','الحرملية','الرحية','الزرق','الضلعة','العامرية','الفجوج بوغرارة سعودي','بئر الشهداء','بحير الشرقي','بريش','سوق نعمان','سيقوس','عين البيضاء','عين الديس','عين الزيتون','عين ببوش','عين فكرون','عين كرشة','عين مليلة','فكيرينة','قصر الصباحي','مسكيانة','هنين','وادي نيني'],'5':['أريس','باتنة','بريكة','تازولت','نقاوس','عين التوتة','تيمقاد'],'6':['بجاية','أقبو','أميزور','تازمالت','خراطة','سوق لإثنين','تيشي'],'7':['بسكرة','طولقة','سيدي عقبة','الوطاية','زريبة الوادي','فوغالة','مشونش'],'8':['بشار','العبادلة','القنادسة','تاغيت','تبلبالة','لحمر'],'9':['البليدة','بوفاريك','مفتاح','بوقرة','العفرون','الأربعاء','موزاية'],'10':['البويرة','سور الغزلان','عين بسام','برج أوخريص','قادرية','زبربر'],'11':['تمنراست','أدلس','عين امقل'],'12':['تبسة','بئر العاتر','العوينات','الكويف','بولحاف الدير'],'13':['تلمسان','مغنية','الغزوات','بني صميل','ندرومة','سبدو','هنين'],'14':['تيارت','فرندة','السوقر','مهدية','قصر الشلالة','عين الذهب'],'15':['تيزي وزو','أزفون','ذراع بن خدة','بوغني','عزازقة','عين الحمام'],'16':['الجزائر الوسطى','باب الوادي','القصبة','بوروبة','الحراش','رغاية','زرالدة','بئر مراد رايس','ابن عكنون','الدار البيضاء','المحمدية','حسين داي','المرادية'],'17':['الجلفة','مسعد','عين وسارة','حاسي بحبح','سد الرحال'],'18':['جيجل','الطاهير','الميلية','القل','زيامة منصورية'],'19':['سطيف','العلمة','بئر العرش','عين أرنات','قجال','الأربعاء ناث إيراثن'],'20':['سعيدة','عين الحجر','سيدي بوبكر','المعمورة'],'21':['سكيكدة','عزابة','الحروش','القل','رمضان جمال'],'22':['سيدي بلعباس','تلاغ','رأس الماء','مرحوم','سيدي علي بن يوب'],'23':['عنابة','سيدي عمار','البوني','شطايبي'],'24':['قالمة','بومهرة أحمد','عين مخلوف','هواري بومدين'],'25':['قسنطينة','الخروب','ديدوش مراد','زيغود يوسف','عين عبيد'],'26':['المدية','البرواقية','قصر البخاري','تابلاط','بني سليمان'],'27':['مستغانم','عين تادلس','مزغران','سيدي علي','خضرة'],'28':['المسيلة','بوسعادة','عين الملح','سيدي عيسى','الهامل'],'29':['معسكر','سيق','تيغنيف','غريس','نسمط'],'30':['ورقلة','حاسي مسعود','حاسي بن عبد الله','تقرت','سيدي خويلد'],'31':['وهران','أرزيو','مرسى الكبير','عين الترك','سيدي الشحمي'],'32':['البيض','الأبيض سيدي الشيخ','المشرية','بريزينة','بوسمغون'],'33':['إيليزي','إن أمناس','برج عمر إدريس'],'34':['برج بوعريريج','رأس الوادي','عين تاغروت','مجانة'],'35':['بومرداس','بودواو','خميس الخشنة','دلس','زموري'],'36':['الطارف','القالة','بن مهيدي','بوحجار'],'37':['تندوف','أم العسل'],'38':['تيسمسيلت','برج الأمير عبد القادر','ثنية الاحد'],'39':['الوادي','قمار','الرباح','حاسي خليفة'],'40':['خنشلة','بابار','بغاي','عين الطويلة'],'41':['سوق أهراس','سدراتة','مداوروش','تاورة'],'42':['تيبازة','شرشال','بواسماعيل','القليعة'],'43':['ميلة','فرجيوة','شلغوم العيد','أحمد راشدي'],'44':['عين الدفلى','خميس مليانة','مليانة','عين الدفلى'],'45':['النعامة','المشرية','عين الصفراء','البيوض'],'46':['عين تموشنت','بني صاف','حمام بوحجر','عين الأربعاء'],'47':['غرداية','بريان','القرارة','متليلي','زلفانة'],'48':['غليزان','مازونة','زمورة','عين الرحمة'],'49':['تيميمون','أوقروت','تنركوك'],'50':['برج باجي مختار','تيمياوين'],'51':['أولاد جلال','سيدي خالد','رأس الميعاد'],'52':['بني عباس','كرزاز','إقلي'],'53':['عين صالح','إينغر'],'54':['عين قزام','تين زواتين'],'55':['تقرت','الزاوية العابدية','المقارين'],'56':['جانت','برج الحواس'],'57':['المغير','جامعة','سطيل'],'58':['المنيعة','حاسي الفحل']};
+
+// ══════════════════════════════════════════════════
+//  WILAYA / BALADIYA
+// ══════════════════════════════════════════════════
 document.getElementById('wilaya').addEventListener('change', function() {
-    const val        = this.value;
-    const baladiyaEl = document.getElementById('baladiya');
-
+    var val = this.value, bal = document.getElementById('baladiya');
     if (val && communes[val]) {
-        const sorted = [...communes[val]].sort();
-        baladiyaEl.innerHTML = '<option value="">-- اختر البلدية --</option>';
-        sorted.forEach(function(c) {
-            const o = document.createElement('option');
-            o.value = c; o.textContent = c;
-            baladiyaEl.appendChild(o);
-        });
-        baladiyaEl.disabled = false;
-
-        const opt  = this.options[this.selectedIndex];
-        homePrice  = parseInt(opt.getAttribute('data-home')) || 0;
-        deskPrice  = parseInt(opt.getAttribute('data-desk')) || 0;
-        deliveryType = 'home';
-        updateUI();
-
-        this.classList.add('valid');
-        this.classList.remove('error');
+        var sorted = communes[val].slice().sort();
+        bal.innerHTML = '<option value="">-- اختر البلدية --</option>';
+        sorted.forEach(function(c){ var o = document.createElement('option'); o.value = c; o.textContent = c; bal.appendChild(o); });
+        bal.disabled = false;
+        var opt = this.options[this.selectedIndex];
+        homePrice = parseInt(opt.getAttribute('data-home'))||0;
+        deskPrice = parseInt(opt.getAttribute('data-desk'))||0;
+        deliveryType = 'home'; updateUI();
+        this.classList.add('valid'); this.classList.remove('error');
         document.getElementById('wilayaErr').classList.remove('show');
+        ga4('wilaya_selected', { wilaya_name: opt.text, wilaya_id: val, home_price: homePrice, desk_price: deskPrice });
     } else {
-        baladiyaEl.disabled = true;
-        baladiyaEl.innerHTML = '<option value="">-- اختر الولاية أولاُّ --</option>';
-        homePrice = 0; deskPrice = 0; deliveryType = 'home';
-        updateUI();
+        bal.disabled = true; bal.innerHTML = '<option value="">-- اختر الولاية أولاُّ --</option>';
+        homePrice = 0; deskPrice = 0; deliveryType = 'home'; updateUI();
     }
 });
-
 document.getElementById('baladiya').addEventListener('change', function() {
-    if (this.value) {
-        this.classList.add('valid');
-        this.classList.remove('error');
-        document.getElementById('baladiyaErr').classList.remove('show');
-    }
+    if (this.value) { this.classList.add('valid'); this.classList.remove('error'); document.getElementById('baladiyaErr').classList.remove('show'); ga4('baladiya_selected', { baladiya_name: this.value }); }
 });
 
-document.getElementById('cardHome').addEventListener('click', function() { deliveryType = 'home'; updateUI(); });
-document.getElementById('cardDesk').addEventListener('click', function() { deliveryType = 'desk'; updateUI(); });
+// Delivery type
+document.getElementById('cardHome').addEventListener('click', function() {
+    deliveryType = 'home'; updateUI();
+    ga4('delivery_type_selected', { delivery_type: 'home', delivery_price: homePrice });
+    capiCustom('DeliveryTypeSelect', { delivery_type: 'home_delivery', delivery_price_usd: toUsd(homePrice) });
+});
+document.getElementById('cardDesk').addEventListener('click', function() {
+    deliveryType = 'desk'; updateUI();
+    ga4('delivery_type_selected', { delivery_type: 'desk', delivery_price: deskPrice });
+    capiCustom('DeliveryTypeSelect', { delivery_type: 'desk_delivery', delivery_price_usd: toUsd(deskPrice) });
+});
 
-let addToCartFired = false;
-
-function changeQty(delta) {
-    const newQty = Math.max(1, Math.min(10, currentQty + delta));
-    if (newQty !== currentQty) {
-        currentQty = newQty;
-        if (!addToCartFired) {
-            addToCartFired = true;
-            capiAddToCart(currentQty);
-        }
+// ══════════════════════════════════════════════════
+//  QUANTITY
+// ══════════════════════════════════════════════════
+window.changeQty = function(delta) {
+    var n = Math.max(1, Math.min(10, currentQty + delta));
+    if (n !== currentQty) {
+        currentQty = n;
+        ga4('quantity_change', { quantity: currentQty, direction: delta > 0 ? 'increase' : 'decrease', product_id: CFG.productId, estimated_total: getTotalPrice(currentQty, currentDeliveryPrice) });
+        if (!addToCartFired) { addToCartFired = true; capiAddToCart(currentQty); }
         updateUI();
     }
-}
+};
 
-function scrollToForm(e) {
-    if (e) e.preventDefault();
-    document.getElementById('cod-form').scrollIntoView({ behavior: 'smooth', block: 'start' });
+// ══════════════════════════════════════════════════
+//  FORM TRACKING
+// ══════════════════════════════════════════════════
+var fieldFocusTimes = {};
+function trackFocus(id) {
+    fieldFocusTimes[id] = Date.now();
+    if (!formStartTime) formStartTime = Date.now();
+    ga4('form_field_focus', { field_name: id, form_id: 'orderForm' });
+    if (!formInteractionFired) {
+        formInteractionFired = true;
+        capiCustom('Form', { field_name: id, action: 'start' });
+        ga4('form_start', { form_id: 'orderForm', form_name: 'Order Form' });
+    }
 }
-function scrollToSection(id, e) {
-    if (e) e.preventDefault();
-    document.getElementById(id).scrollIntoView({ behavior: 'smooth', block: 'start' });
+function trackBlur(id) {
+    if (fieldFocusTimes[id]) { ga4('form_field_complete', { field_name: id, time_spent: Math.round((Date.now()-fieldFocusTimes[id])/1000), form_id: 'orderForm' }); }
 }
+['fullName','phone','wilaya','baladiya'].forEach(function(id) {
+    var el = document.getElementById(id); if (!el) return;
+    el.addEventListener('focus', function(){ trackFocus(id); });
+    el.addEventListener('blur',  function(){ trackBlur(id); });
+    el.addEventListener('change', function() {
+        ga4('form_field_change', { field_name: id, form_id: 'orderForm' });
+        if (id === 'phone' && !leadFired && /^(05|06|07)\d{8}$/.test(this.value.trim())) {
+            leadFired = true;
+            capiLead(this.value.trim(), document.getElementById('fullName').value.trim());
+        }
+    });
+});
+document.getElementById('phone').addEventListener('input', function(){ this.value = this.value.replace(/[^0-9]/g,''); });
 
+// ══════════════════════════════════════════════════
+//  VALIDATION
+// ══════════════════════════════════════════════════
 function validate() {
-    let ok = true;
-
-    const name = document.getElementById('fullName').value.trim();
-    document.getElementById('fullName').classList.remove('error');
-    document.getElementById('nameErr').classList.remove('show');
-    if (name) document.getElementById('fullName').classList.add('valid');
-    else document.getElementById('fullName').classList.remove('valid');
-
-    const phone   = document.getElementById('phone').value.trim();
-    const phoneRx = /^(05|06|07)\d{8}$/;
-    if (!phoneRx.test(phone)) {
-        document.getElementById('phone').classList.add('error');
-        document.getElementById('phone').classList.remove('valid');
-        document.getElementById('phoneErr').classList.add('show');
-        ok = false;
-    } else {
-        document.getElementById('phone').classList.remove('error');
-        document.getElementById('phone').classList.add('valid');
-        document.getElementById('phoneErr').classList.remove('show');
-    }
-
-    const wilaya = document.getElementById('wilaya').value;
-    if (!wilaya) {
-        document.getElementById('wilaya').classList.add('error');
-        document.getElementById('wilaya').classList.remove('valid');
-        document.getElementById('wilayaErr').classList.add('show');
-        ok = false;
-    } else {
-        document.getElementById('wilaya').classList.remove('error');
-        document.getElementById('wilaya').classList.add('valid');
-        document.getElementById('wilayaErr').classList.remove('show');
-    }
-
-    const baladiya = document.getElementById('baladiya').value;
-    document.getElementById('baladiya').classList.remove('error');
-    document.getElementById('baladiyaErr').classList.remove('show');
-    if (baladiya) document.getElementById('baladiya').classList.add('valid');
-    else document.getElementById('baladiya').classList.remove('valid');
-
+    var ok = true;
+    var phone = document.getElementById('phone').value.trim();
+    if (!/^(05|06|07)\d{8}$/.test(phone)) {
+        document.getElementById('phone').classList.add('error'); document.getElementById('phone').classList.remove('valid'); document.getElementById('phoneErr').classList.add('show');
+        ga4('form_validation_error', { field: 'phone' }); ok = false;
+    } else { document.getElementById('phone').classList.remove('error'); document.getElementById('phone').classList.add('valid'); document.getElementById('phoneErr').classList.remove('show'); }
+    if (!document.getElementById('wilaya').value) {
+        document.getElementById('wilaya').classList.add('error'); document.getElementById('wilaya').classList.remove('valid'); document.getElementById('wilayaErr').classList.add('show');
+        ga4('form_validation_error', { field: 'wilaya' }); ok = false;
+    } else { document.getElementById('wilaya').classList.remove('error'); document.getElementById('wilaya').classList.add('valid'); document.getElementById('wilayaErr').classList.remove('show'); }
     return ok;
 }
 
-async function submitOrder() {
+// ══════════════════════════════════════════════════
+//  TELEGRAM
+// ══════════════════════════════════════════════════
+async function sendTg(bot, d) {
+    var dl = d.delType === 'home' ? 'توصيل للمنزل 🏠' : 'التوصيل للمكتب 📦';
+    var msg = '🛒 <b>طلب جديد - Champions League</b>\n\n👤 <b>الاسم:</b> ' + d.name + '\n📱 <b>الهاتف:</b> <code>' + d.phone + '</code>\n🗺️ <b>الولاية:</b> ' + d.wilaya + '\n🏘️ <b>البلدية:</b> ' + d.commune + '\n\n📦 <b>الكمية:</b> ' + d.qty + '\n💰 <b>سعر المنتج:</b> ' + d.prodPrice.toLocaleString('fr-DZ') + ' دج\n🚚 <b>نوع التوصيل:</b> ' + dl + '\n📍 <b>سعر التوصيل:</b> ' + d.delPrice.toLocaleString('fr-DZ') + ' دج\n\n💵 <b>المجموع الكلي:</b> <code>' + d.total.toLocaleString('fr-DZ') + ' دج</code>\n📅 <b>التاريخ:</b> ' + d.dateStr + '\n🆔 <b>معرف الطلب:</b> <code>' + d.txId + '</code>';
+    try { var r = await fetch('https://api.telegram.org/bot' + bot.token + '/sendMessage', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({ chat_id: bot.chat, text: msg.trim(), parse_mode:'HTML', disable_web_page_preview:true }) }); return r.ok; } catch(e) { return false; }
+}
+
+// ══════════════════════════════════════════════════
+//  SUBMIT ORDER
+// ══════════════════════════════════════════════════
+window.submitOrder = async function() {
     if (orderSubmitted) return;
     if (!validate()) {
-        document.querySelector('.cod-form').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        document.querySelector('.cod-form').scrollIntoView({behavior:'smooth',block:'start'});
+        ga4('form_submit_attempt', { success: false, form_id: 'orderForm' });
         return;
     }
-
     orderSubmitted = true;
-    const btn = document.getElementById('submitBtn');
-    btn.disabled = true;
-    btn.innerHTML = '<span>⏳ جارٍ إرسال الطلب...</span>';
+    var btn = document.getElementById('submitBtn');
+    btn.disabled = true; btn.innerHTML = '<span>⏳ جارٍ إرسال الطلب...</span>';
 
-    const wilayaEl       = document.getElementById('wilaya');
-    const wilayaText     = wilayaEl.options[wilayaEl.selectedIndex].text;
-    const baladiyaVal    = document.getElementById('baladiya').value;
-    const total          = getTotalPrice(currentQty, currentDeliveryPrice);
-    const productPrice   = getProductPrice(currentQty);
-    const now            = new Date();
-    const dateStr        = now.toLocaleDateString('fr-DZ') + ' ' + now.toLocaleTimeString('fr-DZ');
-    const customerName   = document.getElementById('fullName').value.trim();
-    const customerPhone  = document.getElementById('phone').value.trim();
-    const transactionId = 'srv_PUR_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+    var wilayaEl = document.getElementById('wilaya');
+    var wilayaText = wilayaEl.options[wilayaEl.selectedIndex].text;
+    var commune = document.getElementById('baladiya').value;
+    var customerName = document.getElementById('fullName').value.trim();
+    var customerPhone = document.getElementById('phone').value.trim();
+    var prodPrice = getProductPrice(currentQty);
+    var total = getTotalPrice(currentQty, currentDeliveryPrice);
+    var now = new Date();
+    var dateStr = now.toLocaleDateString('fr-DZ') + ' ' + now.toLocaleTimeString('fr-DZ');
+    var txId = 'srv_PUR_' + Date.now() + '_' + Math.random().toString(36).substr(2,9);
+    var orderQty = currentQty, orderDelPrice = currentDeliveryPrice, orderDelType = deliveryType;
+    var formTime = formStartTime ? Math.round((Date.now()-formStartTime)/1000) : 0;
 
-    const orderQty           = currentQty;
-    const orderDeliveryPrice = currentDeliveryPrice;
-    const orderDeliveryType  = deliveryType;
+    ga4('form_submit_attempt', { success: true, form_id: 'orderForm', form_completion_time: formTime });
+    await capiInitiateCheckout(orderQty, orderDelPrice, customerPhone, customerName, wilayaText);
 
-    const orderData = {
-        customerName, customerPhone, wilayaText, baladiya: baladiyaVal,
-        currentQty: orderQty, productPrice, deliveryType: orderDeliveryType,
-        currentDeliveryPrice: orderDeliveryPrice, total, dateStr, transactionId
-    };
+    var SHEET = 'https://script.google.com/macros/s/AKfycbxdTbudRsIZ0ANuEtKrl8wtWFCiH8K_OCk9rC53HPiLqih_3W4LBfqlKlrjYj-2pnHF/exec';
+    var payload = { transaction_id: txId, date: dateStr, nom: customerName, phone: customerPhone, wilaya: wilayaText, commune: commune, produit: 'Champions League (Landing Page)', prix_produit: prodPrice, quantite: orderQty, prix_total: total, livraison: orderDelType === 'home' ? 'A Domicile' : 'Point Relais', prix_livraison: orderDelPrice, delivery_type_code: orderDelType, home_price: homePrice, desk_price: deskPrice, product_base_price: CFG.basePriceDzd, product_qty2_price: CFG.qty2PriceDzd, prix_produit_usd: toUsd(prodPrice), prix_total_usd: toUsd(total), utm_source: UTM.source, utm_medium: UTM.medium, utm_campaign: UTM.campaign, scroll_depth: Math.max.apply(null, Object.keys(scrollMilestonesFired).map(Number).filter(Boolean).concat([0])), time_on_page: timeOnPage, device: /Mobi|Android/i.test(navigator.userAgent) ? 'mobile' : 'desktop' };
+    var sheetOk = false;
+    try { await fetch(SHEET, {method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)}); sheetOk = true; } catch(e) {}
 
-    // Fire InitiateCheckout CAPI
-    await capiInitiateCheckout(orderQty, orderDeliveryPrice, customerPhone, customerName, wilayaText);
-
-    // Google Sheet
-    const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxdTbudRsIZ0ANuEtKrl8wtWFCiH8K_OCk9rC53HPiLqih_3W4LBfqlKlrjYj-2pnHF/exec';
-    const payload = {
-        transaction_id: transactionId, date: dateStr, nom: customerName, phone: customerPhone,
-        wilaya: wilayaText, commune: baladiyaVal, produit: 'Champions League (Landing Page)',
-        prix_produit: productPrice, quantite: orderQty, prix_total: total,
-        livraison: orderDeliveryType === 'home' ? 'A Domicile' : 'Point Relais',
-        prix_livraison: orderDeliveryPrice, delivery_type_code: orderDeliveryType,
-        home_price: homePrice, desk_price: deskPrice,
-        product_base_price: CAPI_CONFIG.basePriceDzd, product_qty2_price: CAPI_CONFIG.qty2PriceDzd,
-        prix_produit_usd: dzdToUsd(productPrice),
-        prix_total_usd:   dzdToUsd(total)
-    };
-
-    let sheetOk = false, tg1Ok = false, tg2Ok = false;
-
-    try {
-        await fetch(APPS_SCRIPT_URL, {
-            method: 'POST', mode: 'no-cors',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(payload)
-        });
-        sheetOk = true;
-    } catch(e) { console.warn('Sheet error', e); }
-
-    [tg1Ok, tg2Ok] = await Promise.all([
-        sendToTelegram(orderData),
-        sendToTelegram2(orderData)
-    ]);
-
-    if (!sheetOk && !tg1Ok && !tg2Ok) {
-        btn.innerHTML = '<span>❌ فشل الإرسال، اضغط للمحاولة</span>';
-        btn.disabled = false;
-        orderSubmitted = false;
+    var od = { name: customerName, phone: customerPhone, wilaya: wilayaText, commune: commune, qty: orderQty, prodPrice: prodPrice, delType: orderDelType, delPrice: orderDelPrice, total: total, dateStr: dateStr, txId: txId };
+    var results = await Promise.all([sendTg(TG1, od), sendTg(TG2, od)]);
+    if (!sheetOk && !results[0] && !results[1]) {
+        btn.innerHTML = '<span>❌ فشل الإرسال، اضغط للمحاولة</span>'; btn.disabled = false; orderSubmitted = false;
+        ga4('order_error', { reason: 'all_backends_failed' });
         alert('حدث خطأ في إرسال الطلب. يرجى التحقق من اتصالك والمحاولة مرة أخرى.');
         return;
     }
 
-    // Fire Purchase via CAPI
-    const purchaseOpts = {
-        qty:             orderQty,
-        deliveryPriceDzd: orderDeliveryPrice,
-        phone:           customerPhone,
-        name:            customerName,
-        wilayaText:      wilayaText,
-        communeName:     baladiyaVal,
-        transactionId:   transactionId,
-        orderDeliveryType: orderDeliveryType
-    };
+    await capiPurchase({ qty: orderQty, delDzd: orderDelPrice, phone: customerPhone, name: customerName, wilayaText: wilayaText, commune: commune, txId: txId, delType: orderDelType });
+    ga4('order_confirmed', { transaction_id: txId, total_dzd: total, quantity: orderQty, delivery_type: orderDelType, wilaya: wilayaText, form_time_seconds: formTime, time_on_page: timeOnPage, session_duration: Math.round((Date.now()-SESSION_START)/1000) });
+    showSuccess(); btn.innerHTML = '<span>✅ تم الإرسال بنجاح</span>';
+};
 
-    await capiPurchase(purchaseOpts);
-
-    showSuccess();
-    btn.innerHTML = '<span>✅ تم الإرسال بنجاح</span>';
-}
-
+// ══════════════════════════════════════════════════
+//  SUCCESS + POPUP
+// ══════════════════════════════════════════════════
 function showSuccess() {
     document.getElementById('successPopup').classList.add('active');
     document.getElementById('orderForm').reset();
-    currentQty = 1; currentDeliveryPrice = 0;
-    homePrice = 0; deskPrice = 0; deliveryType = 'home';
-    addToCartFired = false;
+    currentQty = 1; currentDeliveryPrice = 0; homePrice = 0; deskPrice = 0; deliveryType = 'home';
+    addToCartFired = false; leadFired = false; formStartTime = null; formInteractionFired = false;
     document.getElementById('qtyDisplay').textContent = '1';
     document.getElementById('baladiya').disabled = true;
     document.getElementById('baladiya').innerHTML = '<option value="">-- اختر الولاية أولاُّ --</option>';
-    document.querySelectorAll('.form-input, .form-select').forEach(function(el) {
-        el.classList.remove('valid', 'error');
-    });
+    document.querySelectorAll('.form-input,.form-select').forEach(function(el){ el.classList.remove('valid','error'); });
     updateUI();
 }
+window.closePopup = function() { document.getElementById('successPopup').classList.remove('active'); ga4('popup_closed', { popup_type: 'order_success' }); };
+document.getElementById('successPopup').addEventListener('click', function(e){ if(e.target===this) window.closePopup(); });
 
-function closePopup() { document.getElementById('successPopup').classList.remove('active'); }
-document.getElementById('successPopup').addEventListener('click', function(e) { if (e.target === this) closePopup(); });
-document.getElementById('phone').addEventListener('input', function() { this.value = this.value.replace(/[^0-9]/g, ''); });
-
-// ── Floating CTA ──
-const floatBtn   = document.getElementById('floatBtn');
-let floatBtnMode = 'scroll';
-function handleFloatClick(e) {
-    if (e) e.preventDefault();
-    if (floatBtnMode === 'scroll') scrollToSection('section2', e);
-    else scrollToForm(e);
+// ══════════════════════════════════════════════════
+//  SCROLL BEHAVIOR TRACKING
+// ══════════════════════════════════════════════════
+function getSectionAt(pct) {
+    if (pct < 25) return 'hero';
+    if (pct < 50) return 'problem_solution';
+    if (pct < 75) return 'benefits';
+    if (pct < 90) return 'offer';
+    return 'order_form';
 }
-function updateFloatBtn() {
-    const heroBottom = document.getElementById('heroSection').getBoundingClientRect().bottom;
-    if (heroBottom > 100) {
-        if (floatBtnMode !== 'scroll') {
-            floatBtnMode = 'scroll';
-            floatBtn.innerHTML = '👇 اسحب الى الأسفل لاكتشاف كل التفاصيل';
-            floatBtn.href = '#section2';
+function checkScrollMilestones() {
+    var pct = Math.round(((window.pageYOffset + window.innerHeight) / document.documentElement.scrollHeight) * 100);
+    [25,50,75,90,100].forEach(function(m) {
+        if (pct >= m && !scrollMilestonesFired[m]) {
+            scrollMilestonesFired[m] = true;
+            ga4('scroll', { percent_scrolled: m, page_section: getSectionAt(pct) });
+            if (m === 75 || m === 100) capiCustom('ScrollDepth' + m, { scroll_depth: m, time_on_page: Math.round((Date.now()-SESSION_START)/1000) });
         }
-    } else {
-        if (floatBtnMode !== 'order') {
-            floatBtnMode = 'order';
-            floatBtn.innerHTML = '🛒 اطلب الآن - الدفع عند الاستلام';
-            floatBtn.href = '#cod-form';
+    });
+}
+function onScroll() {
+    var st = window.pageYOffset || document.documentElement.scrollTop;
+    var dh = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+    var pct = dh > 0 ? Math.round((st/dh)*100) : 0;
+    document.getElementById('scrollProgress').style.width = pct + '%';
+    if (st > window.innerHeight * 0.5) document.getElementById('stickyHeader').classList.add('visible');
+    else document.getElementById('stickyHeader').classList.remove('visible');
+    checkScrollMilestones();
+    updateFloatBtn();
+}
+window.addEventListener('scroll', onScroll, { passive: true });
+
+// Section visibility
+var secObs = new IntersectionObserver(function(entries) {
+    entries.forEach(function(e) {
+        if (e.isIntersecting) {
+            ga4('section_view', { section_name: e.target.id, time_since_load: Math.round((Date.now()-SESSION_START)/1000) });
+            secObs.unobserve(e.target);
+        }
+    });
+}, { threshold: 0.5 });
+['section2','section3','section4','cod-form'].forEach(function(id){ var el = document.getElementById(id); if(el) secObs.observe(el); });
+
+// Time on page
+setInterval(function() {
+    if (document.visibilityState !== 'visible') return;
+    timeOnPage++;
+    [10,20,30,60,120,180].forEach(function(s) {
+        if (timeOnPage >= s && !topFired[s]) {
+            topFired[s] = true;
+            ga4('time_on_page_milestone', { seconds: s });
+            if (s === 30 || s === 60 || s === 120) capiCustom('TimeOnPage', { time_on_page_seconds: s });
+        }
+    });
+}, 1000);
+
+document.addEventListener('visibilitychange', function() {
+    ga4('page_visibility_change', { state: document.visibilityState, time_on_page: timeOnPage });
+});
+
+// Rage clicks
+var clickHistory = [];
+document.addEventListener('click', function(e) {
+    var now = Date.now();
+    clickHistory.push({ x: e.clientX, y: e.clientY, t: now });
+    clickHistory = clickHistory.filter(function(c){ return now - c.t < 2000; });
+    if (clickHistory.length >= 3) {
+        var xs = clickHistory.map(function(c){return c.x;}), ys = clickHistory.map(function(c){return c.y;});
+        if ((Math.max.apply(null,xs)-Math.min.apply(null,xs)) < 60 && (Math.max.apply(null,ys)-Math.min.apply(null,ys)) < 60) {
+            ga4('rage_click', { element: e.target.tagName + (e.target.id ? '#'+e.target.id : '') });
+            clickHistory = [];
         }
     }
+});
+
+// CTA tracking
+document.getElementById('floatBtn').addEventListener('click', function() {
+    ga4('cta_click', { cta_type: 'floating_button', cta_mode: floatBtnMode });
+    capiCustom('CTAClick', { cta_type: 'floating_button', cta_mode: floatBtnMode });
+});
+document.querySelector('.sticky-btn').addEventListener('click', function() {
+    ga4('cta_click', { cta_type: 'sticky_header_button' });
+});
+
+// Exit intent (desktop)
+document.addEventListener('mouseleave', function(e) {
+    if (e.clientY <= 0 && !exitIntentFired && !orderSubmitted) {
+        exitIntentFired = true;
+        ga4('exit_intent', { form_started: formInteractionFired, scroll_depth: Math.max.apply(null, Object.keys(scrollMilestonesFired).map(Number).filter(Boolean).concat([0])) });
+        capiCustom('ExitIntent', { form_started: formInteractionFired ? 1 : 0, time_on_page: timeOnPage });
+    }
+});
+
+// Before unload
+window.addEventListener('beforeunload', function() {
+    var maxScroll = Math.max.apply(null, Object.keys(scrollMilestonesFired).map(Number).filter(Boolean).concat([0]));
+    ga4('page_exit', { time_on_page: timeOnPage, scroll_depth: maxScroll, form_started: formInteractionFired, order_placed: orderSubmitted, session_duration: Math.round((Date.now()-SESSION_START)/1000) });
+    if (navigator.sendBeacon) {
+        navigator.sendBeacon('https://www.google-analytics.com/mp/collect?measurement_id=G-3NJP2JDXV6&api_secret=', JSON.stringify({ client_id: EXTERNAL_ID, events: [{ name: 'page_exit', params: { time_on_page: timeOnPage, scroll_depth: maxScroll, order_placed: orderSubmitted } }] }));
+    }
+});
+
+// ══════════════════════════════════════════════════
+//  REVEAL + LAZY IMAGES
+// ══════════════════════════════════════════════════
+var revObs = new IntersectionObserver(function(entries){ entries.forEach(function(e){ if(e.isIntersecting){e.target.classList.add('visible');revObs.unobserve(e.target);} }); },{ threshold:0.1,rootMargin:'0px 0px -50px 0px' });
+document.querySelectorAll('.reveal').forEach(function(el){ revObs.observe(el); });
+
+var imgObs = new IntersectionObserver(function(entries){ entries.forEach(function(e){ if(e.isIntersecting){ var img=e.target,src=img.dataset.src; if(src){img.src=src;img.onload=function(){img.classList.add('loaded');img.parentElement.classList.add('loaded');};img.removeAttribute('data-src');} imgObs.unobserve(img); } }); },{ rootMargin:'200px 0px',threshold:0 });
+document.querySelectorAll('.lazy-img').forEach(function(img){ imgObs.observe(img); });
+
+// Form section observe
+var formSectionObs = new IntersectionObserver(function(entries){ entries.forEach(function(e){ if(e.isIntersecting){ ga4('form_section_visible',{form_id:'orderForm'}); capiCustom('FormSectionVisible',{product:CFG.productId}); formSectionObs.disconnect(); } }); },{ threshold: 0.3 });
+var fEl = document.getElementById('cod-form'); if(fEl) formSectionObs.observe(fEl);
+
+// ══════════════════════════════════════════════════
+//  NAVIGATION
+// ══════════════════════════════════════════════════
+window.scrollToForm = function(e){ if(e) e.preventDefault(); document.getElementById('cod-form').scrollIntoView({behavior:'smooth',block:'start'}); };
+window.scrollToSection = function(id,e){ if(e) e.preventDefault(); document.getElementById(id).scrollIntoView({behavior:'smooth',block:'start'}); };
+var floatBtnMode = 'scroll';
+function updateFloatBtn() {
+    var hb = document.getElementById('heroSection').getBoundingClientRect().bottom;
+    if (hb > 100) { if(floatBtnMode!=='scroll'){ floatBtnMode='scroll'; document.getElementById('floatBtn').innerHTML='👇 اسحب الى الأسفل لاكتشاف كل التفاصيل'; document.getElementById('floatBtn').href='#section2'; } }
+    else { if(floatBtnMode!=='order'){ floatBtnMode='order'; document.getElementById('floatBtn').innerHTML='🛒 اطلب الآن - الدفع عند الاستلام'; document.getElementById('floatBtn').href='#cod-form'; } }
 }
-window.addEventListener('scroll', updateFloatBtn, { passive: true });
+window.handleFloatClick = function(e){ if(e) e.preventDefault(); if(floatBtnMode==='scroll') window.scrollToSection('section2',e); else window.scrollToForm(e); };
 
-// ══════════════════════════════════════════════════════════════════
-//  INIT — fire CAPI events on load
-// ══════════════════════════════════════════════════════════════════
+// ══════════════════════════════════════════════════
+//  DEVICE & SESSION USER PROPERTIES (GA4)
+// ══════════════════════════════════════════════════
+if (typeof gtag === 'function') {
+    gtag('set','user_properties',{
+        device_type:       /Mobi|Android/i.test(navigator.userAgent) ? 'mobile' : 'desktop',
+        screen_resolution: screen.width + 'x' + screen.height,
+        timezone:          Intl.DateTimeFormat().resolvedOptions().timeZone,
+        language:          navigator.language,
+        connection_type:   (navigator.connection && navigator.connection.effectiveType) || 'unknown',
+        traffic_source:    UTM.source || (document.referrer ? (function(){ try{return new URL(document.referrer).hostname;}catch(e){return '';} })() : 'direct'),
+        utm_campaign:      UTM.campaign
+    });
+    ga4('session_start_extended', {
+        screen_resolution: screen.width + 'x' + screen.height,
+        viewport:          window.innerWidth + 'x' + window.innerHeight,
+        timezone:          Intl.DateTimeFormat().resolvedOptions().timeZone,
+        language:          navigator.language,
+        connection_type:   (navigator.connection && navigator.connection.effectiveType) || 'unknown',
+        traffic_source:    UTM.source || 'direct',
+        utm_medium:        UTM.medium, utm_campaign: UTM.campaign, utm_content: UTM.content,
+        referrer_domain:   document.referrer ? (function(){ try{return new URL(document.referrer).hostname;}catch(e){return '';} })() : 'direct',
+        fbclid_present:    UTM.fbclid ? 'yes' : 'no',
+        landing_time:      new Date().toISOString()
+    });
+}
+
+// ══════════════════════════════════════════════════
+//  INIT
+// ══════════════════════════════════════════════════
 updateUI();
-
-// PageView via CAPI immediately
 capiPageView();
-
-// ViewContent after 2.5s (user has seen the product)
 setTimeout(capiViewContent, 2500);
-
 </script>
 </body>
 </html>
