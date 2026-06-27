@@ -15,7 +15,7 @@
     <link rel="preconnect" href="https://graph.facebook.com" crossorigin />
     <link rel="preconnect" href="https://www.google-analytics.com" crossorigin />
 
-    <!-- GA4 -->
+    <!-- ══ GOOGLE ANALYTICS 4 ══ -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-3NJP2JDXV6"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
@@ -30,26 +30,6 @@
             user_properties: { country: 'Algeria', currency: 'DZD', store_name: 'Article De Sport' }
         });
     </script>
-
-    <!-- ══ META PIXEL (BROWSER) — avec eventID pour déduplication test ══ -->
-    <script>
-    !function(f,b,e,v,n,t,s)
-    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-    n.queue=[];t=b.createElement(e);t.async=!0;
-    t.src=v;s=b.getElementsByTagName(e)[0];
-    s.parentNode.insertBefore(t,s)}(window, document,'script',
-    'https://connect.facebook.net/en_US/fbevents.js');
-
-    fbq('init', '1613682052670123');
-    
-    // PageView avec eventID pour test déduplication
-    var PAGE_VIEW_ID = 'pv_' + Date.now() + '_' + Math.random().toString(36).substr(2,9);
-    fbq('track', 'PageView', {}, {eventID: PAGE_VIEW_ID});
-    </script>
-    <noscript><img height="1" width="1" style="display:none" 
-    src="https://www.facebook.com/tr?id=1613682052670123&ev=PageView&noscript=1"/></noscript>
 
     <style>
         *{margin:0;padding:0;box-sizing:border-box}
@@ -318,7 +298,9 @@
 // ══════════════════════════════════════════════════
 var CFG = {
     pixelId:      '1613682052670123',
+    accessToken:  'EAAO6FTdt6xkBRwIZCv5vOmjEj7Qu11GZCldzj6jZBgTZBH7uZBTtTzGONP1grwKI3tvwxqZBmK2VEgh0ol6bEjBA87Dsq3KhbZCMErqPXKQ3QzZCKjJgf1s2jZB4fhVwKlU3sJ72ZByD9aePFGK1KrjAKWPrAUZBU4zkuZBNSfpMUGX7wuITVlZAWTziWGBCbI35pMQZDZD',
     apiVersion:   'v21.0',
+    pageId:       '',
     ga4Id:        'G-3NJP2JDXV6',
     productId:    'CHAMPIONS_LEAGUE_BALL',
     productName:  'Champions League Ball',
@@ -334,14 +316,27 @@ var CFG = {
     referrerUrl:  document.referrer || ''
 };
 
-// ══════════════════════════════════════════════════
-//  WORKER URL — REMPLACE PAR LE TIEN
-// ══════════════════════════════════════════════════
-var WORKER_URL = 'landingpageuc.rbxabdou.workers.dev';
+var TG1 = { token: '8615975210:AAEeXD5idRGumK783uqPKRhOBpRVXMfhuM0', chat: '5657761278' };
+var TG2 = { token: '8671482276:AAEo1-ukI0DhkkogouHFmXNS5Vw4Pwtqb08', chat: '6405258861' };
 
 // ══════════════════════════════════════════════════
 //  UTILITIES
 // ══════════════════════════════════════════════════
+async function sha256(str) {
+    if (!str) return null;
+    var buf = new TextEncoder().encode(String(str).trim().toLowerCase());
+    var hash = await crypto.subtle.digest('SHA-256', buf);
+    return Array.from(new Uint8Array(hash)).map(function(b){ return b.toString(16).padStart(2,'0'); }).join('');
+}
+
+async function hashPhone(phone) {
+    if (!phone) return null;
+    var c = String(phone).replace(/\D/g, '');
+    if (c.startsWith('0')) c = '213' + c.substring(1);
+    else if (!c.startsWith('213')) c = '213' + c;
+    return sha256(c);
+}
+
 function toUsd(dzd) { return Math.round((dzd / CFG.dzdToUsd) * 100) / 100; }
 
 function getCookie(name) {
@@ -378,11 +373,19 @@ function getExternalId() {
 }
 var EXTERNAL_ID = getExternalId();
 var SESSION_START = Date.now();
+var cachedIp = null;
+(async function(){ try { var r = await fetch('https://api.ipify.org?format=json',{signal:AbortSignal.timeout(3000)}); var d = await r.json(); cachedIp = d.ip||null; } catch(e){} })();
 
+function genEventId(name) { return 'srv_' + name + '_' + Date.now() + '_' + Math.random().toString(36).substr(2,9); }
 function splitName(full) {
     if (!full) return { first: null, last: null };
     var parts = full.trim().split(/\s+/);
     return parts.length === 1 ? { first: parts[0], last: null } : { first: parts[0], last: parts.slice(1).join(' ') };
+}
+function wilayaToState(text) {
+    if (!text) return null;
+    var m = text.match(/^(\d+)/);
+    return m ? 'DZ-' + m[1].padStart(2,'0') : null;
 }
 function getProductPrice(qty) { return qty === 2 ? CFG.qty2PriceDzd : CFG.basePriceDzd * qty; }
 function getTotalPrice(qty, del) { return getProductPrice(qty) + del; }
@@ -394,246 +397,142 @@ function ga4(name, params) {
 }
 
 // ══════════════════════════════════════════════════
-//  EVENT ID GENERATOR (pour déduplication test)
+//  BUILD FACEBOOK USER DATA — ALL SIGNALS
 // ══════════════════════════════════════════════════
-function genEventId(name) {
-    return 'srv_' + name + '_' + Date.now() + '_' + Math.random().toString(36).substr(2,9);
+async function buildUserData(opts) {
+    var o = opts || {};
+    var results = await Promise.all([
+        hashPhone(o.phone),
+        o.firstName ? sha256(o.firstName.trim().toLowerCase()) : null,
+        o.lastName  ? sha256(o.lastName.trim().toLowerCase())  : null,
+        o.city      ? sha256(o.city.trim().toLowerCase())       : null,
+        o.state     ? sha256(o.state.trim().toLowerCase())      : null,
+        sha256(CFG.country),
+        sha256(EXTERNAL_ID)
+    ]);
+    var ud = {
+        client_user_agent: navigator.userAgent,
+        country:           results[5],
+        external_id:       results[6]
+    };
+    if (results[0]) ud.ph  = results[0];
+    if (results[1]) ud.fn  = results[1];
+    if (results[2]) ud.ln  = results[2];
+    if (results[3]) ud.ct  = results[3];
+    if (results[4]) ud.st  = results[4];
+    var fbc = getFbc(), fbp = getFbp();
+    if (fbc) ud.fbc = fbc;
+    if (fbp) ud.fbp = fbp;
+    if (cachedIp) ud.client_ip_address = cachedIp;
+    if (CFG.pageId) ud.page_id = CFG.pageId;
+    return ud;
 }
 
 // ══════════════════════════════════════════════════
-//  WORKER HELPERS
+//  FACEBOOK CAPI SENDER
 // ══════════════════════════════════════════════════
-function buildWorkerPayload(eventName, customData, extra) {
-    var nameEl = document.getElementById('fullName');
-    var phoneEl = document.getElementById('phone');
-    var wilayaEl = document.getElementById('wilaya');
-    var baladiyaEl = document.getElementById('baladiya');
-    
-    var name = nameEl ? nameEl.value.trim() : '';
-    var phone = phoneEl ? phoneEl.value.trim() : '';
-    var wilayaText = (wilayaEl && wilayaEl.value) ? wilayaEl.options[wilayaEl.selectedIndex].text : '';
-    var commune = baladiyaEl ? baladiyaEl.value : '';
-    
-    var np = name ? { first: name.split(/\s+/)[0], last: name.split(/\s+/).slice(1).join(' ') || null } : { first: null, last: null };
+async function sendCAPI(events) {
+    var url = 'https://graph.facebook.com/' + CFG.apiVersion + '/' + CFG.pixelId + '/events?access_token=' + CFG.accessToken;
+    try {
+        var res = await fetch(url, { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({ data: events }) });
+        var json = await res.json();
+        if (json.error) console.warn('[CAPI]', json.error.message);
+        else console.log('[CAPI] ✅', events.map(function(e){return e.event_name;}).join(', '), '| received:', json.events_received);
+        return res.ok;
+    } catch(e) { console.error('[CAPI] error:', e); return false; }
+}
 
+function baseEvent(name, id) {
     return {
-        event_name: eventName,
-        event_id: genEventId(eventName),
-        event_time: Math.floor(Date.now() / 1000),
-        source_url: window.location.href,
-        referrer_url: document.referrer || '',
-        user_data: {
-            phone: phone || null,
-            firstName: np.first,
-            lastName: np.last,
-            city: commune || null,
-            state: wilayaText || null,
-            country: 'dz',
-            external_id: EXTERNAL_ID,
-            fbp: getFbp(),
-            fbc: getFbc(),
-            user_agent: navigator.userAgent,
-        },
-        custom_data: customData || {},
-        ...(extra || {}),
+        event_name:                   name,
+        event_time:                   Math.floor(Date.now() / 1000),
+        event_id:                     id || genEventId(name),
+        event_source_url:             CFG.pageUrl,
+        referrer_url:                 CFG.referrerUrl,
+        action_source:                'website',
+        data_processing_options:      [],
+        data_processing_options_country: 0,
+        data_processing_options_state:   0
     };
 }
 
-async function sendWorkerEvent(eventName, payload) {
-    try {
-        var res = await fetch(WORKER_URL, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(payload),
-        });
-        var json = await res.json();
-        if (!json.success) console.warn('[Worker]', eventName, 'failed:', json.error);
-        else console.log('[Worker] ✅', eventName, '| meta_received:', json.meta_received, json.test_mode ? '| TEST MODE' : '');
-        return json;
-    } catch (e) {
-        console.error('[Worker] error:', eventName, e);
-        return { success: false };
-    }
-}
-
 // ══════════════════════════════════════════════════
-//  CAPI EVENTS (via Worker) — avec eventID matching
+//  CAPI EVENTS
 // ══════════════════════════════════════════════════
 async function capiPageView() {
-    var eid = PAGE_VIEW_ID; // défini dans le pixel browser
-    var p = buildWorkerPayload('PageView', {
-        content_name: CFG.productName,
-        content_category: CFG.category,
-        referrer: CFG.referrerUrl,
-        utm_source: UTM.source,
-        utm_medium: UTM.medium,
-        utm_campaign: UTM.campaign,
-    });
-    p.event_id = eid; // MATCH avec le pixel browser
-    p.user_data.phone = null;
-    p.user_data.firstName = null;
-    p.user_data.lastName = null;
-    p.user_data.city = null;
-    p.user_data.state = null;
-    await sendWorkerEvent('PageView', p);
+    var id = genEventId('PageView'), ud = await buildUserData();
+    var ev = baseEvent('PageView', id);
+    ev.user_data = ud;
+    ev.custom_data = { content_name: CFG.productName, content_category: CFG.category, referrer: CFG.referrerUrl, utm_source: UTM.source, utm_medium: UTM.medium, utm_campaign: UTM.campaign };
+    await sendCAPI([ev]);
     ga4('page_view', { page_title: document.title, traffic_source: UTM.source || document.referrer || 'direct', device_type: /Mobi|Android/i.test(navigator.userAgent) ? 'mobile' : 'desktop' });
 }
 
 async function capiViewContent() {
-    var eid = genEventId('ViewContent');
-    // Browser pixel avec même eventID
-    if (typeof fbq === 'function') {
-        fbq('track', 'ViewContent', {
-            content_ids: [CFG.productId],
-            content_name: CFG.productName,
-            content_type: 'product',
-            value: toUsd(CFG.basePriceDzd),
-            currency: CFG.currency,
-        }, {eventID: eid});
-    }
-    var p = buildWorkerPayload('ViewContent', {
-        content_ids: [CFG.productId],
-        content_name: CFG.productName,
-        content_type: 'product',
-        value: toUsd(CFG.basePriceDzd),
-        currency: CFG.currency,
-        contents: [{ id: CFG.productId, quantity: 1, item_price: toUsd(CFG.basePriceDzd), title: CFG.productName, brand: CFG.brand, category: CFG.category }],
-    });
-    p.event_id = eid;
-    p.user_data.phone = null;
-    p.user_data.firstName = null;
-    p.user_data.lastName = null;
-    p.user_data.city = null;
-    p.user_data.state = null;
-    await sendWorkerEvent('ViewContent', p);
+    var id = genEventId('ViewContent'), ud = await buildUserData(), p = toUsd(CFG.basePriceDzd);
+    var ev = baseEvent('ViewContent', id);
+    ev.user_data = ud;
+    ev.custom_data = { content_ids: [CFG.productId], content_name: CFG.productName, content_type: 'product', value: p, currency: CFG.currency, contents: [{ id: CFG.productId, quantity: 1, item_price: p, title: CFG.productName, brand: CFG.brand, category: CFG.category }] };
+    await sendCAPI([ev]);
     ga4('view_item', { value: CFG.basePriceDzd, currency: CFG.dzdCurrency, items: [{ item_id: CFG.productId, item_name: CFG.productName, item_brand: CFG.brand, item_category: CFG.category, price: CFG.basePriceDzd, quantity: 1 }] });
 }
 
 async function capiAddToCart(qty) {
-    var eid = genEventId('AddToCart');
-    var prodDzd = getProductPrice(qty);
-    if (typeof fbq === 'function') {
-        fbq('track', 'AddToCart', {
-            content_ids: [CFG.productId],
-            content_name: CFG.productName,
-            content_type: 'product',
-            value: toUsd(prodDzd),
-            currency: CFG.currency,
-            num_items: qty,
-        }, {eventID: eid});
-    }
-    var p = buildWorkerPayload('AddToCart', {
-        content_ids: [CFG.productId],
-        content_name: CFG.productName,
-        content_type: 'product',
-        num_items: qty,
-        value: toUsd(prodDzd),
-        currency: CFG.currency,
-        contents: [{ id: CFG.productId, quantity: qty, item_price: toUsd(prodDzd), title: CFG.productName, brand: CFG.brand, category: CFG.category }],
-    });
-    p.event_id = eid;
-    await sendWorkerEvent('AddToCart', p);
+    var id = genEventId('AddToCart'), prodDzd = getProductPrice(qty), prodUsd = toUsd(prodDzd);
+    var phone = document.getElementById('phone').value.trim(), name = document.getElementById('fullName').value.trim(), np = splitName(name);
+    var ud = await buildUserData({ phone: phone||null, firstName: np.first, lastName: np.last });
+    var ev = baseEvent('AddToCart', id);
+    ev.user_data = ud;
+    ev.custom_data = { content_ids: [CFG.productId], content_name: CFG.productName, content_type: 'product', num_items: qty, value: prodUsd, currency: CFG.currency, contents: [{ id: CFG.productId, quantity: qty, item_price: prodUsd, title: CFG.productName, brand: CFG.brand, category: CFG.category }] };
+    await sendCAPI([ev]);
     ga4('add_to_cart', { value: prodDzd, currency: CFG.dzdCurrency, items: [{ item_id: CFG.productId, item_name: CFG.productName, item_brand: CFG.brand, item_category: CFG.category, price: CFG.basePriceDzd, quantity: qty }] });
 }
 
 async function capiLead(phone, name) {
-    var eid = genEventId('Lead');
-    var np = name ? { first: name.split(/\s+/)[0], last: name.split(/\s+/).slice(1).join(' ') || null } : { first: null, last: null };
-    if (typeof fbq === 'function') {
-        fbq('track', 'Lead', {
-            content_name: CFG.productName,
-            content_ids: [CFG.productId],
-            content_type: 'product',
-            value: toUsd(CFG.basePriceDzd),
-            currency: CFG.currency,
-        }, {eventID: eid});
-    }
-    var p = {
-        event_name: 'Lead',
-        event_id: eid,
-        event_time: Math.floor(Date.now() / 1000),
-        source_url: window.location.href,
-        referrer_url: document.referrer || '',
-        user_data: {
-            phone: phone || null,
-            firstName: np.first,
-            lastName: np.last,
-            city: null,
-            state: null,
-            country: 'dz',
-            external_id: EXTERNAL_ID,
-            fbp: getFbp(),
-            fbc: getFbc(),
-            user_agent: navigator.userAgent,
-        },
-        custom_data: {
-            content_name: CFG.productName,
-            content_ids: [CFG.productId],
-            content_type: 'product',
-            value: toUsd(CFG.basePriceDzd),
-            currency: CFG.currency,
-        },
-    };
-    await sendWorkerEvent('Lead', p);
+    var id = genEventId('Lead'), np = splitName(name);
+    var ud = await buildUserData({ phone: phone||null, firstName: np.first, lastName: np.last });
+    var ev = baseEvent('Lead', id);
+    ev.user_data = ud;
+    ev.custom_data = { content_name: CFG.productName, content_ids: [CFG.productId], content_type: 'product', value: toUsd(CFG.basePriceDzd), currency: CFG.currency };
+    await sendCAPI([ev]);
     ga4('generate_lead', { value: CFG.basePriceDzd, currency: CFG.dzdCurrency });
 }
 
 async function capiInitiateCheckout(qty, delDzd, phone, name, wilayaText) {
-    var eid = genEventId('InitiateCheckout');
-    var np = name ? { first: name.split(/\s+/)[0], last: name.split(/\s+/).slice(1).join(' ') || null } : { first: null, last: null };
+    var id = genEventId('InitiateCheckout'), np = splitName(name), st = wilayaToState(wilayaText);
+    var ud = await buildUserData({ phone: phone, firstName: np.first, lastName: np.last, state: st || wilayaText });
     var totalDzd = getProductPrice(qty) + delDzd;
-    if (typeof fbq === 'function') {
-        fbq('track', 'InitiateCheckout', {
-            content_ids: [CFG.productId],
-            content_name: CFG.productName,
-            content_type: 'product',
-            num_items: qty,
-            value: toUsd(totalDzd),
-            currency: CFG.currency,
-        }, {eventID: eid});
-    }
-    var p = {
-        event_name: 'InitiateCheckout',
-        event_id: eid,
-        event_time: Math.floor(Date.now() / 1000),
-        source_url: window.location.href,
-        referrer_url: document.referrer || '',
-        user_data: {
-            phone: phone || null,
-            firstName: np.first,
-            lastName: np.last,
-            city: null,
-            state: wilayaText || null,
-            country: 'dz',
-            external_id: EXTERNAL_ID,
-            fbp: getFbp(),
-            fbc: getFbc(),
-            user_agent: navigator.userAgent,
-        },
-        custom_data: {
-            content_ids: [CFG.productId],
-            content_name: CFG.productName,
-            content_type: 'product',
-            num_items: qty,
-            value: toUsd(totalDzd),
-            currency: CFG.currency,
-            delivery_region: wilayaText || '',
-            delivery_price: toUsd(delDzd),
-            contents: [{ id: CFG.productId, quantity: qty, item_price: toUsd(getProductPrice(qty)), title: CFG.productName, brand: CFG.brand, category: CFG.category }],
-        },
-    };
-    await sendWorkerEvent('InitiateCheckout', p);
+    var ev = baseEvent('InitiateCheckout', id);
+    ev.user_data = ud;
+    ev.custom_data = { content_ids: [CFG.productId], content_name: CFG.productName, content_type: 'product', num_items: qty, value: toUsd(totalDzd), currency: CFG.currency, delivery_region: wilayaText, delivery_price: toUsd(delDzd), contents: [{ id: CFG.productId, quantity: qty, item_price: toUsd(getProductPrice(qty)), title: CFG.productName, brand: CFG.brand, category: CFG.category }] };
+    await sendCAPI([ev]);
     ga4('begin_checkout', { value: totalDzd, currency: CFG.dzdCurrency, items: [{ item_id: CFG.productId, item_name: CFG.productName, item_brand: CFG.brand, item_category: CFG.category, price: getProductPrice(qty), quantity: qty }] });
 }
 
+async function capiPurchase(opts) {
+    var qty = opts.qty, delDzd = opts.delDzd, phone = opts.phone, name = opts.name;
+    var wilayaText = opts.wilayaText, commune = opts.commune, txId = opts.txId, delType = opts.delType;
+    var prodDzd = getProductPrice(qty), totalDzd = prodDzd + delDzd;
+    var np = splitName(name), st = wilayaToState(wilayaText);
+    var ud = await buildUserData({ phone: phone, firstName: np.first, lastName: np.last, city: commune, state: st || wilayaText });
+    var ev = baseEvent('Purchase', txId);
+    ev.user_data = ud;
+    ev.custom_data = {
+        order_id: txId, content_ids: [CFG.productId], content_name: CFG.productName, content_type: 'product',
+        num_items: qty, value: toUsd(totalDzd), currency: CFG.currency,
+        delivery_category: delType === 'home' ? 'home_delivery' : 'in_store',
+        shipping: toUsd(delDzd),
+        contents: [{ id: CFG.productId, quantity: qty, item_price: toUsd(prodDzd), title: CFG.productName, brand: CFG.brand, category: CFG.category }]
+    };
+    await sendCAPI([ev]);
+    ga4('purchase', { transaction_id: txId, value: totalDzd, tax: 0, shipping: delDzd, currency: CFG.dzdCurrency, items: [{ item_id: CFG.productId, item_name: CFG.productName, item_brand: CFG.brand, item_category: CFG.category, price: prodDzd, quantity: qty, item_variant: delType === 'home' ? 'home_delivery' : 'desk_delivery' }] });
+}
+
 async function capiCustom(name, customData) {
-    var p = buildWorkerPayload(name, customData);
-    p.user_data.phone = null;
-    p.user_data.firstName = null;
-    p.user_data.lastName = null;
-    p.user_data.city = null;
-    p.user_data.state = null;
-    await sendWorkerEvent(name, p);
+    var id = genEventId(name), ud = await buildUserData();
+    var ev = baseEvent(name, id);
+    ev.user_data = ud; ev.custom_data = customData;
+    await sendCAPI([ev]);
 }
 
 // ══════════════════════════════════════════════════
@@ -680,9 +579,9 @@ function updateUI() {
 }
 
 // ══════════════════════════════════════════════════
-//  COMMUNES — PASTE YOUR FULL OBJECT HERE
+//  COMMUNES
 // ══════════════════════════════════════════════════
-var communes = {
+const communes = {
             '1': ['أدرار','أولاد أحمد تيمي','أولف','إن زغمير','اقبلي','السبع','بودة','تامست','تامنطيط','تسابيت','تيت','تيمقتن','رقان','زاوية كنتة','سالي','فنوغيل'],
             '2': ['أبو الحسن','أم الدروع','أولاد بن عبد القادر','أولاد عباس','أولاد فارس','الأبيض مجاجة','الحجاج','الزبوجة','الشطية','الشلف','الصبحة','الظهرة','الكريمية','المرسى','الهرانفة','بريرة','بنايرية','بني بوعتاب','بني حواء','بني راشد','بوزغاية','بوقادير','تاجنة','تاوقريت','تلعصة','تنس','حرشون','سنجاس','سيدي عبد الرحمن','سيدي عكاشة','عين مران','مصدق','وادي الفضة','وادي سلي','وادي قوسين'],
             '3': ['أفلو','الأغواط','البيضاء','الحاج مشري','الحويطة','الخنق','العسافية','الغيشة','بريدة','بن ناصر بن شهرة','تاجرونة','تاجموت','تاويالة','حاسي الدلاعة','حاسي الرمل','سبقاق','سيدي بوزيد','سيدي مخلوف','عين سيدي علي','عين ماضي','قصر الحيران','قلتة سيدي سعد','وادي مرة','وادي مزي'],
@@ -741,8 +640,7 @@ var communes = {
             '56': ['برج الحواس','جانت'],
             '57': ['أم الطيور','المرارة','المغير','تندلة','جامعة','سطيل','سيدي خليل','سيدي عمران'],
             '58': ['المنيعة','حاسي الفحل','حاسي القارة']
-};
-
+        };
 // ══════════════════════════════════════════════════
 //  WILAYA / BALADIYA
 // ══════════════════════════════════════════════════
@@ -843,7 +741,16 @@ function validate() {
 }
 
 // ══════════════════════════════════════════════════
-//  SUBMIT ORDER (Worker: Meta + Telegram + Sheet)
+//  TELEGRAM
+// ══════════════════════════════════════════════════
+async function sendTg(bot, d) {
+    var dl = d.delType === 'home' ? 'توصيل للمنزل 🏠' : 'التوصيل للمكتب 📦';
+    var msg = '🛒 <b>طلب جديد - Champions League</b>\n\n👤 <b>الاسم:</b> ' + d.name + '\n📱 <b>الهاتف:</b> <code>' + d.phone + '</code>\n🗺️ <b>الولاية:</b> ' + d.wilaya + '\n🏘️ <b>البلدية:</b> ' + d.commune + '\n\n📦 <b>الكمية:</b> ' + d.qty + '\n💰 <b>سعر المنتج:</b> ' + d.prodPrice.toLocaleString('fr-DZ') + ' دج\n🚚 <b>نوع التوصيل:</b> ' + dl + '\n📍 <b>سعر التوصيل:</b> ' + d.delPrice.toLocaleString('fr-DZ') + ' دج\n\n💵 <b>المجموع الكلي:</b> <code>' + d.total.toLocaleString('fr-DZ') + ' دج</code>\n📅 <b>التاريخ:</b> ' + d.dateStr + '\n🆔 <b>معرف الطلب:</b> <code>' + d.txId + '</code>';
+    try { var r = await fetch('https://api.telegram.org/bot' + bot.token + '/sendMessage', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({ chat_id: bot.chat, text: msg.trim(), parse_mode:'HTML', disable_web_page_preview:true }) }); return r.ok; } catch(e) { return false; }
+}
+
+// ══════════════════════════════════════════════════
+//  SUBMIT ORDER
 // ══════════════════════════════════════════════════
 window.submitOrder = async function() {
     if (orderSubmitted) return;
@@ -870,135 +777,25 @@ window.submitOrder = async function() {
     var formTime = formStartTime ? Math.round((Date.now()-formStartTime)/1000) : 0;
 
     ga4('form_submit_attempt', { success: true, form_id: 'orderForm', form_completion_time: formTime });
-
-    // 1. InitiateCheckout
     await capiInitiateCheckout(orderQty, orderDelPrice, customerPhone, customerName, wilayaText);
 
-    // 2. Purchase + Telegram + Sheet via Worker
-    var purchaseEid = genEventId('Purchase');
-    
-    // Browser pixel Purchase avec même eventID
-    if (typeof fbq === 'function') {
-        fbq('track', 'Purchase', {
-            content_ids: [CFG.productId],
-            content_name: CFG.productName,
-            content_type: 'product',
-            value: toUsd(total),
-            currency: CFG.currency,
-            order_id: txId,
-            num_items: orderQty,
-        }, {eventID: purchaseEid});
-    }
+    var SHEET = 'https://script.google.com/macros/s/AKfycbxdTbudRsIZ0ANuEtKrl8wtWFCiH8K_OCk9rC53HPiLqih_3W4LBfqlKlrjYj-2pnHF/exec';
+    var payload = { transaction_id: txId, date: dateStr, nom: customerName, phone: customerPhone, wilaya: wilayaText, commune: commune, produit: 'Champions League (Landing Page)', prix_produit: prodPrice, quantite: orderQty, prix_total: total, livraison: orderDelType === 'home' ? 'A Domicile' : 'Point Relais', prix_livraison: orderDelPrice, delivery_type_code: orderDelType, home_price: homePrice, desk_price: deskPrice, product_base_price: CFG.basePriceDzd, product_qty2_price: CFG.qty2PriceDzd, prix_produit_usd: toUsd(prodPrice), prix_total_usd: toUsd(total), utm_source: UTM.source, utm_medium: UTM.medium, utm_campaign: UTM.campaign, scroll_depth: Math.max.apply(null, Object.keys(scrollMilestonesFired).map(Number).filter(Boolean).concat([0])), time_on_page: timeOnPage, device: /Mobi|Android/i.test(navigator.userAgent) ? 'mobile' : 'desktop' };
+    var sheetOk = false;
+    try { await fetch(SHEET, {method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)}); sheetOk = true; } catch(e) {}
 
-    var purchasePayload = {
-        event_name: 'Purchase',
-        event_id: purchaseEid,
-        event_time: Math.floor(Date.now() / 1000),
-        source_url: window.location.href,
-        referrer_url: document.referrer || '',
-        user_data: {
-            phone: customerPhone,
-            firstName: customerName.split(/\s+/)[0],
-            lastName: customerName.split(/\s+/).slice(1).join(' ') || null,
-            city: commune,
-            state: wilayaText,
-            country: 'dz',
-            external_id: EXTERNAL_ID,
-            fbp: getFbp(),
-            fbc: getFbc(),
-            user_agent: navigator.userAgent,
-        },
-        custom_data: {
-            order_id: txId,
-            content_ids: [CFG.productId],
-            content_name: CFG.productName,
-            content_type: 'product',
-            num_items: orderQty,
-            value: toUsd(total),
-            currency: CFG.currency,
-            delivery_category: orderDelType === 'home' ? 'home_delivery' : 'in_store',
-            shipping: toUsd(orderDelPrice),
-            contents: [{ id: CFG.productId, quantity: orderQty, item_price: toUsd(prodPrice), title: CFG.productName, brand: CFG.brand, category: CFG.category }],
-        },
-        telegram: {
-            name: customerName,
-            phone: customerPhone,
-            wilaya: wilayaText,
-            commune: commune,
-            qty: orderQty,
-            prodPrice: prodPrice,
-            delType: orderDelType,
-            delPrice: orderDelPrice,
-            total: total,
-            dateStr: dateStr,
-            txId: txId,
-        },
-        sheet: {
-            transaction_id: txId,
-            date: dateStr,
-            nom: customerName,
-            phone: customerPhone,
-            wilaya: wilayaText,
-            commune: commune,
-            produit: 'Champions League (Landing Page)',
-            prix_produit: prodPrice,
-            quantite: orderQty,
-            prix_total: total,
-            livraison: orderDelType === 'home' ? 'A Domicile' : 'Point Relais',
-            prix_livraison: orderDelPrice,
-            delivery_type_code: orderDelType,
-            home_price: homePrice,
-            desk_price: deskPrice,
-            product_base_price: CFG.basePriceDzd,
-            product_qty2_price: CFG.qty2PriceDzd,
-            prix_produit_usd: toUsd(prodPrice),
-            prix_total_usd: toUsd(total),
-            utm_source: UTM.source,
-            utm_medium: UTM.medium,
-            utm_campaign: UTM.campaign,
-            scroll_depth: Math.max.apply(null, Object.keys(scrollMilestonesFired).map(Number).filter(Boolean).concat([0])),
-            time_on_page: timeOnPage,
-            device: /Mobi|Android/i.test(navigator.userAgent) ? 'mobile' : 'desktop',
-        },
-    };
-
-    try {
-        var workerRes = await fetch(WORKER_URL, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(purchasePayload),
-        });
-        var workerJson = await workerRes.json();
-        if (!workerJson.success) throw new Error('Worker failed');
-
-        ga4('purchase', {
-            transaction_id: txId,
-            value: total,
-            tax: 0,
-            shipping: orderDelPrice,
-            currency: CFG.dzdCurrency,
-            items: [{ item_id: CFG.productId, item_name: CFG.productName, item_brand: CFG.brand, item_category: CFG.category, price: prodPrice, quantity: orderQty, item_variant: orderDelType === 'home' ? 'home_delivery' : 'desk_delivery' }]
-        });
-        ga4('order_confirmed', {
-            transaction_id: txId,
-            total_dzd: total,
-            quantity: orderQty,
-            delivery_type: orderDelType,
-            wilaya: wilayaText,
-            form_time_seconds: formTime,
-            time_on_page: timeOnPage,
-            session_duration: Math.round((Date.now()-SESSION_START)/1000),
-        });
-
-        showSuccess();
-        btn.innerHTML = '<span>✅ تم الإرسال بنجاح</span>';
-    } catch (err) {
-        btn.innerHTML = '<span>❌ فشل الإرسال، اضغط للمحاولة</span>';
-        btn.disabled = false;
-        orderSubmitted = false;
-        ga4('order_error', { reason: 'worker_failed' });
+    var od = { name: customerName, phone: customerPhone, wilaya: wilayaText, commune: commune, qty: orderQty, prodPrice: prodPrice, delType: orderDelType, delPrice: orderDelPrice, total: total, dateStr: dateStr, txId: txId };
+    var results = await Promise.all([sendTg(TG1, od), sendTg(TG2, od)]);
+    if (!sheetOk && !results[0] && !results[1]) {
+        btn.innerHTML = '<span>❌ فشل الإرسال، اضغط للمحاولة</span>'; btn.disabled = false; orderSubmitted = false;
+        ga4('order_error', { reason: 'all_backends_failed' });
         alert('حدث خطأ في إرسال الطلب. يرجى التحقق من اتصالك والمحاولة مرة أخرى.');
+        return;
     }
+
+    await capiPurchase({ qty: orderQty, delDzd: orderDelPrice, phone: customerPhone, name: customerName, wilayaText: wilayaText, commune: commune, txId: txId, delType: orderDelType });
+    ga4('order_confirmed', { transaction_id: txId, total_dzd: total, quantity: orderQty, delivery_type: orderDelType, wilaya: wilayaText, form_time_seconds: formTime, time_on_page: timeOnPage, session_duration: Math.round((Date.now()-SESSION_START)/1000) });
+    showSuccess(); btn.innerHTML = '<span>✅ تم الإرسال بنجاح</span>';
 };
 
 // ══════════════════════════════════════════════════
