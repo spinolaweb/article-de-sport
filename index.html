@@ -694,6 +694,7 @@ async function buildUserData(opts){
 //  CAPI — ALL VALUES SENT AS 3200 DZD (Algerian Dinar)
 // ════════════════════════════════════════
 async function sendCAPI(events){
+  var TEST_EVENT_CODE = 'TEST98720'; // ← CHANGE THIS to your actual test code
   var url='https://graph.facebook.com/'+CFG.apiVersion+'/'+CFG.pixelId+'/events?access_token='+CFG.accessToken;
   try{var res=await fetch(url,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({data:events})});var json=await res.json();if(json.error) console.warn('[CAPI]',json.error.message);else console.log('[CAPI] ✅',events.map(function(e){return e.event_name;}).join(', '),'| received:',json.events_received);return res.ok;}catch(e){console.error('[CAPI] error:',e);return false;}
 }
