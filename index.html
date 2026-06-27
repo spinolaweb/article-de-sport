@@ -1729,7 +1729,7 @@ async function submitOrder() {
     const dateStr        = now.toLocaleDateString('fr-DZ') + ' ' + now.toLocaleTimeString('fr-DZ');
     const customerName   = document.getElementById('fullName').value.trim();
     const customerPhone  = document.getElementById('phone').value.trim();
-    const transactionId  = 'ORD-' + Date.now() + '-' + Math.random().toString(36).substr(2, 9);
+    const transactionId = 'SERVER-' + Date.now() + '-' + Math.random().toString(36).substr(2, 9);
 
     // Snapshot state before any async reset
     const orderQty           = currentQty;
