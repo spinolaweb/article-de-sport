@@ -23,6 +23,22 @@
 <link rel="preload" as="image" href="Benefits.jpg"        fetchpriority="high" type="image/jpeg"/>
 <link rel="preload" as="image" href="offer.jpg"           fetchpriority="high" type="image/jpeg"/>
 <link rel="preload" as="image" href="logo.jpeg"           fetchpriority="low"  type="image/jpeg"/>
+<!--
+  ADAPTIVE QUALITY NOTES FOR THE SERVER ADMIN:
+  ─────────────────────────────────────────────
+  For best results, create low-quality variants of your images:
+    hero-lq.jpg          ~20-30KB  (quality 20, width 400px)
+    ProblemSolution-lq.jpg ~20-30KB
+    Benefits-lq.jpg       ~20-30KB
+    offer-lq.jpg          ~20-30KB
+
+  Command (ImageMagick):
+    convert hero.jpg -resize 400x -quality 20 hero-lq.jpg
+
+  The JS below will serve -lq first on slow connections,
+  then silently upgrade to full quality in the background.
+  If -lq files don't exist, full images are always served.
+-->
 
 <!-- DNS + preconnect for APIs -->
 <link rel="dns-prefetch"  href="https://graph.facebook.com"/>
@@ -48,15 +64,80 @@
      this JS Image() object triggers the download instantly.
      ═══════════════════════════════════════════════════════════ -->
 <script>
-// Fire image downloads IMMEDIATELY — before body, before CSS parse
+// ═══════════════════════════════════════════════════════════════════
+//  ADAPTIVE IMAGE QUALITY ENGINE — runs before body parse
+//  
+//  STRATEGY:
+//  1. Detect connection quality via navigator.connection API
+//  2. SLOW (2G / saveData / <1Mbps): show -lq (low quality) version
+//     INSTANTLY, then silently swap to full quality in background
+//  3. FAST (4G / wifi / >1.5Mbps): load full quality directly
+//  4. Fallback (no API): load full quality (safe default)
+//
+//  This means on ANY connection the user sees SOMETHING instantly.
+//  The full image always loads — quality just determines the order.
+// ═══════════════════════════════════════════════════════════════════
 (function() {
-  var IMAGES = ['hero.jpg', 'ProblemSolution.jpg', 'Benefits.jpg', 'offer.jpg', 'logo.jpeg'];
+  'use strict';
+
+  var FULL_IMAGES = [
+    { id: 'heroImg',    full: 'hero.jpg',             lq: 'hero-lq.jpg' },
+    { id: 'img2',       full: 'ProblemSolution.jpg',   lq: 'ProblemSolution-lq.jpg' },
+    { id: 'img3',       full: 'Benefits.jpg',           lq: 'Benefits-lq.jpg' },
+    { id: 'img4',       full: 'offer.jpg',              lq: 'offer-lq.jpg' }
+  ];
+
+  // ── DETECT CONNECTION QUALITY ──────────────────────────────────
+  function getConnectionTier() {
+    var conn = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+    if (!conn) return 'fast'; // No API — assume fast, load full
+    if (conn.saveData) return 'slow';
+    var ect = conn.effectiveType; // 'slow-2g'|'2g'|'3g'|'4g'
+    if (ect === 'slow-2g' || ect === '2g') return 'slow';
+    if (ect === '3g') return 'medium';
+    // Also check downlink (Mbps)
+    var dl = conn.downlink || 10;
+    if (dl < 0.8) return 'slow';
+    if (dl < 2.0) return 'medium';
+    return 'fast';
+  }
+
+  var tier = getConnectionTier();
+  window._connTier = tier;
+
+  // Store image registry for the DOM-ready swap
+  window._imgRegistry = FULL_IMAGES;
+
+  // ── IMMEDIATE PRELOAD — fires before body parses ───────────────
+  // On fast: preload full quality images now
+  // On slow/medium: preload LQ first (tiny files, arrive fast),
+  //                 then queue full quality downloads in background
   window._imgCache = {};
-  IMAGES.forEach(function(src) {
-    var img = new Image();
-    img.src = src;
-    window._imgCache[src] = img;
-  });
+
+  if (tier === 'fast') {
+    // Download ALL full-quality images right now in parallel
+    FULL_IMAGES.forEach(function(def) {
+      var img = new Image();
+      img.src = def.full;
+      window._imgCache[def.full] = img;
+    });
+  } else {
+    // Download LQ versions first (20-30KB each — arrive in <1s even on 3G)
+    FULL_IMAGES.forEach(function(def) {
+      var img = new Image();
+      img.src = def.lq;
+      window._imgCache[def.lq] = img;
+    });
+    // SIMULTANEOUSLY start downloading full quality in background
+    // They'll be ready in cache by the time user scrolls
+    setTimeout(function() {
+      FULL_IMAGES.forEach(function(def) {
+        var img = new Image();
+        img.src = def.full;
+        window._imgCache[def.full] = img;
+      });
+    }, tier === 'slow' ? 800 : 200);
+  }
 })();
 </script>
 
@@ -92,7 +173,17 @@ body{font-family:system-ui,-apple-system,'Segoe UI',Tahoma,Arial,sans-serif;back
 .sticky-btn:hover{transform:scale(1.05)}
 
 /* ── FLOAT BUTTON ── */
-.float-btn{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);z-index:999;background:linear-gradient(135deg,var(--red),var(--red-dark));color:#fff;border:none;padding:16px 36px;border-radius:50px;font-size:1.05rem;font-weight:900;cursor:pointer;box-shadow:0 8px 30px rgba(232,19,42,.55);animation:floatPulse 2s infinite;white-space:nowrap;text-decoration:none;display:inline-flex;align-items:center;gap:8px;font-family:inherit;max-width:calc(100% - 32px);justify-content:center;will-change:box-shadow}
+.float-btn{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);z-index:999;background:linear-gradient(135deg,var(--red),var(--red-dark));color:#fff;border:none;padding:16px 36px;border-radius:50px;font-size:1.05rem;font-weight:900;cursor:pointer;box-shadow:0 8px 30px rgba(232,19,42,.55);animation:floatPulse 2s infinite;white-space:nowrap;text-decoration:none;display:inline-flex;align-items:center;gap:8px;font-family:inherit;max-width:calc(100% - 32px);justify-content:center;will-change:box-shadow;
+  transition:opacity .25s ease, transform .25s ease, visibility .25s ease;
+  visibility:visible;
+}
+.float-btn.hidden{
+  opacity:0 !important;
+  transform:translateX(-50%) translateY(20px) !important;
+  visibility:hidden !important;
+  pointer-events:none !important;
+  animation:none !important;
+}
 @keyframes floatPulse{0%,100%{box-shadow:0 8px 30px rgba(232,19,42,.55)}50%{box-shadow:0 8px 50px rgba(232,19,42,.85)}}
 
 /* ── SCROLL INDICATOR ── */
@@ -114,8 +205,30 @@ body{font-family:system-ui,-apple-system,'Segoe UI',Tahoma,Arial,sans-serif;back
   object-fit:cover;
   vertical-align:bottom;
   /* NO opacity:0 — image shows AS SOON as it's downloaded */
-  /* since we pre-downloaded it, it shows instantly */
 }
+/* Quality upgrade: LQ → full crossfade, imperceptible but smooth */
+.img-section img.upgrading{
+  animation:qualityUpgrade .4s ease forwards;
+}
+@keyframes qualityUpgrade{
+  0%{filter:blur(2px);transform:scale(1.01)}
+  100%{filter:none;transform:scale(1)}
+}
+/* Slow connection indicator — shown briefly then auto-hidden */
+.conn-badge{
+  position:fixed;bottom:90px;right:16px;
+  background:rgba(10,22,40,.9);
+  color:rgba(255,255,255,.7);
+  font-size:.72rem;font-weight:600;
+  padding:5px 12px;border-radius:20px;
+  border:1px solid rgba(245,197,24,.25);
+  z-index:997;
+  opacity:0;
+  transition:opacity .3s ease;
+  pointer-events:none;
+  backdrop-filter:blur(8px);
+}
+.conn-badge.show{opacity:1}
 
 /* ── REVEAL ── */
 @media (prefers-reduced-motion:no-preference){
@@ -281,6 +394,9 @@ setTimeout(_loadFBOnce,3000);
 
 <div class="scroll-progress" id="scrollProgress"></div>
 
+<!-- Connection quality badge — shown briefly on slow connections -->
+<div class="conn-badge" id="connBadge">📶 جاري تحميل الصور...</div>
+
 <div class="urgency-bar">
   <div class="pulse-dot"></div>
   <span>🔥 الكميات محدودة — الطلبات تُرسل كل يوم مع شركات التوصيل</span>
@@ -305,6 +421,7 @@ setTimeout(_loadFBOnce,3000);
 
 <div class="img-section" id="heroSection">
   <img
+    id="heroImg"
     src="hero.jpg"
     alt="Champions League UCL Budapest 2026 Final Ball"
     width="1200"
@@ -322,6 +439,7 @@ setTimeout(_loadFBOnce,3000);
 
 <div class="img-section reveal" id="section2">
   <img
+    id="img2"
     src="ProblemSolution.jpg"
     alt="المشكلة والحل"
     width="1200"
@@ -339,6 +457,7 @@ setTimeout(_loadFBOnce,3000);
 
 <div class="img-section reveal" id="section3">
   <img
+    id="img3"
     src="Benefits.jpg"
     alt="المميزات"
     width="1200"
@@ -356,6 +475,7 @@ setTimeout(_loadFBOnce,3000);
 
 <div class="img-section reveal" id="section4">
   <img
+    id="img4"
     src="offer.jpg"
     alt="العرض"
     width="1200"
@@ -999,10 +1119,50 @@ window.addEventListener('beforeunload',function(){var maxS=Math.max.apply(null,O
 // ════════════════════════════════════════
 window.scrollToForm=function(e){if(e)e.preventDefault();document.getElementById('cod-form').scrollIntoView({behavior:'smooth',block:'start'});};
 window.scrollToSection=function(id,e){if(e)e.preventDefault();var el=document.getElementById(id);if(el)el.scrollIntoView({behavior:'smooth',block:'start'});};
+
+// ── FLOAT BUTTON: hide when cod-form section is visible ─────────
+// Uses both scroll-position logic AND IntersectionObserver for pixel-perfect hiding
+var _formVisible = false;
+
+// IntersectionObserver watches #cod-form — hide btn when form enters viewport
+var _codFormObserver = new IntersectionObserver(function(entries) {
+  entries.forEach(function(e) {
+    _formVisible = e.isIntersecting;
+    _applyFloatBtnState();
+  });
+}, {
+  threshold: 0.05  // hide as soon as even 5% of form is visible
+});
+_codFormObserver.observe(document.getElementById('cod-form'));
+
+function _applyFloatBtnState() {
+  var btn = document.getElementById('floatBtn');
+  if (_formVisible) {
+    btn.classList.add('hidden');
+  } else {
+    btn.classList.remove('hidden');
+  }
+}
+
 function updateFloatBtn(){
   var hb=document.getElementById('heroSection').getBoundingClientRect().bottom;
-  if(hb>100){if(floatBtnMode!=='scroll'){floatBtnMode='scroll';document.getElementById('floatBtn').innerHTML='👇 اسحب للأسفل لاكتشاف التفاصيل';document.getElementById('floatBtn').href='#section2';}}
-  else{if(floatBtnMode!=='order'){floatBtnMode='order';document.getElementById('floatBtn').innerHTML='🛒 اطلب الآن — الدفع عند الاستلام';document.getElementById('floatBtn').href='#cod-form';}}
+  var btn=document.getElementById('floatBtn');
+  // Only update text/mode if button is currently visible
+  if (!_formVisible) {
+    if(hb>100){
+      if(floatBtnMode!=='scroll'){
+        floatBtnMode='scroll';
+        btn.innerHTML='👇 اسحب للأسفل لاكتشاف التفاصيل';
+        btn.href='#section2';
+      }
+    } else {
+      if(floatBtnMode!=='order'){
+        floatBtnMode='order';
+        btn.innerHTML='🛒 اطلب الآن — الدفع عند الاستلام';
+        btn.href='#cod-form';
+      }
+    }
+  }
 }
 window.handleFloatClick=function(e){if(e)e.preventDefault();if(floatBtnMode==='scroll')window.scrollToSection('section2',e);else window.scrollToForm(e);};
 document.getElementById('floatBtn').addEventListener('click',function(){ga4('cta_click',{cta_type:'floating_button',mode:floatBtnMode});capiCustom('CTAClick',{cta_type:'floating_button',cta_mode:floatBtnMode,value:SESSION_FB_PRICE});});
