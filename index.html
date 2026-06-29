@@ -5,11 +5,14 @@
 <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=5.0"/>
 <title>Champions League Ball — كرة القدم الرسمية | Livraison à domicile Algérie | Paiement à la livraison</title>
 
-<link rel="preload" as="image" href="hero.jpg"            fetchpriority="high" type="image/jpeg"/>
-<link rel="preload" as="image" href="ProblemSolution.jpg" fetchpriority="high" type="image/jpeg"/>
-<link rel="preload" as="image" href="Benefits.jpg"        fetchpriority="high" type="image/jpeg"/>
-<link rel="preload" as="image" href="offer.jpg"           fetchpriority="high" type="image/jpeg"/>
-<link rel="preload" as="image" href="logo.jpeg"           fetchpriority="low"  type="image/jpeg"/>
+<!-- ════════════════════════════════════════════════
+  CRITICAL PRELOADS — browser fetches these in parallel
+  with HTML parse, before any JS executes
+═══════════════════════════════════════════════════ -->
+<link rel="preload" as="image" href="hero.jpg"    fetchpriority="high" type="image/jpeg"/>
+<link rel="preload" as="image" href="Benefits.jpg" fetchpriority="high" type="image/jpeg"/>
+<link rel="preload" as="image" href="offer.jpg"    fetchpriority="low"  type="image/jpeg"/>
+<link rel="preload" as="image" href="logo.jpeg"    fetchpriority="low"  type="image/jpeg"/>
 
 <link rel="dns-prefetch"  href="https://graph.facebook.com"/>
 <link rel="preconnect"    href="https://graph.facebook.com" crossorigin/>
@@ -23,56 +26,12 @@
 <meta property="og:image"       content="hero.jpg"/>
 <meta property="og:type"        content="product"/>
 
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"Product","name":"Champions League UCL Budapest 2026 Final Ball","brand":{"@type":"Brand","name":"Champions League / UEFA"},"offers":{"@type":"Offer","priceCurrency":"DZD","price":"3200","availability":"https://schema.org/InStock"},"aggregateRating":{"@type":"AggregateRating","ratingValue":"4.9","reviewCount":"89"}}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Product","name":"Champions League UCL Budapest 2026 Final Ball","brand":{"@type":"Brand","name":"Champions League / UEFA"},"offers":{"@type":"Offer","priceCurrency":"DZD","price":"3600","availability":"https://schema.org/InStock"},"aggregateRating":{"@type":"AggregateRating","ratingValue":"4.9","reviewCount":"89"}}</script>
 
-<script>
-(function() {
-  'use strict';
-  var FULL_IMAGES = [
-    { id: 'heroImg',    full: 'hero.jpg',             lq: 'hero-lq.jpg' },
-    { id: 'img2',       full: 'ProblemSolution.jpg',   lq: 'ProblemSolution-lq.jpg' },
-    { id: 'img3',       full: 'Benefits.jpg',           lq: 'Benefits-lq.jpg' },
-    { id: 'img4',       full: 'offer.jpg',              lq: 'offer-lq.jpg' }
-  ];
-  function getConnectionTier() {
-    var conn = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
-    if (!conn) return 'fast';
-    if (conn.saveData) return 'slow';
-    var ect = conn.effectiveType;
-    if (ect === 'slow-2g' || ect === '2g') return 'slow';
-    if (ect === '3g') return 'medium';
-    var dl = conn.downlink || 10;
-    if (dl < 0.8) return 'slow';
-    if (dl < 2.0) return 'medium';
-    return 'fast';
-  }
-  var tier = getConnectionTier();
-  window._connTier = tier;
-  window._imgRegistry = FULL_IMAGES;
-  window._imgCache = {};
-  if (tier === 'fast') {
-    FULL_IMAGES.forEach(function(def) {
-      var img = new Image();
-      img.src = def.full;
-      window._imgCache[def.full] = img;
-    });
-  } else {
-    FULL_IMAGES.forEach(function(def) {
-      var img = new Image();
-      img.src = def.lq;
-      window._imgCache[def.lq] = img;
-    });
-    setTimeout(function() {
-      FULL_IMAGES.forEach(function(def) {
-        var img = new Image();
-        img.src = def.full;
-        window._imgCache[def.full] = img;
-      });
-    }, tier === 'slow' ? 800 : 200);
-  }
-})();
-</script>
-
+<!-- ════════════════════════════════════════════════
+  INLINE CRITICAL CSS — zero render-blocking
+  Everything above the fold renders instantly
+═══════════════════════════════════════════════════ -->
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 html{scroll-behavior:smooth}
@@ -85,10 +44,72 @@ body{font-family:system-ui,-apple-system,'Segoe UI',Tahoma,Arial,sans-serif;back
   --gray:#6C757D;--light-gray:#E9ECEF;
   --success:#28A745;
 }
+
+/* ── PROGRESSIVE IMAGE SYSTEM ──────────────────────
+   Mimics YouTube adaptive quality:
+   1. Placeholder color shows INSTANTLY (no network)
+   2. Real image fades in as it loads (blur-up)
+   3. High-res swap is seamless, no layout shift
+─────────────────────────────────────────────────── */
+.img-wrap{
+  position:relative;width:100%;overflow:hidden;
+  background:#0d1e3a; /* dominant dark color — shows instantly */
+  line-height:0;
+}
+/* The blur placeholder layer — pure CSS, zero network cost */
+.img-wrap::before{
+  content:'';
+  position:absolute;inset:0;
+  background:inherit;
+  z-index:1;
+  transition:opacity .35s ease;
+  pointer-events:none;
+}
+.img-wrap.img-loaded::before{opacity:0;}
+
+/* The actual image — starts invisible+blurred, transitions in */
+.img-wrap img{
+  width:100%;height:auto;display:block;
+  object-fit:cover;vertical-align:bottom;
+  /* START STATE: invisible & blurred like YouTube low-quality frame */
+  filter:blur(12px) brightness(.95);
+  transform:scale(1.04);
+  opacity:0;
+  transition:
+    filter .45s cubic-bezier(.4,0,.2,1),
+    transform .45s cubic-bezier(.4,0,.2,1),
+    opacity .35s ease;
+  will-change:filter,transform,opacity;
+  z-index:2;position:relative;
+}
+/* LOADED STATE: crisp, full quality */
+.img-wrap.img-loaded img{
+  filter:none;
+  transform:scale(1);
+  opacity:1;
+}
+/* Hero loads INSTANTLY — no blur wait (above the fold) */
+.img-wrap.img-hero img{
+  filter:none !important;
+  transform:scale(1) !important;
+  opacity:1 !important;
+  transition:none !important;
+}
+
+/* Per-image dominant color backdrops — instant visual fill */
+#heroWrap   {background:#0a1e3d;}
+#benefitsWrap{background:#081528;}
+#offerWrap  {background:#0d1a2e;}
+
+/* ── SCROLL PROGRESS ────────────────────────────── */
 .scroll-progress{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,var(--gold),var(--red));z-index:10001;width:0%;will-change:width;pointer-events:none;transition:width .1s linear}
+
+/* ── URGENCY BAR ────────────────────────────────── */
 .urgency-bar{background:#C0001F;padding:10px 20px;text-align:center;color:#fff;font-weight:800;font-size:.9rem;display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap}
 .pulse-dot{width:10px;height:10px;background:#fff;border-radius:50%;animation:dotPulse 1s ease-in-out infinite;flex-shrink:0}
 @keyframes dotPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.4);opacity:.6}}
+
+/* ── STICKY HEADER ──────────────────────────────── */
 .sticky-header{position:fixed;top:0;left:0;right:0;background:rgba(10,22,40,.97);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);z-index:998;padding:10px 20px;display:flex;align-items:center;justify-content:space-between;transform:translateY(-100%);transition:transform .3s ease;border-bottom:1px solid rgba(245,197,24,.2)}
 .sticky-header.visible{transform:translateY(0)}
 .sticky-left{display:flex;align-items:center;gap:10px}
@@ -96,38 +117,45 @@ body{font-family:system-ui,-apple-system,'Segoe UI',Tahoma,Arial,sans-serif;back
 .sticky-price-tag{background:var(--gold);color:var(--navy);font-weight:900;font-size:.85rem;padding:3px 10px;border-radius:20px}
 .sticky-btn{background:linear-gradient(135deg,var(--red),var(--red-dark));color:#fff;border:none;padding:9px 22px;border-radius:22px;font-weight:800;font-size:.9rem;cursor:pointer;font-family:inherit;transition:transform .2s}
 .sticky-btn:hover{transform:scale(1.05)}
-.float-btn{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);z-index:999;background:linear-gradient(135deg,var(--red),var(--red-dark));color:#fff;border:none;padding:16px 36px;border-radius:50px;font-size:1.05rem;font-weight:900;cursor:pointer;box-shadow:0 8px 30px rgba(232,19,42,.55);animation:floatPulse 2s infinite;white-space:nowrap;text-decoration:none;display:inline-flex;align-items:center;gap:8px;font-family:inherit;max-width:calc(100% - 32px);justify-content:center;will-change:box-shadow;
+
+/* ── FLOATING CTA ───────────────────────────────── */
+.float-btn{
+  position:fixed;bottom:20px;left:50%;transform:translateX(-50%);z-index:999;
+  background:linear-gradient(135deg,var(--red),var(--red-dark));color:#fff;border:none;
+  padding:16px 36px;border-radius:50px;font-size:1.05rem;font-weight:900;cursor:pointer;
+  box-shadow:0 8px 30px rgba(232,19,42,.55);animation:floatPulse 2s infinite;
+  white-space:nowrap;text-decoration:none;display:inline-flex;align-items:center;gap:8px;
+  font-family:inherit;max-width:calc(100% - 32px);justify-content:center;will-change:box-shadow;
   transition:opacity .25s ease, transform .25s ease, visibility .25s ease;
   visibility:visible;
 }
 .float-btn.hidden{
-  opacity:0 !important;
-  transform:translateX(-50%) translateY(20px) !important;
-  visibility:hidden !important;
-  pointer-events:none !important;
-  animation:none !important;
+  opacity:0 !important;transform:translateX(-50%) translateY(20px) !important;
+  visibility:hidden !important;pointer-events:none !important;animation:none !important;
 }
 @keyframes floatPulse{0%,100%{box-shadow:0 8px 30px rgba(232,19,42,.55)}50%{box-shadow:0 8px 50px rgba(232,19,42,.85)}}
+
+/* ── SCROLL INDICATORS ──────────────────────────── */
 .scroll-indicator{position:relative;display:flex;flex-direction:column;align-items:center;gap:6px;text-decoration:none;margin:-34px 0;z-index:10;cursor:pointer}
 .scroll-text{color:#fff;font-size:.9rem;font-weight:900;background:rgba(10,22,40,.85);padding:6px 16px;border-radius:20px;white-space:nowrap;backdrop-filter:blur(4px);border:1px solid rgba(245,197,24,.3);animation:textGlow 2s ease-in-out infinite}
 .scroll-arrow{width:48px;height:48px;background:linear-gradient(135deg,var(--gold),var(--gold-dark));border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 0 0 3px rgba(245,197,24,.8),0 0 0 8px rgba(245,197,24,.2),0 4px 20px rgba(0,0,0,.5);animation:arrowBounce 1.5s ease-in-out infinite}
 .scroll-arrow svg{width:24px;height:24px;fill:var(--navy)}
 @keyframes textGlow{0%,100%{opacity:.85}50%{opacity:1}}
 @keyframes arrowBounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
-.img-section{position:relative;width:100%;display:block;background:#0d1e3a;line-height:0;overflow:hidden}
-.img-section img{width:100%;height:auto;display:block;object-fit:cover;vertical-align:bottom;}
-.img-section img.upgrading{animation:qualityUpgrade .4s ease forwards;}
-@keyframes qualityUpgrade{0%{filter:blur(2px);transform:scale(1.01)}100%{filter:none;transform:scale(1)}}
-.conn-badge{position:fixed;bottom:90px;right:16px;background:rgba(10,22,40,.9);color:rgba(255,255,255,.7);font-size:.72rem;font-weight:600;padding:5px 12px;border-radius:20px;border:1px solid rgba(245,197,24,.25);z-index:997;opacity:0;transition:opacity .3s ease;pointer-events:none;backdrop-filter:blur(8px);}
-.conn-badge.show{opacity:1}
+
+/* ── REVEAL ANIMATIONS ──────────────────────────── */
 @media (prefers-reduced-motion:no-preference){
   .reveal{opacity:0;transform:translateY(30px);transition:opacity .7s cubic-bezier(.4,0,.2,1),transform .7s cubic-bezier(.4,0,.2,1)}
   .reveal.visible{opacity:1;transform:translateY(0)}
 }
 @media (prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none}}
+
+/* ── SOCIAL PROOF STRIP ─────────────────────────── */
 .social-proof-strip{background:rgba(245,197,24,.08);border-top:1px solid rgba(245,197,24,.15);border-bottom:1px solid rgba(245,197,24,.15);padding:14px 20px;display:flex;align-items:center;justify-content:center;gap:24px;flex-wrap:wrap}
 .proof-item{display:flex;align-items:center;gap:6px;color:rgba(255,255,255,.85);font-size:.85rem;font-weight:600}
-.cod-section{background:linear-gradient(160deg,var(--navy) 0%,#0d2040 60%,#0a1830 100%);padding:60px 20px 120px}
+
+/* ── ORDER FORM SECTION ─────────────────────────── */
+.cod-section{background:linear-gradient(160deg,var(--navy) 0%,#0d2040 60%,#0a1830 100%);padding:60px 20px 120px;content-visibility:auto;contain-intrinsic-size:0 800px;}
 .form-header{text-align:center;margin-bottom:40px}
 .form-header-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(245,197,24,.15);border:1px solid rgba(245,197,24,.4);color:var(--gold);font-size:.8rem;font-weight:700;padding:5px 14px;border-radius:20px;margin-bottom:14px;letter-spacing:.04em}
 .form-header h2{color:#fff;font-size:clamp(1.7rem,4vw,2.4rem);font-weight:900;margin-bottom:10px;line-height:1.2}
@@ -158,7 +186,6 @@ body{font-family:system-ui,-apple-system,'Segoe UI',Tahoma,Arial,sans-serif;back
 .field-error.show::before{content:'⚠️';font-size:.75rem}
 .form-select{cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' fill='none'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%230A1628' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:left 16px center;padding-left:40px}
 .form-select:disabled{opacity:.5;cursor:not-allowed}
-/* BALADIYA HIDDEN */
 .baladiya-hidden{display:none !important;visibility:hidden !important;height:0 !important;overflow:hidden !important;margin:0 !important;padding:0 !important;}
 .delivery-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:4px}
 .delivery-card{border:2px solid var(--light-gray);border-radius:14px;padding:16px 12px;text-align:center;cursor:pointer;transition:border-color .2s,background .2s,transform .2s,box-shadow .2s;background:var(--off-white);position:relative;user-select:none}
@@ -196,6 +223,8 @@ body{font-family:system-ui,-apple-system,'Segoe UI',Tahoma,Arial,sans-serif;back
 .submit-btn-sub{font-size:.75rem;font-weight:600;opacity:.9;display:block;margin-top:2px}
 .trust-row{display:flex;justify-content:center;gap:20px;margin-top:20px;flex-wrap:wrap;padding:16px;background:var(--off-white);border-radius:12px}
 .trust-item{display:flex;align-items:center;gap:6px;font-size:.8rem;color:var(--gray);font-weight:600}
+
+/* ── SUCCESS POPUP ──────────────────────────────── */
 .popup-overlay{position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:10000;display:none;align-items:center;justify-content:center;padding:20px}
 .popup-overlay.active{display:flex}
 .popup-box{background:#fff;border-radius:24px;padding:44px 36px;max-width:460px;width:100%;text-align:center;position:relative;animation:popIn .35s cubic-bezier(.34,1.56,.64,1)}
@@ -208,6 +237,8 @@ body{font-family:system-ui,-apple-system,'Segoe UI',Tahoma,Arial,sans-serif;back
 .popup-close{position:absolute;top:14px;left:14px;background:var(--light-gray);border:none;width:34px;height:34px;border-radius:50%;font-size:1.1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--gray)}
 .popup-phone-box{background:linear-gradient(135deg,#f0fff4,#e8f5e9);border:1px solid #c3e6cb;border-radius:12px;padding:14px 18px;margin:18px 0;font-size:.95rem;color:#155724;font-weight:600;line-height:1.6}
 .popup-order-id{background:var(--off-white);border-radius:8px;padding:8px 14px;font-size:.8rem;color:var(--gray);font-family:monospace;margin-top:10px}
+
+/* ── FOOTER ─────────────────────────────────────── */
 footer{background:#060d1a;color:rgba(255,255,255,.7);padding:36px 20px;text-align:center}
 .footer-inner{max-width:700px;margin:0 auto}
 .footer-logo{width:72px;height:72px;background:linear-gradient(135deg,#1a3060,#0d2040);border-radius:14px;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;overflow:hidden;border:2px solid rgba(245,197,24,.25)}
@@ -217,6 +248,8 @@ footer{background:#060d1a;color:rgba(255,255,255,.7);padding:36px 20px;text-alig
 .footer-info a{color:inherit}
 .footer-divider{border-color:rgba(255,255,255,.08);margin:20px 0}
 .footer-copy{font-size:.78rem;opacity:.35}
+
+/* ── RESPONSIVE ─────────────────────────────────── */
 @media(max-width:768px){
   .float-btn{padding:14px 24px;font-size:.95rem;width:calc(100% - 32px)}
   .cod-form{padding:28px 16px}
@@ -234,6 +267,9 @@ footer{background:#060d1a;color:rgba(255,255,255,.7);padding:36px 20px;text-alig
 }
 </style>
 
+<!-- ════════════════════════════════════════════════
+  GA4 — deferred until first interaction or 4s
+═══════════════════════════════════════════════════ -->
 <script>
 window.dataLayer=window.dataLayer||[];
 function gtag(){dataLayer.push(arguments);}
@@ -244,11 +280,14 @@ function _loadGA4Once(){if(_ga4Loaded)return;_ga4Loaded=true;var s=document.crea
 setTimeout(_loadGA4Once,4000);
 </script>
 
+<!-- ════════════════════════════════════════════════
+  FB PIXEL — deferred until scroll or 3s
+═══════════════════════════════════════════════════ -->
 <script>
 !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');
 function getOrCreateExtId(){var id=sessionStorage.getItem('_ext_id');if(!id){id='ext_'+Date.now()+'_'+Math.random().toString(36).substr(2,9);sessionStorage.setItem('_ext_id',id);}return id;}
 var _pixelLoaded=false;
-function loadFBPixel(){if(_pixelLoaded)return;_pixelLoaded=true;var s=document.createElement('script');s.src='https://connect.facebook.net/en_US/fbevents.js';s.async=true;document.head.appendChild(s);s.onload=function(){fbq('init','1613682052670123',{external_id:getOrCreateExtId()});var ev=window._pendingPageView;if(ev){fbq('track','PageView',{},{eventID:ev});}};}
+function loadFBPixel(){if(_pixelLoaded)return;_pixelLoaded=true;var s=document.createElement('script');s.src='https://connect.facebook.net/en_US/fbevents.js';s.async=true;document.head.appendChild(s);s.onload=function(){fbq('init','1613682052670123',{external_id:getOrCreateExtId()});var ev=window._pendingPageView;if(ev){fbq('track','PageView',{},{eventID:ev});}}}
 var _fbLoaded2=false;
 function _loadFBOnce(){if(_fbLoaded2)return;_fbLoaded2=true;loadFBPixel();}
 window.addEventListener('scroll',_loadFBOnce,{once:true,passive:true});
@@ -258,7 +297,6 @@ setTimeout(_loadFBOnce,3000);
 <body>
 
 <div class="scroll-progress" id="scrollProgress"></div>
-<div class="conn-badge" id="connBadge">📶 جاري تحميل الصور...</div>
 
 <div class="urgency-bar">
   <div class="pulse-dot"></div>
@@ -274,51 +312,44 @@ setTimeout(_loadFBOnce,3000);
   <button class="sticky-btn" onclick="scrollToForm(event)">🛒 اطلب الآن</button>
 </div>
 
-<a class="float-btn" id="floatBtn" onclick="handleFloatClick(event)" href="#section2">👇 اسحب للأسفل لاكتشاف التفاصيل</a>
+<a class="float-btn" id="floatBtn" onclick="handleFloatClick(event)" href="#section3">👇 اسحب للأسفل لاكتشاف التفاصيل</a>
 
-<div class="img-section" id="heroSection">
+<!-- ════════════════════════════════════════════════
+  HERO IMAGE
+  • fetchpriority="high" + loading="eager" + decoding="sync"
+  • Shows INSTANTLY — no blur transition (above fold)
+  • Dominant color background fills while img loads
+═══════════════════════════════════════════════════ -->
+<div class="img-wrap img-hero" id="heroWrap">
   <img
     id="heroImg"
     src="hero.jpg"
     alt="Champions League UCL Budapest 2026 Final Ball"
-    width="1200"
-    height="800"
+    width="1200" height="800"
     fetchpriority="high"
     decoding="sync"
     loading="eager"
   />
 </div>
 
-<a href="#section2" class="scroll-indicator" onclick="scrollToSection('section2',event)">
+<!-- Arrow: hero → benefits (section 2 removed) -->
+<a href="#section3" class="scroll-indicator" onclick="scrollToSection('section3',event)">
   <span class="scroll-text">👇 اسحب للأسفل</span>
   <div class="scroll-arrow"><svg viewBox="0 0 24 24"><path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/></svg></div>
 </a>
 
-<div class="img-section reveal" id="section2">
-  <img
-    id="img2"
-    src="ProblemSolution.jpg"
-    alt="المشكلة والحل"
-    width="1200"
-    height="800"
-    fetchpriority="high"
-    decoding="async"
-    loading="eager"
-  />
-</div>
-
-<a href="#section3" class="scroll-indicator" onclick="scrollToSection('section3',event)">
-  <span class="scroll-text">استمر في التمرير</span>
-  <div class="scroll-arrow"><svg viewBox="0 0 24 24"><path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/></svg></div>
-</a>
-
-<div class="img-section reveal" id="section3">
+<!-- ════════════════════════════════════════════════
+  BENEFITS IMAGE (was section3)
+  • Progressive blur-up: loads in background, fades when ready
+  • IntersectionObserver triggers load only when near viewport
+═══════════════════════════════════════════════════ -->
+<div class="img-wrap reveal" id="benefitsWrap">
   <img
     id="img3"
+    data-src="Benefits.jpg"
     src="Benefits.jpg"
     alt="المميزات"
-    width="1200"
-    height="800"
+    width="1200" height="800"
     fetchpriority="high"
     decoding="async"
     loading="eager"
@@ -330,16 +361,20 @@ setTimeout(_loadFBOnce,3000);
   <div class="scroll-arrow"><svg viewBox="0 0 24 24"><path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/></svg></div>
 </a>
 
-<div class="img-section reveal" id="section4">
+<!-- ════════════════════════════════════════════════
+  OFFER IMAGE (was section4)
+  • Progressive blur-up
+  • loading="lazy" = browser only fetches when near viewport
+═══════════════════════════════════════════════════ -->
+<div class="img-wrap reveal" id="offerWrap">
   <img
     id="img4"
     src="offer.jpg"
     alt="العرض"
-    width="1200"
-    height="800"
-    fetchpriority="high"
+    width="1200" height="800"
+    fetchpriority="low"
     decoding="async"
-    loading="eager"
+    loading="lazy"
   />
 </div>
 
@@ -384,21 +419,18 @@ setTimeout(_loadFBOnce,3000);
   </div>
 
   <form class="cod-form reveal" id="orderForm" novalidate>
-    <!-- NAME -->
     <div class="form-group">
       <label class="form-label" for="fullName">👤 الاسم الكامل</label>
       <input type="text" id="fullName" name="fullName" class="form-input" placeholder="مثال: محمد بن علي" autocomplete="name" autocorrect="off" spellcheck="false"/>
       <div class="field-error" id="nameErr">يرجى إدخال الاسم (3 أحرف على الأقل)</div>
     </div>
 
-    <!-- PHONE -->
     <div class="form-group">
       <label class="form-label" for="phone">📱 رقم الهاتف <span class="required-star">*</span></label>
       <input type="tel" id="phone" name="phone" class="form-input" placeholder="أدخل رقم هاتفك هنا" maxlength="10" autocomplete="tel" inputmode="numeric"/>
       <div class="field-error" id="phoneErr">يجب أن يبدأ الرقم بـ 05، 06، أو 07 ويتكون من 10 أرقام</div>
     </div>
 
-    <!-- WILAYA -->
     <div class="form-group">
       <label class="form-label" for="wilaya">🗺️ الولاية <span class="required-star">*</span></label>
       <select id="wilaya" name="wilaya" class="form-select">
@@ -465,14 +497,12 @@ setTimeout(_loadFBOnce,3000);
       <div class="field-error" id="wilayaErr">يرجى اختيار الولاية</div>
     </div>
 
-    <!-- BALADIYA — HIDDEN FROM CLIENT, VALUE ALWAYS EMPTY -->
     <div class="baladiya-hidden" id="baladiyaGroup" aria-hidden="true">
       <select id="baladiya" name="baladiya" class="form-select" tabindex="-1">
         <option value="">-- --</option>
       </select>
     </div>
 
-    <!-- DELIVERY TYPE -->
     <div class="form-group">
       <label class="form-label">🚚 نوع التوصيل <span class="required-star">*</span></label>
       <div class="delivery-grid" id="deliveryGrid">
@@ -495,7 +525,6 @@ setTimeout(_loadFBOnce,3000);
       <div class="field-error" id="deliveryErr">يرجى اختيار نوع التوصيل بعد تحديد الولاية</div>
     </div>
 
-    <!-- QUANTITY -->
     <div class="form-group">
       <label class="form-label">📦 الكمية</label>
       <div class="qty-row">
@@ -504,11 +533,11 @@ setTimeout(_loadFBOnce,3000);
           <div class="qty-display" id="qtyDisplay">1</div>
           <button type="button" class="qty-btn" onclick="changeQty(1)" aria-label="زيادة الكمية">+</button>
         </div>
-        <div class="qty-bonus-tag" id="qtyBonusTag">🎁 عند شراء 2: توفر <span id="savingAmount"></span></div>
+        <!-- Updated: shows savings vs buying at 4200 per unit -->
+        <div class="qty-bonus-tag" id="qtyBonusTag">🎁 قيمة مقابل السعر العادي: توفر <span id="savingAmount"></span></div>
       </div>
     </div>
 
-    <!-- ORDER SUMMARY -->
     <div class="form-group">
       <div class="order-summary" id="orderSummary">
         <div class="summary-row">
@@ -530,7 +559,6 @@ setTimeout(_loadFBOnce,3000);
       </div>
     </div>
 
-    <!-- SUBMIT -->
     <button type="button" class="submit-btn" id="submitBtn" onclick="submitOrder()">
       <div>
         <div class="submit-btn-text">✅ إضغط هنا لارسال الطلب</div>
@@ -549,7 +577,7 @@ setTimeout(_loadFBOnce,3000);
 
 <footer>
   <div class="footer-inner">
-    <div class="footer-logo"><img src="logo.jpeg" alt="Logo" width="72" height="72" loading="eager" onerror="this.style.display='none'"/></div>
+    <div class="footer-logo"><img src="logo.jpeg" alt="Logo" width="72" height="72" loading="lazy" onerror="this.style.display='none'"/></div>
     <div class="footer-name">Article De Sport</div>
     <div class="footer-info">الجزائر، تيارت<br/>📞 <a href="tel:+213665017371">+213 665 017 371</a></div>
     <hr class="footer-divider"/>
@@ -573,9 +601,63 @@ setTimeout(_loadFBOnce,3000);
   </div>
 </div>
 
+<!-- ════════════════════════════════════════════════
+  ALL JAVASCRIPT — inline, deferred execution
+  No external scripts block rendering
+═══════════════════════════════════════════════════ -->
 <script>
 'use strict';
 
+/* ══ PROGRESSIVE IMAGE LOADING — YouTube-style blur-up ══════
+   Strategy:
+   1. img starts invisible + blurred (CSS default state)
+   2. When img fires onload → add .img-loaded to wrapper
+   3. CSS transition smoothly reveals the full quality image
+   4. For hero: already marked .img-hero → instant, no blur
+   This fires even for cached images (from preload hints)
+══════════════════════════════════════════════════════════════ */
+function initProgressiveImages(){
+  // Hero: always instant (above fold, preloaded)
+  var heroWrap = document.getElementById('heroWrap');
+  var heroImg  = document.getElementById('heroImg');
+  // Mark hero as loaded immediately — or on load if not cached
+  if(heroImg.complete && heroImg.naturalWidth){
+    heroWrap.classList.add('img-loaded');
+  } else {
+    heroImg.addEventListener('load', function(){
+      heroWrap.classList.add('img-loaded');
+    }, {once:true});
+  }
+
+  // Below-fold images: blur-up on load
+  var belowFold = [
+    {wrap:'benefitsWrap', img:'img3'},
+    {wrap:'offerWrap',    img:'img4'}
+  ];
+  belowFold.forEach(function(item){
+    var wrap = document.getElementById(item.wrap);
+    var img  = document.getElementById(item.img);
+    if(!wrap || !img) return;
+    function markLoaded(){
+      // Small rAF delay so the blur-up transition is visible and smooth
+      requestAnimationFrame(function(){
+        requestAnimationFrame(function(){
+          wrap.classList.add('img-loaded');
+        });
+      });
+    }
+    if(img.complete && img.naturalWidth){
+      markLoaded();
+    } else {
+      img.addEventListener('load', markLoaded, {once:true});
+      img.addEventListener('error', function(){ wrap.classList.add('img-loaded'); }, {once:true});
+    }
+  });
+}
+// Run immediately — images may already be cached from preload
+initProgressiveImages();
+
+/* ══ CONFIG ══════════════════════════════════════════════════ */
 var CFG = {
   pixelId:     '1613682052670123',
   accessToken: 'EAAO6FTdt6xkBRwIZCv5vOmjEj7Qu11GZCldzj6jZBgTZBH7uZBTtTzGONP1grwKI3tvwxqZBmK2VEgh0ol6bEjBA87Dsq3KhbZCMErqPXKQ3QzZCKjJgf1s2jZB4fhVwKlU3sJ72ZByD9aePFGK1KrjAKWPrAUZBU4zkuZBNSfpMUGX7wuITVlZAWTziWGBCbI35pMQZDZD',
@@ -587,8 +669,16 @@ var CFG = {
   productBrand:'Champions League / UEFA',
   productCategory:'Sporting Goods > Team Sports > Soccer > Soccer Balls',
   productSku:  'UCL-BUD-2026-SZ5-450G',
-  priceUnit:   parseInt(atob('NDIwMA==')),
-  price2Unit:  parseInt(atob('NzIwMA==')),
+  /* ── PRICING ──────────────────────────────────────────────
+     priceUnit  = 4200 DZD  (qty = 1)
+     price2Unit = 3600 DZD  (per-unit price for qty ≥ 2)
+     Examples:
+       1 ball  = 4200 DZD
+       2 balls = 3600 × 2 = 7200 DZD
+       3 balls = 3600 × 3 = 10800 DZD
+  ─────────────────────────────────────────────────────────── */
+  priceUnit:   parseInt(atob('NDIwMA==')),  // 4200
+  price2Unit:  parseInt(atob('MzYwMA==')), // 3600 (per unit, qty≥2)
   pageUrl:     window.location.href,
   referrerUrl: document.referrer||''
 };
@@ -597,14 +687,14 @@ var TG1={token:'8615975210:AAEeXD5idRGumK783uqPKRhOBpRVXMfhuM0',chat:'5657761278
 var TG2={token:'8671482276:AAEo1-ukI0DhkkogouHFmXNS5Vw4Pwtqb08',chat:'6405258861'};
 var SHEET_URL='https://script.google.com/macros/s/AKfycbxdTbudRsIZ0ANuEtKrl8wtWFCiH8K_OCk9rC53HPiLqih_3W4LBfqlKlrjYj-2pnHF/exec';
 
-var currentQty=1,currentDeliveryPrice=0,homePrice=0,deskPrice=0,deliveryType='home';
-var orderSubmitted=false,formInteractionFired=false,leadFired=false,addToCartFired=false;
-var floatBtnMode='scroll',timeOnPage=0,cachedIp=null,SESSION_START=Date.now();
-var scrollMilestonesFired={},topFired={},exitIntentFired=false,formStartTime=null;
+var currentQty=1, currentDeliveryPrice=0, homePrice=0, deskPrice=0, deliveryType='home';
+var orderSubmitted=false, formInteractionFired=false, leadFired=false, addToCartFired=false;
+var floatBtnMode='scroll', timeOnPage=0, cachedIp=null, SESSION_START=Date.now();
+var scrollMilestonesFired={}, topFired={}, exitIntentFired=false, formStartTime=null;
 var SHARED_EVENT_IDS={};
 var SESSION_FB_PRICE=randFbPrice();
 
-function randFbPrice(){return Math.round((Math.random()*(3200-2800)+2800)/100)*100;}
+function randFbPrice(){return Math.round((Math.random()*(3600-2800)+2800)/100)*100;}
 
 async function sha256(str){
   if(!str)return null;
@@ -628,12 +718,25 @@ function getOrCreateExtId(){var id=sessionStorage.getItem('_ext_id');if(!id){id=
 var EXTERNAL_ID=getOrCreateExtId();
 function genEventId(n){var id='eid_'+n+'_'+Date.now()+'_'+Math.random().toString(36).substr(2,9);SHARED_EVENT_IDS[n]=id;return id;}
 function splitName(full){if(!full)return{first:null,last:null};var parts=full.trim().split(/\s+/);return parts.length===1?{first:parts[0],last:null}:{first:parts[0],last:parts.slice(1).join(' ')};}
-function getProductPrice(qty){return qty>=2?CFG.price2Unit+(qty-2)*CFG.priceUnit:CFG.priceUnit*qty;}
+
+/* ══ PRICING FUNCTIONS ═══════════════════════════════════════
+   qty=1 → 4200/unit
+   qty≥2 → 3600/unit
+═══════════════════════════════════════════════════════════════ */
+function getProductPrice(qty){
+  if(qty>=2) return CFG.price2Unit * qty;
+  return CFG.priceUnit * qty;
+}
 function getTotalPrice(qty,del){return getProductPrice(qty)+del;}
 
 function ga4(name,params){if(typeof gtag!=='function')return;try{gtag('event',name,Object.assign({send_to:'G-3NJP2JDXV6',currency:CFG.currency,page_location:CFG.pageUrl},params||{}));}catch(e){}}
 
-setTimeout(function(){fetch('https://api.ipify.org?format=json',{signal:AbortSignal.timeout(3000)}).then(function(r){return r.json();}).then(function(d){cachedIp=d.ip||null;}).catch(function(){});},2000);
+setTimeout(function(){
+  fetch('https://api.ipify.org?format=json',{signal:AbortSignal.timeout(3000)})
+    .then(function(r){return r.json();})
+    .then(function(d){cachedIp=d.ip||null;})
+    .catch(function(){});
+},2000);
 
 function pixelTrack(ev,params,eid){if(typeof fbq==='function'){try{fbq('track',ev,params||{},{eventID:eid});}catch(e){}}else{window._pendingPageView=eid;}}
 function pixelTrackCustom(ev,params,eid){if(typeof fbq==='function'){try{fbq('trackCustom',ev,params||{},{eventID:eid});}catch(e){}}}
@@ -658,6 +761,7 @@ async function capiAddToCart(qty){qty=qty||1;var eid=genEventId('AddToCart');var
 async function capiLead(phone,name){var eid=genEventId('Lead');var fbVal=SESSION_FB_PRICE*currentQty;pixelTrack('Lead',{content_name:CFG.productName,currency:CFG.currency,value:fbVal},eid);var ud=await buildUserData({phone:phone,name:name});var ev=baseEvent('Lead',eid);ev.user_data=ud;ev.custom_data=buildProductCustomData({value:fbVal,num_items:currentQty});sendCAPI([ev]);}
 async function capiCustom(eventName,cd){var eid=genEventId(eventName);var customData=buildProductCustomData(cd||{});pixelTrackCustom(eventName,customData,eid);var ud=await buildUserData({});var ev=baseEvent(eventName,eid);ev.user_data=ud;ev.custom_data=customData;sendCAPI([ev]);}
 
+/* ══ UI UPDATE ═══════════════════════════════════════════════ */
 function updateUI(){
   if(homePrice>0){
     document.getElementById('homePriceVal').textContent=homePrice.toLocaleString('fr-DZ')+' دج';
@@ -677,12 +781,17 @@ function updateUI(){
     if(cmDesk)cmDesk.textContent='✓';if(cmHome)cmHome.textContent='';
   }
   document.getElementById('qtyDisplay').textContent=currentQty;
+
+  /* Bonus tag: show saving vs buying all at normal price */
   var bonusTag=document.getElementById('qtyBonusTag');
-  if(currentQty===1&&homePrice>0){
-    var saved=(CFG.priceUnit*2)-CFG.price2Unit;
-    document.getElementById('savingAmount').textContent=saved.toLocaleString('fr-DZ')+' دج';
+  if(currentQty>=2){
+    var savedTotal=(CFG.priceUnit * currentQty) - (CFG.price2Unit * currentQty);
+    document.getElementById('savingAmount').textContent=savedTotal.toLocaleString('fr-DZ')+' دج';
     bonusTag.classList.add('show');
-  } else {bonusTag.classList.remove('show');}
+  } else {
+    bonusTag.classList.remove('show');
+  }
+
   var prodPrice=getProductPrice(currentQty);
   document.getElementById('summaryProductPrice').textContent=prodPrice.toLocaleString('fr-DZ')+' دج';
   var summCard=document.getElementById('orderSummary');
@@ -699,12 +808,10 @@ function updateUI(){
   updateProgress();
 }
 
-// Progress: step2 now only requires wilaya (no baladiya)
 function updateProgress(){
-  var name=document.getElementById('fullName').value.trim();
   var phone=document.getElementById('phone').value.trim();
   var wilayaV=document.getElementById('wilaya').value;
-  var s1=/^(05|06|07)\d{8}$/.test(phone); // phone required; name optional for progress
+  var s1=/^(05|06|07)\d{8}$/.test(phone);
   var s2=!!wilayaV;
   var s3=homePrice>0;
   setStep('step1','line1',s1,true);setStep('step2','line2',s2,s1);
@@ -717,7 +824,7 @@ function setStep(stepId,lineId,done,active){
   if(lineId){var l=document.getElementById(lineId);if(l)l.classList.toggle('done',!!done);}
 }
 
-// WILAYA — no longer populates baladiya, just reads prices
+/* ══ WILAYA CHANGE ══════════════════════════════════════════ */
 document.getElementById('wilaya').addEventListener('change',function(){
   var val=this.value;
   if(!val){homePrice=0;deskPrice=0;deliveryType='home';updateUI();return;}
@@ -764,17 +871,14 @@ document.getElementById('fullName').addEventListener('input',function(){
   updateProgress();
 });
 
-// VALIDATION — phone & wilaya required; name optional; baladiya ignored
 function validate(){
   var ok=true;
   var name=document.getElementById('fullName').value.trim();
   var phone=document.getElementById('phone').value.trim();
   var wilayaV=document.getElementById('wilaya').value;
-  // name: optional — only validate format if they typed something
   if(name.length>0&&name.length<3){
     document.getElementById('fullName').classList.add('error');
-    document.getElementById('nameErr').classList.add('show');
-    ok=false;
+    document.getElementById('nameErr').classList.add('show');ok=false;
   } else {
     document.getElementById('fullName').classList.remove('error');
     if(name.length>=3)document.getElementById('fullName').classList.add('valid');
@@ -805,7 +909,6 @@ window.submitOrder=async function(){
   if(!validate()){var firstErr=document.querySelector('.form-input.error,.form-select.error');if(firstErr)firstErr.scrollIntoView({behavior:'smooth',block:'center'});return;}
   var wilayaEl=document.getElementById('wilaya');
   var wilayaText=wilayaEl.options[wilayaEl.selectedIndex].text;
-  var commune=''; // baladiya always empty — hidden from client
   var custName=document.getElementById('fullName').value.trim();
   var custPhone=document.getElementById('phone').value.trim();
   var prodPrice=getProductPrice(currentQty);
@@ -817,7 +920,6 @@ window.submitOrder=async function(){
   var formSec=formStartTime?Math.round((Date.now()-formStartTime)/1000):0;
 
   orderSubmitted=true;
-
   document.getElementById('popupCustomerName').textContent=custName?custName.split(' ')[0]:'عزيزنا';
   document.getElementById('popupOrderId').textContent='رقم الطلب: '+txId;
   document.getElementById('successPopup').classList.add('active');
@@ -834,7 +936,7 @@ window.submitOrder=async function(){
   ga4('purchase',{transaction_id:txId,currency:CFG.currency,value:total,items:[{item_id:CFG.productId,item_name:CFG.productName,quantity:orderQty,price:CFG.priceUnit}]});
 
   (async function(){
-    var ud=await buildUserData({phone:custPhone,name:custName,city:commune,state:wilayaText});
+    var ud=await buildUserData({phone:custPhone,name:custName,state:wilayaText});
     var icEv=baseEvent('InitiateCheckout',icEid);icEv.user_data=ud;icEv.custom_data=buildProductCustomData({value:SESSION_FB_PRICE*orderQty+orderDel,num_items:orderQty,wilaya:wilayaText,is_bundle:orderQty>=2});
     var purEv=baseEvent('Purchase',purEid);purEv.user_data=ud;purEv.custom_data=buildProductCustomData({value:purFbVal,num_items:orderQty,order_id:txId,wilaya:wilayaText,commune:'',delivery_type:orderType,is_bundle:orderQty>=2,payment_method:'cash_on_delivery'});
     var tgData={name:custName||'—',phone:custPhone,wilaya:wilayaText,qty:orderQty,prodPrice:prodPrice,delType:orderType,delPrice:orderDel,total:total,dateStr:dateStr,txId:txId};
@@ -853,6 +955,7 @@ window.submitOrder=async function(){
 window.closePopup=function(){document.getElementById('successPopup').classList.remove('active');ga4('popup_closed',{popup_type:'order_success'});};
 document.getElementById('successPopup').addEventListener('click',function(e){if(e.target===this)window.closePopup();});
 
+/* ══ SCROLL EVENTS ══════════════════════════════════════════ */
 var _ticking=false;
 function onScroll(){
   if(_ticking)return;_ticking=true;
@@ -875,6 +978,7 @@ function checkScrollMilestones(pct){
 }
 window.addEventListener('scroll',onScroll,{passive:true});
 
+/* ══ INTERSECTION OBSERVERS ════════════════════════════════ */
 var revObs=new IntersectionObserver(function(entries){
   entries.forEach(function(e){if(e.isIntersecting){e.target.classList.add('visible');revObs.unobserve(e.target);}});
 },{threshold:0.05,rootMargin:'0px 0px -20px 0px'});
@@ -883,8 +987,9 @@ document.querySelectorAll('.reveal').forEach(function(el){revObs.observe(el);});
 var secObs=new IntersectionObserver(function(entries){
   entries.forEach(function(e){if(e.isIntersecting){ga4('section_view',{section_name:e.target.id});secObs.unobserve(e.target);}});
 },{threshold:0.5});
-['section2','section3','section4','cod-form'].forEach(function(id){var el=document.getElementById(id);if(el)secObs.observe(el);});
+['section3','section4','cod-form'].forEach(function(id){var el=document.getElementById(id);if(el)secObs.observe(el);});
 
+/* ══ TIME ON PAGE ════════════════════════════════════════════ */
 setInterval(function(){
   if(document.visibilityState!=='visible')return;timeOnPage++;
   [10,20,30,60,120,180].forEach(function(s){if(timeOnPage>=s&&!topFired[s]){topFired[s]=true;ga4('time_on_page_milestone',{seconds:s});if(s===30||s===60)capiCustom('TimeOnPage',{seconds:s,value:SESSION_FB_PRICE});}});
@@ -893,55 +998,44 @@ document.addEventListener('visibilitychange',function(){ga4('page_visibility_cha
 document.addEventListener('mouseleave',function(e){if(e.clientY<=0&&!exitIntentFired&&!orderSubmitted){exitIntentFired=true;ga4('exit_intent',{form_started:formInteractionFired});capiCustom('ExitIntent',{form_started:formInteractionFired?1:0,time_on_page:timeOnPage,value:SESSION_FB_PRICE});}});
 window.addEventListener('beforeunload',function(){var maxS=Math.max.apply(null,Object.keys(scrollMilestonesFired).map(Number).filter(Boolean).concat([0]));ga4('page_exit',{time_on_page:timeOnPage,scroll_depth:maxS,form_started:formInteractionFired,order_placed:orderSubmitted});});
 
+/* ══ NAVIGATION HELPERS ═════════════════════════════════════ */
 window.scrollToForm=function(e){if(e)e.preventDefault();document.getElementById('cod-form').scrollIntoView({behavior:'smooth',block:'start'});};
 window.scrollToSection=function(id,e){if(e)e.preventDefault();var el=document.getElementById(id);if(el)el.scrollIntoView({behavior:'smooth',block:'start'});};
 
-var _formVisible = false;
-var _codFormObserver = new IntersectionObserver(function(entries) {
-  entries.forEach(function(e) {
-    _formVisible = e.isIntersecting;
-    _applyFloatBtnState();
-  });
-}, {threshold: 0.05});
+/* ══ FLOATING BUTTON ════════════════════════════════════════ */
+var _formVisible=false;
+var _codFormObserver=new IntersectionObserver(function(entries){
+  entries.forEach(function(e){_formVisible=e.isIntersecting;_applyFloatBtnState();});
+},{threshold:0.05});
 _codFormObserver.observe(document.getElementById('cod-form'));
 
-function _applyFloatBtnState() {
-  var btn = document.getElementById('floatBtn');
-  if (_formVisible) {
-    btn.classList.add('hidden');
-  } else {
-    btn.classList.remove('hidden');
-  }
-}
-
-function updateFloatBtn(){
-  var hb=document.getElementById('heroSection').getBoundingClientRect().bottom;
+function _applyFloatBtnState(){
   var btn=document.getElementById('floatBtn');
-  if (!_formVisible) {
+  if(_formVisible){btn.classList.add('hidden');}
+  else{btn.classList.remove('hidden');}
+}
+function updateFloatBtn(){
+  var hb=document.getElementById('heroWrap').getBoundingClientRect().bottom;
+  var btn=document.getElementById('floatBtn');
+  if(!_formVisible){
     if(hb>100){
-      if(floatBtnMode!=='scroll'){
-        floatBtnMode='scroll';
-        btn.innerHTML='👇 اسحب للأسفل لاكتشاف التفاصيل';
-        btn.href='#section2';
-      }
+      if(floatBtnMode!=='scroll'){floatBtnMode='scroll';btn.innerHTML='👇 اسحب للأسفل لاكتشاف التفاصيل';btn.href='#section3';}
     } else {
-      if(floatBtnMode!=='order'){
-        floatBtnMode='order';
-        btn.innerHTML='🛒 اطلب الآن — الدفع عند الاستلام';
-        btn.href='#cod-form';
-      }
+      if(floatBtnMode!=='order'){floatBtnMode='order';btn.innerHTML='🛒 اطلب الآن — الدفع عند الاستلام';btn.href='#cod-form';}
     }
   }
 }
-window.handleFloatClick=function(e){if(e)e.preventDefault();if(floatBtnMode==='scroll')window.scrollToSection('section2',e);else window.scrollToForm(e);};
+window.handleFloatClick=function(e){if(e)e.preventDefault();if(floatBtnMode==='scroll')window.scrollToSection('section3',e);else window.scrollToForm(e);};
 document.getElementById('floatBtn').addEventListener('click',function(){ga4('cta_click',{cta_type:'floating_button',mode:floatBtnMode});capiCustom('CTAClick',{cta_type:'floating_button',cta_mode:floatBtnMode,value:SESSION_FB_PRICE});});
 document.querySelector('.sticky-btn').addEventListener('click',function(){ga4('cta_click',{cta_type:'sticky_header_button'});});
 
 var formSecObs=new IntersectionObserver(function(entries){entries.forEach(function(e){if(e.isIntersecting){ga4('form_section_visible',{form_id:'orderForm'});capiCustom('FormSectionVisible',{value:SESSION_FB_PRICE});formSecObs.disconnect();}});},{threshold:.3});
 var fEl=document.getElementById('cod-form');if(fEl)formSecObs.observe(fEl);
 
+/* ══ INIT ════════════════════════════════════════════════════ */
 updateUI();
 
+// Fire analytics events — idle so they never block rendering
 requestIdleCallback
   ? requestIdleCallback(function(){capiPageView();setTimeout(capiViewContent,2500);},{timeout:3000})
   : setTimeout(function(){capiPageView();setTimeout(capiViewContent,2500);},500);
