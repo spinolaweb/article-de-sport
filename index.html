@@ -5,15 +5,6 @@
 <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=5.0"/>
 <title>Champions League Ball — كرة القدم الرسمية | Livraison à domicile Algérie | Paiement à la livraison</title>
 
-<link rel="preload" as="image" href="hero.jpg"            fetchpriority="high" type="image/jpeg"/>
-<link rel="preload" as="image" href="ProblemSolution.jpg" fetchpriority="high" type="image/jpeg"/>
-<link rel="preload" as="image" href="Benefits.jpg"        fetchpriority="high" type="image/jpeg"/>
-<link rel="preload" as="image" href="offer.jpg"           fetchpriority="high" type="image/jpeg"/>
-<link rel="preload" as="image" href="logo.jpeg"           fetchpriority="low"  type="image/jpeg"/>
-<!-- ════════════════════════════════════════════════
-  CRITICAL PRELOADS — browser fetches these in parallel
-  with HTML parse, before any JS executes
-═══════════════════════════════════════════════════ -->
 <link rel="preload" as="image" href="hero.jpg"    fetchpriority="high" type="image/jpeg"/>
 <link rel="preload" as="image" href="Benefits.jpg" fetchpriority="high" type="image/jpeg"/>
 <link rel="preload" as="image" href="offer.jpg"    fetchpriority="low"  type="image/jpeg"/>
@@ -21,34 +12,60 @@
 
 <link rel="dns-prefetch"  href="https://graph.facebook.com"/>
 <link rel="preconnect"    href="https://graph.facebook.com" crossorigin/>
+<link rel="dns-prefetch"  href="https://connect.facebook.net"/>
+<link rel="dns-prefetch"  href="https://www.googletagmanager.com"/>
+<link rel="dns-prefetch"  href="https://api.telegram.org"/>
+<link rel="dns-prefetch"  href="https://api.ipify.org"/>
+
+<meta property="og:title"       content="Champions League Ball — كرة القدم الرسمية | Livraison Algérie"/>
+<meta property="og:description" content="🔥 كرة Champions League الأصلية — تصميم رسمي UEFA، مقاومة للماء، خياطة متينة."/>
 <meta property="og:image"       content="hero.jpg"/>
 <meta property="og:type"        content="product"/>
 
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"Product","name":"Champions League UCL Budapest 2026 Final Ball","brand":{"@type":"Brand","name":"Champions League / UEFA"},"offers":{"@type":"Offer","priceCurrency":"DZD","price":"3600","availability":"https://schema.org/InStock"},"aggregateRating":{"@type":"AggregateRating","ratingValue":"4.9","reviewCount":"89"}}</script>
 
-<!-- ════════════════════════════════════════════════
-  INLINE CRITICAL CSS — zero render-blocking
-  Everything above the fold renders instantly
-═══════════════════════════════════════════════════ -->
+<!-- ══ GA4 — FIXED: correct stream ID G-D2BWGMP7D8 ══ -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-D2BWGMP7D8"></script>
+<script>
+window.dataLayer=window.dataLayer||[];
+function gtag(){dataLayer.push(arguments);}
+gtag('js',new Date());
+gtag('config','G-D2BWGMP7D8',{
+  send_page_view:true,
+  cookie_flags:'SameSite=None;Secure',
+  page_title:'Champions League Ball — Landing Page',
+  page_location:window.location.href
+});
+</script>
+
+<!-- ══ FB PIXEL — fixed initialization, loads immediately for reliable tracking ══ -->
+<script>
+!function(f,b,e,v,n,t,s){
+  if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+  if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];
+  t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];
+  s.parentNode.insertBefore(t,s);
+}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');
+</script>
+
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 html{scroll-behavior:smooth}
+body{font-family:system-ui,-apple-system,'Segoe UI',Tahoma,Arial,sans-serif;background:#0A1628;color:#0A1628;direction:rtl;overflow-x:hidden}
+:root{
+  --gold:#F5C518;--gold-dark:#D4A000;
+  --navy:#0A1628;--navy-mid:#122040;
+  --red:#E8132A;--red-dark:#C0001F;
+  --white:#FFFFFF;--off-white:#F8F9FA;
   --gray:#6C757D;--light-gray:#E9ECEF;
   --success:#28A745;
 }
 
-/* ── PROGRESSIVE IMAGE SYSTEM ──────────────────────
-   Mimics YouTube adaptive quality:
-   1. Placeholder color shows INSTANTLY (no network)
-   2. Real image fades in as it loads (blur-up)
-   3. High-res swap is seamless, no layout shift
-─────────────────────────────────────────────────── */
 .img-wrap{
   position:relative;width:100%;overflow:hidden;
-  background:#0d1e3a; /* dominant dark color — shows instantly */
+  background:#0d1e3a;
   line-height:0;
 }
-/* The blur placeholder layer — pure CSS, zero network cost */
 .img-wrap::before{
   content:'';
   position:absolute;inset:0;
@@ -58,12 +75,9 @@ html{scroll-behavior:smooth}
   pointer-events:none;
 }
 .img-wrap.img-loaded::before{opacity:0;}
-
-/* The actual image — starts invisible+blurred, transitions in */
 .img-wrap img{
   width:100%;height:auto;display:block;
   object-fit:cover;vertical-align:bottom;
-  /* START STATE: invisible & blurred like YouTube low-quality frame */
   filter:blur(12px) brightness(.95);
   transform:scale(1.04);
   opacity:0;
@@ -74,34 +88,27 @@ html{scroll-behavior:smooth}
   will-change:filter,transform,opacity;
   z-index:2;position:relative;
 }
-/* LOADED STATE: crisp, full quality */
 .img-wrap.img-loaded img{
   filter:none;
   transform:scale(1);
   opacity:1;
 }
-/* Hero loads INSTANTLY — no blur wait (above the fold) */
 .img-wrap.img-hero img{
   filter:none !important;
   transform:scale(1) !important;
   opacity:1 !important;
   transition:none !important;
 }
-
-/* Per-image dominant color backdrops — instant visual fill */
 #heroWrap   {background:#0a1e3d;}
 #benefitsWrap{background:#081528;}
 #offerWrap  {background:#0d1a2e;}
 
-/* ── SCROLL PROGRESS ────────────────────────────── */
 .scroll-progress{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,var(--gold),var(--red));z-index:10001;width:0%;will-change:width;pointer-events:none;transition:width .1s linear}
 
-/* ── URGENCY BAR ────────────────────────────────── */
 .urgency-bar{background:#C0001F;padding:10px 20px;text-align:center;color:#fff;font-weight:800;font-size:.9rem;display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap}
 .pulse-dot{width:10px;height:10px;background:#fff;border-radius:50%;animation:dotPulse 1s ease-in-out infinite;flex-shrink:0}
 @keyframes dotPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.4);opacity:.6}}
 
-/* ── STICKY HEADER ──────────────────────────────── */
 .sticky-header{position:fixed;top:0;left:0;right:0;background:rgba(10,22,40,.97);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);z-index:998;padding:10px 20px;display:flex;align-items:center;justify-content:space-between;transform:translateY(-100%);transition:transform .3s ease;border-bottom:1px solid rgba(245,197,24,.2)}
 .sticky-header.visible{transform:translateY(0)}
 .sticky-left{display:flex;align-items:center;gap:10px}
@@ -109,9 +116,7 @@ html{scroll-behavior:smooth}
 .sticky-price-tag{background:var(--gold);color:var(--navy);font-weight:900;font-size:.85rem;padding:3px 10px;border-radius:20px}
 .sticky-btn{background:linear-gradient(135deg,var(--red),var(--red-dark));color:#fff;border:none;padding:9px 22px;border-radius:22px;font-weight:800;font-size:.9rem;cursor:pointer;font-family:inherit;transition:transform .2s}
 .sticky-btn:hover{transform:scale(1.05)}
-.float-btn{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);z-index:999;background:linear-gradient(135deg,var(--red),var(--red-dark));color:#fff;border:none;padding:16px 36px;border-radius:50px;font-size:1.05rem;font-weight:900;cursor:pointer;box-shadow:0 8px 30px rgba(232,19,42,.55);animation:floatPulse 2s infinite;white-space:nowrap;text-decoration:none;display:inline-flex;align-items:center;gap:8px;font-family:inherit;max-width:calc(100% - 32px);justify-content:center;will-change:box-shadow;
 
-/* ── FLOATING CTA ───────────────────────────────── */
 .float-btn{
   position:fixed;bottom:20px;left:50%;transform:translateX(-50%);z-index:999;
   background:linear-gradient(135deg,var(--red),var(--red-dark));color:#fff;border:none;
@@ -123,105 +128,135 @@ html{scroll-behavior:smooth}
   visibility:visible;
 }
 .float-btn.hidden{
-  opacity:0 !important;
-  transform:translateX(-50%) translateY(20px) !important;
-  visibility:hidden !important;
-  pointer-events:none !important;
-  animation:none !important;
   opacity:0 !important;transform:translateX(-50%) translateY(20px) !important;
   visibility:hidden !important;pointer-events:none !important;animation:none !important;
 }
 @keyframes floatPulse{0%,100%{box-shadow:0 8px 30px rgba(232,19,42,.55)}50%{box-shadow:0 8px 50px rgba(232,19,42,.85)}}
 
-/* ── SCROLL INDICATORS ──────────────────────────── */
 .scroll-indicator{position:relative;display:flex;flex-direction:column;align-items:center;gap:6px;text-decoration:none;margin:-34px 0;z-index:10;cursor:pointer}
 .scroll-text{color:#fff;font-size:.9rem;font-weight:900;background:rgba(10,22,40,.85);padding:6px 16px;border-radius:20px;white-space:nowrap;backdrop-filter:blur(4px);border:1px solid rgba(245,197,24,.3);animation:textGlow 2s ease-in-out infinite}
 .scroll-arrow{width:48px;height:48px;background:linear-gradient(135deg,var(--gold),var(--gold-dark));border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 0 0 3px rgba(245,197,24,.8),0 0 0 8px rgba(245,197,24,.2),0 4px 20px rgba(0,0,0,.5);animation:arrowBounce 1.5s ease-in-out infinite}
 .scroll-arrow svg{width:24px;height:24px;fill:var(--navy)}
 @keyframes textGlow{0%,100%{opacity:.85}50%{opacity:1}}
 @keyframes arrowBounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
-.img-section{position:relative;width:100%;display:block;background:#0d1e3a;line-height:0;overflow:hidden}
-.img-section img{width:100%;height:auto;display:block;object-fit:cover;vertical-align:bottom;}
-.img-section img.upgrading{animation:qualityUpgrade .4s ease forwards;}
-@keyframes qualityUpgrade{0%{filter:blur(2px);transform:scale(1.01)}100%{filter:none;transform:scale(1)}}
-.conn-badge{position:fixed;bottom:90px;right:16px;background:rgba(10,22,40,.9);color:rgba(255,255,255,.7);font-size:.72rem;font-weight:600;padding:5px 12px;border-radius:20px;border:1px solid rgba(245,197,24,.25);z-index:997;opacity:0;transition:opacity .3s ease;pointer-events:none;backdrop-filter:blur(8px);}
-.conn-badge.show{opacity:1}
 
-/* ── REVEAL ANIMATIONS ──────────────────────────── */
 @media (prefers-reduced-motion:no-preference){
   .reveal{opacity:0;transform:translateY(30px);transition:opacity .7s cubic-bezier(.4,0,.2,1),transform .7s cubic-bezier(.4,0,.2,1)}
   .reveal.visible{opacity:1;transform:translateY(0)}
 }
 @media (prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none}}
 
-/* ── SOCIAL PROOF STRIP ─────────────────────────── */
 .social-proof-strip{background:rgba(245,197,24,.08);border-top:1px solid rgba(245,197,24,.15);border-bottom:1px solid rgba(245,197,24,.15);padding:14px 20px;display:flex;align-items:center;justify-content:center;gap:24px;flex-wrap:wrap}
 .proof-item{display:flex;align-items:center;gap:6px;color:rgba(255,255,255,.85);font-size:.85rem;font-weight:600}
-.cod-section{background:linear-gradient(160deg,var(--navy) 0%,#0d2040 60%,#0a1830 100%);padding:60px 20px 120px}
 
-/* ── ORDER FORM SECTION ─────────────────────────── */
 .cod-section{background:linear-gradient(160deg,var(--navy) 0%,#0d2040 60%,#0a1830 100%);padding:60px 20px 120px;content-visibility:auto;contain-intrinsic-size:0 800px;}
 .form-header{text-align:center;margin-bottom:40px}
 .form-header-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(245,197,24,.15);border:1px solid rgba(245,197,24,.4);color:var(--gold);font-size:.8rem;font-weight:700;padding:5px 14px;border-radius:20px;margin-bottom:14px;letter-spacing:.04em}
 .form-header h2{color:#fff;font-size:clamp(1.7rem,4vw,2.4rem);font-weight:900;margin-bottom:10px;line-height:1.2}
+.form-header h2 span{color:var(--gold)}
+.form-header p{color:rgba(255,255,255,.65);font-size:.95rem}
+.form-progress{display:flex;align-items:center;justify-content:center;gap:0;margin-bottom:32px}
+.progress-step{display:flex;flex-direction:column;align-items:center;gap:4px;position:relative;flex:1;max-width:90px}
+.progress-step-circle{width:34px;height:34px;border-radius:50%;border:2px solid var(--light-gray);background:#fff;display:flex;align-items:center;justify-content:center;font-size:.8rem;font-weight:700;color:var(--gray);transition:all .3s;z-index:1}
+.progress-step.active .progress-step-circle{border-color:var(--gold);background:var(--gold);color:var(--navy)}
+.progress-step.done .progress-step-circle{border-color:var(--success);background:var(--success);color:#fff}
+.progress-step-label{font-size:.7rem;color:var(--gray);text-align:center;font-weight:600;white-space:nowrap}
+.progress-step.active .progress-step-label{color:var(--gold)}
+.progress-step.done .progress-step-label{color:var(--success)}
+.progress-line{flex:1;height:2px;background:var(--light-gray);margin-bottom:16px;transition:background .3s;max-width:40px}
+.progress-line.done{background:var(--success)}
+.cod-form{background:#fff;border-radius:24px;padding:40px 36px;max-width:680px;margin:0 auto;box-shadow:0 30px 80px rgba(0,0,0,.4);position:relative;overflow:hidden}
+.cod-form::before{content:'';position:absolute;top:0;right:0;left:0;height:5px;background:linear-gradient(90deg,var(--gold),var(--red),var(--gold))}
+.form-group{margin-bottom:22px;position:relative}
+.form-label{display:flex;align-items:center;gap:8px;font-size:.92rem;font-weight:700;color:var(--navy);margin-bottom:8px}
+.required-star{color:var(--red)}
+.form-input,.form-select{width:100%;padding:14px 18px;border:2px solid var(--light-gray);border-radius:12px;font-size:1rem;color:var(--navy);background:var(--off-white);transition:border-color .2s,box-shadow .2s;direction:rtl;-webkit-appearance:none;appearance:none;font-family:inherit}
+.form-input:focus,.form-select:focus{outline:none;border-color:var(--gold);box-shadow:0 0 0 4px rgba(245,197,24,.15);background:#fff}
+.form-input.error,.form-select.error{border-color:var(--red);box-shadow:0 0 0 3px rgba(232,19,42,.1);animation:shake .3s ease}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+.form-input.valid,.form-select.valid{border-color:var(--success);background:#f8fff9}
+.field-error{color:var(--red);font-size:.82rem;margin-top:5px;display:none;font-weight:600}
+.field-error.show{display:flex;align-items:center;gap:4px}
 .field-error.show::before{content:'⚠️';font-size:.75rem}
 .form-select{cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' fill='none'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%230A1628' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:left 16px center;padding-left:40px}
 .form-select:disabled{opacity:.5;cursor:not-allowed}
 .baladiya-hidden{display:none !important;visibility:hidden !important;height:0 !important;overflow:hidden !important;margin:0 !important;padding:0 !important;}
 .delivery-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:4px}
 .delivery-card{border:2px solid var(--light-gray);border-radius:14px;padding:16px 12px;text-align:center;cursor:pointer;transition:border-color .2s,background .2s,transform .2s,box-shadow .2s;background:var(--off-white);position:relative;user-select:none}
+.delivery-card:hover{border-color:var(--gold);background:#fffef5;transform:translateY(-2px);box-shadow:0 6px 20px rgba(245,197,24,.15)}
+.delivery-card.active{border-color:var(--gold);background:linear-gradient(135deg,#fff8e0,#fffde8);box-shadow:0 0 0 3px rgba(245,197,24,.2)}
+.delivery-card .delivery-icon{font-size:1.5rem;display:block;margin-bottom:5px}
+.delivery-card .delivery-name{font-weight:700;font-size:.9rem;color:var(--navy)}
+.delivery-card .delivery-price{font-size:.82rem;color:var(--gray);margin-top:2px;min-height:22px;display:flex;align-items:center;justify-content:center;gap:3px}
+.delivery-card input[type="radio"]{position:absolute;opacity:0;width:0;height:0}
+.delivery-card .check-mark{position:absolute;top:8px;left:8px;width:20px;height:20px;border-radius:50%;border:2px solid var(--light-gray);background:#fff;transition:.2s;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700}
+.delivery-card.active .check-mark{border-color:var(--gold);background:var(--gold);color:var(--navy)}
+.delivery-badge{position:absolute;top:-8px;right:10px;background:var(--success);color:#fff;font-size:.65rem;font-weight:800;padding:2px 8px;border-radius:10px}
+.qty-row{display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.qty-control{display:flex;align-items:center;border:2px solid var(--light-gray);border-radius:12px;overflow:hidden;background:var(--off-white);flex-shrink:0}
+.qty-btn{width:50px;height:50px;background:var(--navy);color:#fff;border:none;font-size:1.4rem;cursor:pointer;transition:background .2s;flex-shrink:0;font-family:inherit;display:flex;align-items:center;justify-content:center}
+.qty-btn:hover{background:#1e3a6e}
+.qty-btn:active{background:var(--red)}
+.qty-display{min-width:52px;text-align:center;font-size:1.3rem;font-weight:900;color:var(--navy);padding:10px 8px}
+.qty-bonus-tag{background:linear-gradient(135deg,var(--gold),var(--gold-dark));color:var(--navy);font-size:.78rem;font-weight:800;padding:4px 10px;border-radius:8px;line-height:1.3;display:none;align-items:center;gap:5px}
+.qty-bonus-tag.show{display:flex}
+.order-summary{background:linear-gradient(135deg,#f8f9fa,#fff);border:2px solid var(--light-gray);border-radius:16px;padding:18px 20px;margin-bottom:6px;transition:border-color .3s,background .3s}
+.order-summary.highlight{border-color:var(--gold);background:linear-gradient(135deg,#fff8e0,#fffde8)}
+.summary-row{display:flex;align-items:center;justify-content:space-between;padding:5px 0;font-size:.9rem}
+.summary-row .s-label{color:var(--gray)}
+.summary-row .s-val{font-weight:700;color:var(--navy);min-height:24px;display:flex;align-items:center}
+.summary-divider{border:none;border-top:1px dashed var(--light-gray);margin:8px 0}
+.summary-total-row{display:flex;align-items:center;justify-content:space-between;padding:6px 0}
+.summary-total-row .t-label{font-size:.95rem;font-weight:700;color:var(--navy)}
+.summary-total-amount{font-size:1.8rem;font-weight:900;color:var(--red);line-height:1;min-height:36px;display:flex;align-items:center}
+.summary-total-currency{font-size:.85rem;color:var(--gray);font-weight:600;margin-top:2px}
+.submit-btn{width:100%;padding:18px;background:linear-gradient(135deg,var(--red),var(--red-dark));color:#fff;border:none;border-radius:14px;font-size:1.15rem;font-weight:900;cursor:pointer;box-shadow:0 8px 25px rgba(232,19,42,.45);transition:transform .3s,box-shadow .3s;display:flex;align-items:center;justify-content:center;gap:10px;font-family:inherit;position:relative;overflow:hidden}
+.submit-btn:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 12px 35px rgba(232,19,42,.65)}
+.submit-btn:disabled{opacity:.7;cursor:not-allowed;transform:none}
+.submit-btn-text{display:flex;align-items:center;gap:8px}
 .submit-btn-sub{font-size:.75rem;font-weight:600;opacity:.9;display:block;margin-top:2px}
 .trust-row{display:flex;justify-content:center;gap:20px;margin-top:20px;flex-wrap:wrap;padding:16px;background:var(--off-white);border-radius:12px}
 .trust-item{display:flex;align-items:center;gap:6px;font-size:.8rem;color:var(--gray);font-weight:600}
 
-/* ── SUCCESS POPUP ──────────────────────────────── */
 .popup-overlay{position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:10000;display:none;align-items:center;justify-content:center;padding:20px}
 .popup-overlay.active{display:flex}
 .popup-box{background:#fff;border-radius:24px;padding:44px 36px;max-width:460px;width:100%;text-align:center;position:relative;animation:popIn .35s cubic-bezier(.34,1.56,.64,1)}
+@keyframes popIn{from{transform:scale(.7);opacity:0}to{transform:scale(1);opacity:1}}
+.popup-check{width:80px;height:80px;background:linear-gradient(135deg,#28A745,#1e7e34);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:2.5rem;margin:0 auto 20px;color:#fff;animation:checkPop .4s .2s both}
+@keyframes checkPop{from{transform:scale(0)}to{transform:scale(1)}}
+.popup-box h2{font-size:1.5rem;font-weight:900;color:var(--navy);margin-bottom:10px}
+.popup-box p{color:var(--gray);font-size:.92rem;line-height:1.8;margin-bottom:6px}
+.popup-highlight{color:var(--red);font-weight:700}
 .popup-close{position:absolute;top:14px;left:14px;background:var(--light-gray);border:none;width:34px;height:34px;border-radius:50%;font-size:1.1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--gray)}
 .popup-phone-box{background:linear-gradient(135deg,#f0fff4,#e8f5e9);border:1px solid #c3e6cb;border-radius:12px;padding:14px 18px;margin:18px 0;font-size:.95rem;color:#155724;font-weight:600;line-height:1.6}
 .popup-order-id{background:var(--off-white);border-radius:8px;padding:8px 14px;font-size:.8rem;color:var(--gray);font-family:monospace;margin-top:10px}
 
-/* ── FOOTER ─────────────────────────────────────── */
 footer{background:#060d1a;color:rgba(255,255,255,.7);padding:36px 20px;text-align:center}
 .footer-inner{max-width:700px;margin:0 auto}
 .footer-logo{width:72px;height:72px;background:linear-gradient(135deg,#1a3060,#0d2040);border-radius:14px;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;overflow:hidden;border:2px solid rgba(245,197,24,.25)}
+.footer-logo img{width:100%;height:100%;object-fit:contain}
+.footer-name{color:#fff;font-size:1.1rem;font-weight:700;margin-bottom:6px}
+.footer-info{font-size:.88rem;line-height:1.8;opacity:.6}
 .footer-info a{color:inherit}
 .footer-divider{border-color:rgba(255,255,255,.08);margin:20px 0}
 .footer-copy{font-size:.78rem;opacity:.35}
 
-/* ── RESPONSIVE ─────────────────────────────────── */
 @media(max-width:768px){
   .float-btn{padding:14px 24px;font-size:.95rem;width:calc(100% - 32px)}
   .cod-form{padding:28px 16px}
+  .trust-row{gap:12px}
+  .social-proof-strip{gap:14px}
+}
+@media(max-width:480px){
+  .cod-section{padding:50px 10px 100px}
+  .cod-form{padding:22px 12px;border-radius:16px}
+  .delivery-card{padding:12px 8px}
+  .delivery-card .delivery-name{font-size:.8rem}
+  .popup-box{padding:32px 18px}
+  .sticky-product-name{display:none}
+  .urgency-bar{font-size:.82rem;gap:6px}
 }
 </style>
-
-<!-- ════════════════════════════════════════════════
-  GA4 — deferred until first interaction or 4s
-═══════════════════════════════════════════════════ -->
-<script>
-window.dataLayer=window.dataLayer||[];
-function gtag(){dataLayer.push(arguments);}
-gtag('js',new Date());
-var _gaLoaded=false;
-function _loadGA4Once(){if(_gaLoaded)return;_gaLoaded=true;var s=document.createElement('script');s.src='https://www.googletagmanager.com/gtag/js?id=G-3NJP2JDXV6';s.async=true;document.head.appendChild(s);}
-setTimeout(_loadGA4Once,4000);
-</script>
-
-<!-- ════════════════════════════════════════════════
-  FB PIXEL — deferred until scroll or 3s
-═══════════════════════════════════════════════════ -->
-<script>
-!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');
-function getOrCreateExtId(){var id=sessionStorage.getItem('_ext_id');if(!id){id='ext_'+Date.now()+'_'+Math.random().toString(36).substr(2,9);sessionStorage.setItem('_ext_id',id);}return id;}
-var _pixelLoaded=false;
-function loadFBPixel(){if(_pixelLoaded)return;_pixelLoaded=true;var s=document.createElement('script');s.src='https://connect.facebook.net/en_US/fbevents.js';s.async=true;document.head.appendChild(s);s.onload=function(){fbq('init','1613682052670123',{external_id:getOrCreateExtId()});var ev=window._pendingPageView;if(ev){fbq('track','PageView',{},{eventID:ev});}};}
-var _fbLoaded2=false;
-function _loadFBOnce(){if(_fbLoaded2)return;_fbLoaded2=true;loadFBPixel();}
-window.addEventListener('scroll',_loadFBOnce,{once:true,passive:true});
-setTimeout(_loadFBOnce,3000);
-</script>
 </head>
 <body>
 
@@ -229,26 +264,20 @@ setTimeout(_loadFBOnce,3000);
 
 <div class="urgency-bar">
   <div class="pulse-dot"></div>
-  <span>🔴 عرض محدود — الكمية محدودة! اطلب الآن قبل نفاد المخزون</span>
+  <span>🔥 الكميات محدودة — الطلبات تُرسل كل يوم مع شركات التوصيل</span>
+  <div class="pulse-dot"></div>
 </div>
 
 <div class="sticky-header" id="stickyHeader">
   <div class="sticky-left">
-    <span class="sticky-product-name">⚽ Champions League Ball</span>
-    <span class="sticky-price-tag">3,600 دج</span>
+    <span class="sticky-product-name">🏆 Champions League Ball</span>
+    <span class="sticky-price-tag">الدفع عند الاستلام</span>
   </div>
   <button class="sticky-btn" onclick="scrollToForm(event)">🛒 اطلب الآن</button>
 </div>
 
 <a class="float-btn" id="floatBtn" onclick="handleFloatClick(event)" href="#section3">👇 اسحب للأسفل لاكتشاف التفاصيل</a>
 
-<div class="img-section" id="heroSection">
-<!-- ════════════════════════════════════════════════
-  HERO IMAGE
-  • fetchpriority="high" + loading="eager" + decoding="sync"
-  • Shows INSTANTLY — no blur transition (above fold)
-  • Dominant color background fills while img loads
-═══════════════════════════════════════════════════ -->
 <div class="img-wrap img-hero" id="heroWrap">
   <img
     id="heroImg"
@@ -261,20 +290,15 @@ setTimeout(_loadFBOnce,3000);
   />
 </div>
 
-<a href="#section3" class="scroll-indicator" onclick="scrollToSection('section3',event)">
+<!-- SCROLL INDICATOR 1: hero → benefits — TRACKED -->
+<a href="#section3" class="scroll-indicator" onclick="trackScrollIndicator('hero','benefits',event); scrollToSection('section3',event)">
   <span class="scroll-text">👇 اسحب للأسفل</span>
   <div class="scroll-arrow"><svg viewBox="0 0 24 24"><path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/></svg></div>
 </a>
 
-<!-- ════════════════════════════════════════════════
-  BENEFITS IMAGE (was section3)
-  • Progressive blur-up: loads in background, fades when ready
-  • IntersectionObserver triggers load only when near viewport
-═══════════════════════════════════════════════════ -->
 <div class="img-wrap reveal" id="benefitsWrap">
   <img
     id="img3"
-    data-src="Benefits.jpg"
     src="Benefits.jpg"
     alt="المميزات"
     width="1200" height="800"
@@ -284,16 +308,12 @@ setTimeout(_loadFBOnce,3000);
   />
 </div>
 
-<a href="#section4" class="scroll-indicator" onclick="scrollToSection('section4',event)">
-  <span class="scroll-text">استمر في التمرير</span>
+<!-- SCROLL INDICATOR 2: benefits → offer — TRACKED -->
+<a href="#section4" class="scroll-indicator" onclick="trackScrollIndicator('benefits','offer',event); scrollToSection('section4',event)">
+  <span class="scroll-text">شاهد العرض المميز</span>
   <div class="scroll-arrow"><svg viewBox="0 0 24 24"><path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/></svg></div>
 </a>
 
-<!-- ════════════════════════════════════════════════
-  OFFER IMAGE (was section4)
-  • Progressive blur-up
-  • loading="lazy" = browser only fetches when near viewport
-═══════════════════════════════════════════════════ -->
 <div class="img-wrap reveal" id="offerWrap">
   <img
     id="img4"
@@ -306,135 +326,159 @@ setTimeout(_loadFBOnce,3000);
   />
 </div>
 
+<!-- SCROLL INDICATOR 3: offer → form — TRACKED -->
+<a href="#cod-form" class="scroll-indicator" onclick="trackScrollIndicator('offer','form',event); scrollToSection('cod-form',event)">
+  <span class="scroll-text">🛒 اطلب الآن</span>
+  <div class="scroll-arrow"><svg viewBox="0 0 24 24"><path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/></svg></div>
+</a>
+
 <div class="social-proof-strip">
-  <span class="proof-item">⭐ 4.9 (89 تقييم)</span>
-  <span class="proof-item">✅ 2,300+ طلب</span>
-  <span class="proof-item">🚚 توصيل سريع</span>
-  <span class="proof-item">💰 الدفع عند الاستلام</span>
+  <div class="proof-item"><span>⭐</span><span>4.9/5 من 89 تقييم</span></div>
+  <div class="proof-item"><span>🚚</span><span>توصيل لـ 58 ولاية</span></div>
+  <div class="proof-item"><span>💳</span><span>الدفع عند الاستلام</span></div>
+  <div class="proof-item"><span>🔄</span><span>ضمان الجودة</span></div>
 </div>
 
 <section class="cod-section" id="cod-form">
-  <div class="form-header">
-    <div class="form-header-badge">📦 اطلب الآن — الدفع عند الاستلام</div>
-    <h2>⚽ احصل على كرة دوري الأبطال الرسمية</h2>
-    <p style="color:rgba(255,255,255,.7);font-size:1.1rem;max-width:500px;margin:0 auto;">سعر خاص 3,600 دج فقط للقطعة عند شراء 2 أو أكثر</p>
+  <div class="form-header reveal">
+    <div class="form-header-badge">🏆 طلب الآن — الدفع عند الاستلام</div>
+    <h2>أكمل طلبك في <span>أقل من دقيقة</span></h2>
+  </div>
+
+  <div class="form-progress reveal" id="formProgress">
+    <div class="progress-step active" id="step1">
+      <div class="progress-step-circle">1</div>
+      <div class="progress-step-label">بياناتك</div>
+    </div>
+    <div class="progress-line" id="line1"></div>
+    <div class="progress-step" id="step2">
+      <div class="progress-step-circle">2</div>
+      <div class="progress-step-label">الولاية</div>
+    </div>
+    <div class="progress-line" id="line2"></div>
+    <div class="progress-step" id="step3">
+      <div class="progress-step-circle">3</div>
+      <div class="progress-step-label">التوصيل</div>
+    </div>
+    <div class="progress-line" id="line3"></div>
+    <div class="progress-step" id="step4">
+      <div class="progress-step-circle">✓</div>
+      <div class="progress-step-label">تأكيد</div>
+    </div>
   </div>
 
   <form class="cod-form reveal" id="orderForm" novalidate>
-    <!-- NAME -->
     <div class="form-group">
       <label class="form-label" for="fullName">👤 الاسم الكامل</label>
       <input type="text" id="fullName" name="fullName" class="form-input" placeholder="مثال: محمد بن علي" autocomplete="name" autocorrect="off" spellcheck="false"/>
       <div class="field-error" id="nameErr">يرجى إدخال الاسم (3 أحرف على الأقل)</div>
     </div>
 
-    <!-- PHONE -->
     <div class="form-group">
       <label class="form-label" for="phone">📱 رقم الهاتف <span class="required-star">*</span></label>
       <input type="tel" id="phone" name="phone" class="form-input" placeholder="أدخل رقم هاتفك هنا" maxlength="10" autocomplete="tel" inputmode="numeric"/>
       <div class="field-error" id="phoneErr">يجب أن يبدأ الرقم بـ 05، 06، أو 07 ويتكون من 10 أرقام</div>
     </div>
 
-    <!-- WILAYA -->
     <div class="form-group">
       <label class="form-label" for="wilaya">🗺️ الولاية <span class="required-star">*</span></label>
       <select id="wilaya" name="wilaya" class="form-select">
         <option value="">-- اختر الولاية --</option>
-        <option value="Adrar">أدرار</option>
-        <option value="Chlef">الشلف</option>
-        <option value="Laghouat">الأغواط</option>
-        <option value="Oum El Bouaghi">أم البواقي</option>
-        <option value="Batna">باتنة</option>
-        <option value="Béjaïa">بجاية</option>
-        <option value="Biskra">بسكرة</option>
-        <option value="Béchar">بشار</option>
-        <option value="Blida">البليدة</option>
-        <option value="Bouira">البويرة</option>
-        <option value="Tamanrasset">تمنراست</option>
-        <option value="Tébessa">تبسة</option>
-        <option value="Tlemcen">تلمسان</option>
-        <option value="Tiaret">تيارت</option>
-        <option value="Tizi Ouzou">تيزي وزو</option>
-        <option value="Alger">الجزائر</option>
-        <option value="Djelfa">الجلفة</option>
-        <option value="Jijel">جيجل</option>
-        <option value="Sétif">سطيف</option>
-        <option value="Saïda">سعيدة</option>
-        <option value="Skikda">سكيكدة</option>
-        <option value="Sidi Bel Abbès">سيدي بلعباس</option>
-        <option value="Annaba">عنابة</option>
-        <option value="Guelma">قالمة</option>
-        <option value="Constantine">قسنطينة</option>
-        <option value="Médéa">المدية</option>
-        <option value="Mostaganem">مستغانم</option>
-        <option value="M'Sila">المسيلة</option>
-        <option value="Mascara">معسكر</option>
-        <option value="Ouargla">ورقلة</option>
-        <option value="Oran">وهران</option>
-        <option value="El Bayadh">البيض</option>
-        <option value="Illizi">إليزي</option>
-        <option value="Bordj Bou Arréridj">برج بوعريريج</option>
-        <option value="Boumerdès">بومرداس</option>
-        <option value="El Tarf">الطارف</option>
-        <option value="Tindouf">تندوف</option>
-        <option value="Tissemsilt">تيسمسيلت</option>
-        <option value="El Oued">الوادي</option>
-        <option value="Khenchela">خنشلة</option>
-        <option value="Souk Ahras">سوق أهراس</option>
-        <option value="Tipaza">تيبازة</option>
-        <option value="Mila">ميلة</option>
-        <option value="Aïn Defla">عين الدفلى</option>
-        <option value="Naâma">النعامة</option>
-        <option value="Aïn Témouchent">عين تموشنت</option>
-        <option value="Ghardaïa">غرداية</option>
-        <option value="Relizane">غليزان</option>
-        <option value="Timimoun">تيميمون</option>
-        <option value="Bordj Badji Mokhtar">برج باجي مختار</option>
-        <option value="Ouled Djellal">أولاد جلال</option>
-        <option value="Béni Abbès">بني عباس</option>
-        <option value="In Salah">عين صالح</option>
-        <option value="In Guezzam">عين قزام</option>
-        <option value="Touggourt">تقرت</option>
-        <option value="Djanet">جانت</option>
-        <option value="El M'Ghair">المغير</option>
-        <option value="El Menia">المنيعة</option>
+        <option value="1"  data-h="NjAw" data-d="NDAw">01 - أدرار</option>
+        <option value="2"  data-h="NTAw" data-d="MzAw">02 - الشلف</option>
+        <option value="3"  data-h="NjAw" data-d="NDAw">03 - الأغواط</option>
+        <option value="4"  data-h="NTAw" data-d="MzAw">04 - أم البواقي</option>
+        <option value="5"  data-h="NTAw" data-d="MzAw">05 - باتنة</option>
+        <option value="6"  data-h="NTAw" data-d="MzAw">06 - بجاية</option>
+        <option value="7"  data-h="NjAw" data-d="NDAw">07 - بسكرة</option>
+        <option value="8"  data-h="NjAw" data-d="NDAw">08 - بشار</option>
+        <option value="9"  data-h="NTAw" data-d="MzAw">09 - البليدة</option>
+        <option value="10" data-h="NTAw" data-d="MzAw">10 - البويرة</option>
+        <option value="11" data-h="NjAw" data-d="NDAw">11 - تمنراست</option>
+        <option value="12" data-h="NTAw" data-d="MzAw">12 - تبسة</option>
+        <option value="13" data-h="NTAw" data-d="MzAw">13 - تلمسان</option>
+        <option value="14" data-h="NTAw" data-d="MzAw">14 - تيارت</option>
+        <option value="15" data-h="NTAw" data-d="MzAw">15 - تيزي وزو</option>
+        <option value="16" data-h="NTAw" data-d="MzAw">16 - الجزائر</option>
+        <option value="17" data-h="NTAw" data-d="MzAw">17 - الجلفة</option>
+        <option value="18" data-h="NTAw" data-d="MzAw">18 - جيجل</option>
+        <option value="19" data-h="NTAw" data-d="MzAw">19 - سطيف</option>
+        <option value="20" data-h="NTAw" data-d="MzAw">20 - سعيدة</option>
+        <option value="21" data-h="NTAw" data-d="MzAw">21 - سكيكدة</option>
+        <option value="22" data-h="NTAw" data-d="MzAw">22 - سيدي بلعباس</option>
+        <option value="23" data-h="NTAw" data-d="MzAw">23 - عنابة</option>
+        <option value="24" data-h="NTAw" data-d="MzAw">24 - قالمة</option>
+        <option value="25" data-h="NTAw" data-d="MzAw">25 - قسنطينة</option>
+        <option value="26" data-h="NTAw" data-d="MzAw">26 - المدية</option>
+        <option value="27" data-h="NTAw" data-d="MzAw">27 - مستغانم</option>
+        <option value="28" data-h="NTAw" data-d="MzAw">28 - المسيلة</option>
+        <option value="29" data-h="NTAw" data-d="MzAw">29 - معسكر</option>
+        <option value="30" data-h="NjAw" data-d="NDAw">30 - ورقلة</option>
+        <option value="31" data-h="NTAw" data-d="MzAw">31 - وهران</option>
+        <option value="32" data-h="NjAw" data-d="NDAw">32 - البيض</option>
+        <option value="33" data-h="NjAw" data-d="NDAw">33 - إيليزي</option>
+        <option value="34" data-h="NTAw" data-d="MzAw">34 - برج بوعريريج</option>
+        <option value="35" data-h="NTAw" data-d="MzAw">35 - بومرداس</option>
+        <option value="36" data-h="NTAw" data-d="MzAw">36 - الطارف</option>
+        <option value="37" data-h="NjAw" data-d="NDAw">37 - تندوف</option>
+        <option value="38" data-h="NTAw" data-d="MzAw">38 - تيسمسيلت</option>
+        <option value="39" data-h="NjAw" data-d="NDAw">39 - الوادي</option>
+        <option value="40" data-h="NTAw" data-d="MzAw">40 - خنشلة</option>
+        <option value="41" data-h="NTAw" data-d="MzAw">41 - سوق أهراس</option>
+        <option value="42" data-h="NTAw" data-d="MzAw">42 - تيبازة</option>
+        <option value="43" data-h="NTAw" data-d="MzAw">43 - ميلة</option>
+        <option value="44" data-h="NTAw" data-d="MzAw">44 - عين الدفلى</option>
+        <option value="45" data-h="NjAw" data-d="NDAw">45 - النعامة</option>
+        <option value="46" data-h="NTAw" data-d="MzAw">46 - عين تموشنت</option>
+        <option value="47" data-h="NjAw" data-d="NDAw">47 - غرداية</option>
+        <option value="48" data-h="NTAw" data-d="MzAw">48 - غليزان</option>
+        <option value="49" data-h="NjAw" data-d="NDAw">49 - تيميمون</option>
+        <option value="50" data-h="NjAw" data-d="NDAw">50 - برج باجي مختار</option>
+        <option value="51" data-h="NTAw" data-d="MzAw">51 - أولاد جلال</option>
+        <option value="52" data-h="NjAw" data-d="NDAw">52 - بني عباس</option>
+        <option value="53" data-h="NjAw" data-d="NDAw">53 - عين صالح</option>
+        <option value="54" data-h="NjAw" data-d="NDAw">54 - عين قزام</option>
+        <option value="55" data-h="NjAw" data-d="NDAw">55 - تقرت</option>
+        <option value="56" data-h="NjAw" data-d="NDAw">56 - جانت</option>
+        <option value="57" data-h="NjAw" data-d="NDAw">57 - المغير</option>
+        <option value="58" data-h="NjAw" data-d="NDAw">58 - المنيعة</option>
       </select>
       <div class="field-error" id="wilayaErr">يرجى اختيار الولاية</div>
     </div>
 
-    <!-- BALADIYA — HIDDEN FROM CLIENT, VALUE ALWAYS EMPTY -->
     <div class="baladiya-hidden" id="baladiyaGroup" aria-hidden="true">
       <select id="baladiya" name="baladiya" class="form-select" tabindex="-1">
         <option value="">-- --</option>
       </select>
     </div>
 
-    <!-- DELIVERY TYPE -->
     <div class="form-group">
       <label class="form-label">🚚 نوع التوصيل <span class="required-star">*</span></label>
       <div class="delivery-grid" id="deliveryGrid">
-        <div class="delivery-card" id="deliveryHome" data-type="home" onclick="selectDelivery('home')">
-          <div class="delivery-check" id="checkHome">✓</div>
-          <div class="delivery-icon">🏠</div>
-          <div class="delivery-label">توصيل للمنزل</div>
-          <div class="delivery-price" id="homePriceDisplay">0 دج</div>
-        </div>
-        <div class="delivery-card" id="deliveryDesk" data-type="desk" onclick="selectDelivery('desk')">
-          <div class="delivery-check" id="checkDesk"></div>
-          <div class="delivery-icon">🏢</div>
-          <div class="delivery-label">استلام من المكتب</div>
-          <div class="delivery-price" id="deskPriceDisplay">0 دج</div>
-        </div>
+        <label class="delivery-card active" id="cardHome">
+          <input type="radio" name="deliveryType" value="home" checked/>
+          <span class="check-mark">✓</span>
+          <span class="delivery-badge">الأكثر طلباً</span>
+          <span class="delivery-icon">🏠</span>
+          <span class="delivery-name">توصيل للمنزل</span>
+          <span class="delivery-price">+ <span id="homePriceVal">---</span></span>
+        </label>
+        <label class="delivery-card" id="cardDesk">
+          <input type="radio" name="deliveryType" value="desk"/>
+          <span class="check-mark"></span>
+          <span class="delivery-icon">📦</span>
+          <span class="delivery-name">توصيل للمكتب</span>
+          <span class="delivery-price">+ <span id="deskPriceVal">---</span></span>
+        </label>
       </div>
       <div class="field-error" id="deliveryErr">يرجى اختيار نوع التوصيل بعد تحديد الولاية</div>
     </div>
 
-    <!-- QUANTITY -->
     <div class="form-group">
       <label class="form-label">📦 الكمية</label>
       <div class="qty-row">
-        <div class="qty-selector">
-          <button type="button" class="qty-btn" onclick="changeQty(-1)" aria-label="تقليل الكمية">-</button>
+        <div class="qty-control">
+          <button type="button" class="qty-btn" onclick="changeQty(-1)" aria-label="تقليل الكمية">−</button>
           <div class="qty-display" id="qtyDisplay">1</div>
           <button type="button" class="qty-btn" onclick="changeQty(1)" aria-label="زيادة الكمية">+</button>
         </div>
@@ -442,35 +486,39 @@ setTimeout(_loadFBOnce,3000);
       </div>
     </div>
 
-    <!-- ORDER SUMMARY -->
     <div class="form-group">
       <div class="order-summary" id="orderSummary">
         <div class="summary-row">
-          <span>سعر الكرة</span>
-          <span id="summaryProductPrice">4,200 دج</span>
+          <span class="s-label">🏆 سعر المنتج</span>
+          <span class="s-val"><span id="summaryProductPrice">---</span></span>
         </div>
         <div class="summary-row">
-          <span>تكلفة التوصيل</span>
-          <span id="summaryDeliveryPrice">0 دج</span>
+          <span class="s-label">🚚 التوصيل</span>
+          <span class="s-val"><span id="summaryDeliveryPrice">---</span></span>
         </div>
-        <div class="summary-row summary-total">
-          <span>المجموع</span>
-          <span id="summaryTotalPrice">4,200 دج</span>
+        <hr class="summary-divider"/>
+        <div class="summary-total-row">
+          <span class="t-label">💰 المجموع الكامل</span>
+          <div style="text-align:left">
+            <div class="summary-total-amount"><span id="summaryTotal">---</span></div>
+            <div class="summary-total-currency">دينار جزائري — الدفع عند الاستلام</div>
+          </div>
         </div>
       </div>
     </div>
 
-    <!-- SUBMIT -->
     <button type="button" class="submit-btn" id="submitBtn" onclick="submitOrder()">
       <div>
         <div class="submit-btn-text">✅ إضغط هنا لارسال الطلب</div>
-        <span class="submit-btn-sub">الدفع عند الاستلام — توصيل سريع</span>
+        <span class="submit-btn-sub">توصيل سريع — الدفع عند الاستلام</span>
       </div>
     </button>
+
     <div class="trust-row">
-      <span class="trust-item">🔒 معلوماتك آمنة</span>
-      <span class="trust-item">📦 شحن سريع</span>
-      <span class="trust-item">💰 الدفع عند الاستلام</span>
+      <div class="trust-item"><span>🔒</span><span>بياناتك آمنة 100%</span></div>
+      <div class="trust-item"><span>🚚</span><span>توصيل لجميع الولايات</span></div>
+      <div class="trust-item"><span>💳</span><span>الدفع عند الاستلام فقط</span></div>
+      <div class="trust-item"><span>📞</span><span>دعم عبر الهاتف</span></div>
     </div>
   </form>
 </section>
@@ -481,7 +529,7 @@ setTimeout(_loadFBOnce,3000);
     <div class="footer-name">Article De Sport</div>
     <div class="footer-info">الجزائر، تيارت<br/>📞 <a href="tel:+213665017371">+213 665 017 371</a></div>
     <hr class="footer-divider"/>
-    <div class="footer-copy">© 2026 Article De Sport — جميع الحقوق محفوظة</div>
+    <div class="footer-copy">© 2025 Champions League. جميع الحقوق محفوظة.</div>
   </div>
 </footer>
 
@@ -489,257 +537,808 @@ setTimeout(_loadFBOnce,3000);
 <div class="popup-overlay" id="successPopup">
   <div class="popup-box">
     <button class="popup-close" onclick="closePopup()">✕</button>
-    <div style="font-size:3rem;margin-bottom:10px;">✅</div>
-    <h3 style="color:#1a3a5c;font-size:1.5rem;margin-bottom:6px;">تم استلام طلبك!</h3>
-    <p style="color:var(--gray);font-size:1rem;margin-bottom:12px;">سيتم التواصل معك خلال 24 ساعة لتأكيد الطلب.</p>
+    <div class="popup-check">✓</div>
+    <h2>تم استلام طلبك! 🎉</h2>
+    <p>شكرا لثقتك بنا يا <strong id="popupCustomerName">عزيزنا</strong></p>
     <div class="popup-phone-box">
-      📞 رقم الهاتف: <strong id="popupCustomerPhone">—</strong><br/>
-      👤 الاسم: <span id="popupCustomerName">—</span>
+      📞 سيتصل بك فريقنا قريباً لتأكيد الطلب<br/>
+      <span style="font-size:.82rem">يرجى إبقاء هاتفك مفتوحاً حتى نتمكن من التواصل معك</span>
     </div>
-    <div class="popup-order-id" id="popupOrderId">رقم الطلب: —</div>
+    <p class="popup-highlight">المنتج في طريقه إليك! 🚚⚽</p>
+    <div class="popup-order-id" id="popupOrderId"></div>
   </div>
 </div>
 
-<!-- ════════════════════════════════════════════════
-  ALL JAVASCRIPT — inline, deferred execution
-  No external scripts block rendering
-═══════════════════════════════════════════════════ -->
 <script>
 'use strict';
 
-/* ══ PROGRESSIVE IMAGE LOADING — YouTube-style blur-up ══════
-   Strategy:
-   1. img starts invisible + blurred (CSS default state)
-   2. When img fires onload → add .img-loaded to wrapper
-   3. CSS transition smoothly reveals the full quality image
-   4. For hero: already marked .img-hero → instant, no blur
-   This fires even for cached images (from preload hints)
-══════════════════════════════════════════════════════════════ */
-function initProgressiveImages(){
-  // Hero: always instant (above fold, preloaded)
-  var heroWrap = document.getElementById('heroWrap');
-  var heroImg  = document.getElementById('heroImg');
-  // Mark hero as loaded immediately — or on load if not cached
-  if(heroImg.complete && heroImg.naturalWidth){
-    heroWrap.classList.add('img-loaded');
-  } else {
-    heroImg.addEventListener('load', function(){
-      heroWrap.classList.add('img-loaded');
-    }, {once:true});
-  }
+/* ══════════════════════════════════════════════════════════════
+   FULL OPTIMIZED TRACKING — UCL LANDING PAGE
+   ▸ GA4 ID: G-D2BWGMP7D8 (FIXED — was G-3NJP2JDXV6)
+   ▸ FB Pixel: 1613682052670123
+   ▸ CAPI: v21.0 — test event code REMOVED for production
+   ▸ 11 NEW EVENTS ADDED:
+       1.  form_validation_error     — which fields fail & how often
+       2.  form_field_abandon        — which step users drop at
+       3.  scroll_indicator_click    — hero/benefits/offer arrows
+       4.  section_visible (CAPI)    — benefits + offer to FB CAPI
+       5.  phone_format_error        — phone validation failure rate
+       6.  order_summary_visible     — price reveal engagement
+       7.  delivery_price_seen       — per-wilaya price reaction
+       8.  popup_close_timing        — post-conversion engagement
+       9.  bundle_upsell_seen        — upsell message effectiveness
+      10.  web_vitals (LCP)          — Core Web Vitals tracking
+      11.  return_visitor            — new vs returning enrichment
+   ▸ BUGS FIXED:
+       ✔ GA4 ID corrected to G-D2BWGMP7D8
+       ✔ TEST2786 removed from CAPI
+       ✔ FB Pixel script fixed (no longer deferred, fires reliably)
+       ✔ Return visitor detection added via localStorage
+       ✔ Form validation error tracking added
+       ✔ Section visible events now mirror to CAPI
+       ✔ SESSION_LEAD_VALUE no longer random — uses real product price
+═══════════════════════════════════════════════════════════════ */
 
-  // Below-fold images: blur-up on load
-  var belowFold = [
-    {wrap:'benefitsWrap', img:'img3'},
-    {wrap:'offerWrap',    img:'img4'}
-  ];
-  belowFold.forEach(function(item){
-    var wrap = document.getElementById(item.wrap);
-    var img  = document.getElementById(item.img);
-    if(!wrap || !img) return;
-    function markLoaded(){
-      // Small rAF delay so the blur-up transition is visible and smooth
-      requestAnimationFrame(function(){
-        requestAnimationFrame(function(){
-          wrap.classList.add('img-loaded');
-        });
-      });
-    }
-    if(img.complete && img.naturalWidth){
-      markLoaded();
-    } else {
-      img.addEventListener('load', markLoaded, {once:true});
-      img.addEventListener('error', function(){ wrap.classList.add('img-loaded'); }, {once:true});
-    }
+/* ══ PROGRESSIVE IMAGE LOADING ══════════════════════════════ */
+function initProgressiveImages(){
+  var heroWrap=document.getElementById('heroWrap');
+  var heroImg=document.getElementById('heroImg');
+  if(heroImg.complete&&heroImg.naturalWidth){heroWrap.classList.add('img-loaded');}
+  else{heroImg.addEventListener('load',function(){heroWrap.classList.add('img-loaded');},{once:true});}
+  [{wrap:'benefitsWrap',img:'img3'},{wrap:'offerWrap',img:'img4'}].forEach(function(item){
+    var wrap=document.getElementById(item.wrap);
+    var img=document.getElementById(item.img);
+    if(!wrap||!img)return;
+    function markLoaded(){requestAnimationFrame(function(){requestAnimationFrame(function(){wrap.classList.add('img-loaded');});});}
+    if(img.complete&&img.naturalWidth){markLoaded();}
+    else{img.addEventListener('load',markLoaded,{once:true});img.addEventListener('error',function(){wrap.classList.add('img-loaded');},{once:true});}
   });
 }
-// Run immediately — images may already be cached from preload
 initProgressiveImages();
 
+/* ══ RETURN VISITOR DETECTION (NEW #11) ════════════════════ */
+var IS_RETURNING=false;
+var VISIT_COUNT=1;
+try{
+  IS_RETURNING=!!localStorage.getItem('_ucl_visited');
+  VISIT_COUNT=parseInt(localStorage.getItem('_ucl_vc')||'0')+1;
+  localStorage.setItem('_ucl_visited','1');
+  localStorage.setItem('_ucl_vc',String(VISIT_COUNT));
+}catch(e){}
+
 /* ══ CONFIG ══════════════════════════════════════════════════ */
-var CFG = {
+var GA4_ID='G-D2BWGMP7D8'; /* FIXED — correct measurement ID */
+var CFG={
   pixelId:     '1613682052670123',
-  accessToken: 'EAAO6FTdt6xkBRwIZCv5vOmjEj7Qu11GZCldzj6jZBgTZBH7uZBTtTzGONP1grwKI3tvwxqZBmK2VEgh0ol6bEjBA87Dsq3KhbZCMErqPXKQ3QzZCKjJgf1s2jZB4fhVwKlU3sJ72ZByD9aePFGK1KrjAKWPrAUZBU4zkuZBNSfpMUGX7wuITVlZAWTziWGBCbI35pMQZDZD',
+  /* SECURITY NOTE: Move accessToken to a server-side proxy (Cloudflare Worker / Vercel fn)
+     and call your proxy here instead of graph.facebook.com directly.
+     Current setup is functional but token is exposed in client JS. */
+  accessToken: 'EAAO6FTdt6xkBSYZA2ZAINjyno0s7b9ct5pTCXoDASsR3m8A61GEnA9yDxUtEWNZANElrhIhxkt2G4TSq9YHN0pgk7QNund7NsvILIcSzqiCLZB1xA1NH7Vs2JEXeIFLVpydALowtH3HHd7nS6JLF6hdCcmTMYubZCZAu82ilZCmZCABIUZCGLrwXYq2N6qPZBptAZDZD',
+  apiVersion:  'v21.0',
   currency:    'DZD',
+  country:     'dz',
+  productId:   'UCL_BUDAPEST_2026_FINAL_BALL_SZ5',
   productName: 'Champions League UCL Budapest 2026 Final Ball',
-  productId:   'UCL-BUD-2026-SZ5-450G',
   productBrand:'Champions League / UEFA',
   productCategory:'Sporting Goods > Team Sports > Soccer > Soccer Balls',
   productSku:  'UCL-BUD-2026-SZ5-450G',
-  /* ── PRICING ──────────────────────────────────────────────
-     priceUnit  = 4200 DZD  (qty = 1)
-     price2Unit = 3600 DZD  (per-unit price for qty ≥ 2)
-     Examples:
-       1 ball  = 4200 DZD
-       2 balls = 3600 × 2 = 7200 DZD
-       3 balls = 3600 × 3 = 10800 DZD
-  ─────────────────────────────────────────────────────────── */
-  priceUnit:   parseInt(atob('NDIwMA==')),  // 4200
-  price2Unit:  parseInt(atob('MzYwMA==')), // 3600 (per unit, qty≥2)
+  priceUnit:   parseInt(atob('NDIwMA==')),   /* 4200 DZD qty=1 */
+  price2Unit:  parseInt(atob('MzYwMA==')),   /* 3600 DZD qty≥2 */
   pageUrl:     window.location.href,
   referrerUrl: document.referrer||''
 };
 
-var TG={token:'8671482276:AAEo1-ukI0DhkkogouHFmXNS5Vw4Pwtqb08',chat:'6405258861'};
+var TG1={token:'8671482276:AAEo1-ukI0DhkkogouHFmXNS5Vw4Pwtqb08',chat:'6405258861'};
 var TG2={token:'8671482276:AAEo1-ukI0DhkkogouHFmXNS5Vw4Pwtqb08',chat:'6405258861'};
-var SHEET_URL='https://script.google.com/macros/s/AKfycbxdTbudRsIZ0ANuEtKrl8wtWFCiH8K_OCk9rC53HPiLqih_3W4LBfqlKlrjYj-2pnHF/exec';
+var SHEET_URL='https://script.google.com/macros/s/AKfycbxkkztY7dOMvdR3i4OhF58OhldQt-rV-FLBMxKyHgxZx3RHbDyeCJrU32SKejTgPMfgnQ/exec';
 
-var currentQty=1, currentDeliveryPrice=0, homePrice=0, deskPrice=0, deliveryType='home';
-var orderSubmitted=false, formInteractionFired=false, leadFired=false, addToCartFired=false;
-var floatBtnMode='scroll', timeOnPage=0, cachedIp=null, SESSION_START=Date.now();
-var scrollMilestonesFired={}, topFired={}, exitIntentFired=false, formStartTime=null;
+var currentQty=1,currentDeliveryPrice=0,homePrice=0,deskPrice=0,deliveryType='home';
+var orderSubmitted=false,formInteractionFired=false,addToCartFired=false;
+var floatBtnMode='scroll',timeOnPage=0,cachedIp=null,SESSION_START=Date.now();
+var scrollMilestonesFired={},topFired={},exitIntentFired=false,formStartTime=null;
 var SHARED_EVENT_IDS={};
-var SESSION_FB_PRICE=randFbPrice();
+var popupOpenTime=null; /* for popup_close_timing (NEW #8) */
+var orderSummaryVisibleFired=false; /* for order_summary_visible (NEW #6) */
+var bundleUpsellSeenFired=false; /* for bundle_upsell_seen (NEW #9) */
+var deliveryPriceSeenFired=false; /* for delivery_price_seen (NEW #7) */
+var phoneErrorCount=0; /* for phone_format_error (NEW #5) */
+var fieldFocusTimes={},fieldInteracted={};
 
-function randFbPrice(){return Math.round((Math.random()*(3600-2800)+2800)/100)*100;}
+/* FIXED: Session lead value is now the real product price, not random */
+var SESSION_LEAD_VALUE=CFG.priceUnit;
 
+/* ══ CRYPTO / HASH UTILS ════════════════════════════════════ */
 async function sha256(str){
   if(!str)return null;
-  var enc = new TextEncoder().encode(str);
-  var buf = await crypto.subtle.digest('SHA-256', enc);
-  return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('');
+  var buf=new TextEncoder().encode(String(str).trim().toLowerCase());
+  var hash=await crypto.subtle.digest('SHA-256',buf);
+  return Array.from(new Uint8Array(hash)).map(function(b){return b.toString(16).padStart(2,'0');}).join('');
 }
+async function hashPhone(phone){
+  if(!phone)return null;
+  var c=String(phone).replace(/\D/g,'');
+  if(c.startsWith('0'))c='213'+c.substring(1);
+  else if(!c.startsWith('213'))c='213'+c;
+  return sha256(c);
+}
+function getCookie(n){var m=document.cookie.match(new RegExp('(^| )'+n+'=([^;]+)'));return m?m[2]:null;}
+function getFbc(){var c=getCookie('_fbc');if(c)return c;var fbclid=new URLSearchParams(window.location.search).get('fbclid');if(fbclid)return 'fb.1.'+Date.now()+'.'+fbclid;return null;}
+function getFbp(){return getCookie('_fbp')||null;}
+function getUtm(){var p=new URLSearchParams(window.location.search);return{source:p.get('utm_source')||'',medium:p.get('utm_medium')||'',campaign:p.get('utm_campaign')||'',content:p.get('utm_content')||'',term:p.get('utm_term')||'',fbclid:p.get('fbclid')||'',gclid:p.get('gclid')||''};}
+var UTM=getUtm();
 function getOrCreateExtId(){var id=sessionStorage.getItem('_ext_id');if(!id){id='ext_'+Date.now()+'_'+Math.random().toString(36).substr(2,9);sessionStorage.setItem('_ext_id',id);}return id;}
 var EXTERNAL_ID=getOrCreateExtId();
 function genEventId(n){var id='eid_'+n+'_'+Date.now()+'_'+Math.random().toString(36).substr(2,9);SHARED_EVENT_IDS[n]=id;return id;}
 function splitName(full){if(!full)return{first:null,last:null};var parts=full.trim().split(/\s+/);return parts.length===1?{first:parts[0],last:null}:{first:parts[0],last:parts.slice(1).join(' ')};}
+function deviceType(){return/Mobi|Android/i.test(navigator.userAgent)?'mobile':'desktop';}
 
-/* ══ PRICING FUNCTIONS ═══════════════════════════════════════
-   qty=1 → 4200/unit
-   qty≥2 → 3600/unit
-═══════════════════════════════════════════════════════════════ */
-function getProductPrice(qty){
-  if(qty>=2) return CFG.price2Unit * qty;
-  return CFG.priceUnit * qty;
-}
+/* ══ PRICING ════════════════════════════════════════════════ */
+function getProductPrice(qty){return qty>=2?CFG.price2Unit*qty:CFG.priceUnit*qty;}
 function getTotalPrice(qty,del){return getProductPrice(qty)+del;}
 
-function ga4(name,params){if(typeof gtag!=='function')return;try{gtag('event',name,Object.assign({send_to:'G-3NJP2JDXV6',currency:CFG.currency,page_location:CFG.pageUrl},params||{}));}catch(e){}}
+/* ══ GA4 ════════════════════════════════════════════════════ */
+function ga4(name,params){
+  if(typeof gtag!=='function')return;
+  try{
+    gtag('event',name,Object.assign({
+      send_to:GA4_ID,
+      currency:CFG.currency,
+      page_location:CFG.pageUrl,
+      is_returning_visitor:IS_RETURNING,
+      visit_count:VISIT_COUNT,
+      device_type:deviceType()
+    },params||{}));
+  }catch(e){}
+}
 
-setTimeout(function(){
-  fetch('https://api.ipify.org?format=json',{signal:AbortSignal.timeout(3000)})
-    .then(function(r){return r.json();})
-    .then(function(d){cachedIp=d.ip||null;})
-    .catch(function(){});
-},2000);
+/* ══ IP FETCH ════════════════════════════════════════════════ */
+fetch('https://api.ipify.org?format=json', {signal: AbortSignal.timeout(3000)})
+  .then(function(r){ return r.json(); })
+  .then(function(d){ cachedIp = d.ip || null; })
+  .catch(function(){})
+  .finally(function(){
+    // IP is now available (or null if it failed) — fire page events
+    capiPageView();
+    trackReturnVisitor();
+    setTimeout(capiViewContent, 2500);
+  });
 
-function pixelTrack(ev,params,eid){if(typeof fbq==='function'){try{fbq('track',ev,params||{},{eventID:eid});}catch(e){}}else{window._pendingPageView=eid;}}
-function pixelTrackCustom(ev,params,eid){if(typeof fbq==='function'){try{fbq('trackCustom',ev,params||{},{eventID:eid});}catch(e){}}}
+/* ══ FB PIXEL HELPERS ═══════════════════════════════════════ */
+function pixelTrack(ev,params,eid){
+  if(typeof fbq==='function'){
+    try{fbq('track',ev,params||{},{eventID:eid});}catch(e){}
+  }
+}
+function pixelTrackCustom(ev,params,eid){
+  if(typeof fbq==='function'){
+    try{fbq('trackCustom',ev,params||{},{eventID:eid});}catch(e){}
+  }
+}
 
-function baseEvent(name,eid){return{event_name:name,event_time:Date.now(),event_id:eid,event_source_url:CFG.pageUrl,action_source:'website'};}
-function buildProductCustomData(extra){var d={content_ids:[CFG.productId],content_name:CFG.productName,content_type:'product',currency:CFG.currency,value:extra.value||SESSION_FB_PRICE*currentQty,num_items:extra.num_items||currentQty};if(extra.order_id)d.order_id=extra.order_id;if(extra.wilaya)d.wilaya=extra.wilaya;if(extra.commune)d.commune=extra.commune;if(extra.delivery_type)d.delivery_type=extra.delivery_type;if(extra.is_bundle)d.is_bundle=extra.is_bundle;if(extra.payment_method)d.payment_method=extra.payment_method;return d;}
-async function buildUserData(d){var ud={client_user_agent:navigator.userAgent};if(cachedIp)ud.client_ip_address=cachedIp;if(d.phone&&d.phone.length===10){var ph=d.phone;var phn='213'+ph.substring(1);ud.phone=phn;var hsh=await sha256(phn);if(hsh)ud.ph=hsh;}if(d.name){var nm=splitName(d.name);if(nm.first){var fn=await sha256(nm.first);if(fn)ud.fn=fn;}if(nm.last){var ln=await sha256(nm.last);if(ln)ud.ln=ln;}}if(d.city){var ct=await sha256(d.city);if(ct)ud.ct=ct;}if(d.state){var st=await sha256(d.state);if(st)ud.st=st;}if(EXTERNAL_ID){var ext=await sha256(EXTERNAL_ID);if(ext)ud.external_id=ext;}return ud;}
-function sendCAPI(events){fetch('https://graph.facebook.com/v19.0/'+CFG.pixelId+'/events?access_token='+CFG.accessToken,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({data:events})}).catch(function(){});}
-function capiPageView(){var eid=genEventId('PageView');pixelTrack('PageView',{},eid);var ud=buildUserData({});var ev=baseEvent('PageView',eid);ev.user_data=ud;ev.custom_data=buildProductCustomData({});sendCAPI([ev]);}
-function capiViewContent(){var eid=genEventId('ViewContent');pixelTrack('ViewContent',{content_name:CFG.productName,content_type:'product',currency:CFG.currency,value:SESSION_FB_PRICE},eid);var ud=buildUserData({});var ev=baseEvent('ViewContent',eid);ev.user_data=ud;ev.custom_data=buildProductCustomData({value:SESSION_FB_PRICE});sendCAPI([ev]);}
-async function capiLead(phone,name){var eid=genEventId('Lead');var fbVal=SESSION_FB_PRICE*currentQty;pixelTrack('Lead',{content_name:CFG.productName,currency:CFG.currency,value:fbVal},eid);var ud=await buildUserData({phone:phone,name:name});var ev=baseEvent('Lead',eid);ev.user_data=ud;ev.custom_data=buildProductCustomData({value:fbVal,num_items:currentQty});sendCAPI([ev]);}
-async function capiCustom(eventName,cd){var eid=genEventId(eventName);var customData=buildProductCustomData(cd||{});pixelTrackCustom(eventName,customData,eid);var ud=await buildUserData({});var ev=baseEvent(eventName,eid);ev.user_data=ud;ev.custom_data=customData;sendCAPI([ev]);}
+/* Initialize pixel now that it's loaded in <head> */
+(function(){
+  try{
+    fbq('init',CFG.pixelId,{external_id:EXTERNAL_ID});
+  }catch(e){}
+})();
 
-/* ══ UI UPDATE ═══════════════════════════════════════════════ */
+/* ══ CUSTOM DATA BUILDER ════════════════════════════════════ */
+function buildLeadCustomData(o){
+  return Object.assign({
+    content_ids:      [CFG.productId],
+    content_name:     CFG.productName,
+    content_category: CFG.productCategory,
+    content_type:     'product',
+    currency:         CFG.currency,
+    product_brand:    CFG.productBrand,
+    product_sku:      CFG.productSku,
+    store_name:       'Article De Sport',
+    store_country:    'Algeria',
+    payment_method:   'cash_on_delivery',
+    delivery_zone:    'Algeria — 58 Wilayas',
+    order_type:       'cod_lead',
+    is_returning_visitor: IS_RETURNING,
+    visit_count:      VISIT_COUNT
+  },o||{});
+}
+
+/* ══ USER DATA BUILDER ═══════════════════════════════════════ */
+async function buildUserData(opts){
+  opts=opts||{};
+  var name=splitName(opts.name||'');
+  var results=await Promise.all([
+    hashPhone(opts.phone),
+    name.first?sha256(name.first.toLowerCase()):null,
+    name.last?sha256(name.last.toLowerCase()):null,
+    opts.city?sha256(opts.city.trim().toLowerCase()):null,
+    opts.state?sha256(opts.state.trim().toLowerCase()):null,
+    sha256(CFG.country),
+    sha256(EXTERNAL_ID)
+  ]);
+  var ud={client_user_agent:navigator.userAgent,country:results[5],external_id:results[6]};
+  if(results[0])ud.ph=results[0];
+  if(results[1])ud.fn=results[1];
+  if(results[2])ud.ln=results[2];
+  if(results[3])ud.ct=results[3];
+  if(results[4])ud.st=results[4];
+  var fbc=getFbc(),fbp=getFbp();
+  if(fbc)ud.fbc=fbc;
+  if(fbp)ud.fbp=fbp;
+  if(cachedIp)ud.client_ip_address=cachedIp;
+  return ud;
+}
+
+function baseEvent(name,eventId){
+  return{
+    event_name:name,
+    event_time:Math.floor(Date.now()/1000),
+    event_id:eventId,
+    event_source_url:CFG.pageUrl,
+    action_source:'website',
+    data_processing_options:[],
+    data_processing_options_country:0,
+    data_processing_options_state:0
+  };
+}
+
+/* FIXED: test_event_code=TEST2786 REMOVED from production URL */
+async function sendCAPI(events){
+  var url='https://graph.facebook.com/'+CFG.apiVersion+'/'+CFG.pixelId+'/events?access_token='+CFG.accessToken;
+  try{
+    var res=await fetch(url,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({data:events})});
+    var json=await res.json();
+    return!json.error;
+  }catch(err){return false;}
+}
+
+/* ══ CAPI EVENT FUNCTIONS ═══════════════════════════════════ */
+
+async function capiPageView(){
+  var eid=genEventId('PageView');
+  pixelTrack('PageView',{},eid);
+  var ud=await buildUserData({});
+  var ev=baseEvent('PageView',eid);
+  ev.user_data=ud;
+  ev.custom_data=buildLeadCustomData({value:CFG.priceUnit,num_items:1});
+  sendCAPI([ev]);
+  ga4('page_view',{content_name:CFG.productName,is_returning_visitor:IS_RETURNING,visit_count:VISIT_COUNT});
+}
+
+async function capiViewContent(){
+  var eid=genEventId('ViewContent');
+  pixelTrack('ViewContent',{
+    content_ids:[CFG.productId],
+    content_name:CFG.productName,
+    content_type:'product',
+    currency:CFG.currency,
+    value:CFG.priceUnit
+  },eid);
+  var ud=await buildUserData({});
+  var ev=baseEvent('ViewContent',eid);
+  ev.user_data=ud;
+  ev.custom_data=buildLeadCustomData({value:CFG.priceUnit,num_items:1});
+  sendCAPI([ev]);
+}
+
+async function capiAddToCart(qty){
+  qty=qty||1;
+  var eid=genEventId('AddToCart');
+  var phone=document.getElementById('phone').value.trim();
+  var name=document.getElementById('fullName').value.trim();
+  pixelTrack('AddToCart',{
+    content_ids:[CFG.productId],
+    content_name:CFG.productName,
+    content_type:'product',
+    currency:CFG.currency,
+    value:CFG.priceUnit*qty,
+    num_items:qty
+  },eid);
+  var ud=await buildUserData({phone:phone,name:name});
+  var ev=baseEvent('AddToCart',eid);
+  ev.user_data=ud;
+  ev.custom_data=buildLeadCustomData({value:CFG.priceUnit*qty,num_items:qty});
+  sendCAPI([ev]);
+}
+
+async function capiInitiateCheckout(qty,delPrice,phone,name,wilaya){
+  var eid=genEventId('InitiateCheckout');
+  var val=getTotalPrice(qty,delPrice);
+  pixelTrack('InitiateCheckout',{
+    content_ids:[CFG.productId],
+    content_name:CFG.productName,
+    content_type:'product',
+    currency:CFG.currency,
+    value:val,
+    num_items:qty
+  },eid);
+  var ud=await buildUserData({phone:phone,name:name,state:wilaya});
+  var ev=baseEvent('InitiateCheckout',eid);
+  ev.user_data=ud;
+  ev.custom_data=buildLeadCustomData({
+    value:val,
+    num_items:qty,
+    wilaya:wilaya,
+    delivery_type:deliveryType,
+    is_bundle:qty>=2
+  });
+  sendCAPI([ev]);
+}
+
+async function capiLead(orderData){
+  var eid=genEventId('Lead');
+  var totalVal=getTotalPrice(orderData.qty,orderData.delPrice);
+  pixelTrack('Lead',{
+    content_ids:[CFG.productId],
+    content_name:CFG.productName,
+    content_type:'product',
+    currency:CFG.currency,
+    value:totalVal,
+    num_items:orderData.qty,
+    order_id:orderData.txId,
+    predicted_ltv:totalVal
+  },eid);
+  var ud=await buildUserData({phone:orderData.phone,name:orderData.name,state:orderData.wilaya});
+  var ev=baseEvent('Lead',eid);
+  ev.user_data=ud;
+  ev.custom_data=buildLeadCustomData({
+    value:totalVal,
+    num_items:orderData.qty,
+    order_id:orderData.txId,
+    wilaya:orderData.wilaya,
+    delivery_type:orderData.delType,
+    delivery_price:orderData.delPrice,
+    product_price:orderData.prodPrice,
+    is_bundle:orderData.qty>=2,
+    customer_name:orderData.name,
+    form_time_sec:orderData.formSec,
+    time_on_page_sec:timeOnPage,
+    utm_source:UTM.source,
+    utm_medium:UTM.medium,
+    utm_campaign:UTM.campaign,
+    utm_content:UTM.content,
+    device_type:deviceType(),
+    phone_errors_during_session:phoneErrorCount,
+    visit_count:VISIT_COUNT
+  });
+  sendCAPI([ev]);
+  ga4('generate_lead',{
+    transaction_id:orderData.txId,
+    currency:CFG.currency,
+    value:totalVal,
+    items:[{item_id:CFG.productId,item_name:CFG.productName,quantity:orderData.qty,price:CFG.priceUnit}]
+  });
+}
+
+async function capiCompleteRegistration(orderData){
+  var eid=genEventId('CompleteRegistration');
+  var totalVal=getTotalPrice(orderData.qty,orderData.delPrice);
+  pixelTrack('CompleteRegistration',{
+    content_name:CFG.productName,
+    currency:CFG.currency,
+    value:totalVal,
+    status:'cod_order_submitted',
+    order_id:orderData.txId
+  },eid);
+  var ud=await buildUserData({phone:orderData.phone,name:orderData.name,state:orderData.wilaya});
+  var ev=baseEvent('CompleteRegistration',eid);
+  ev.user_data=ud;
+  ev.custom_data=buildLeadCustomData({
+    value:totalVal,
+    num_items:orderData.qty,
+    order_id:orderData.txId,
+    status:'cod_order_submitted',
+    wilaya:orderData.wilaya,
+    delivery_type:orderData.delType,
+    delivery_price:orderData.delPrice,
+    product_price:orderData.prodPrice,
+    is_bundle:orderData.qty>=2,
+    utm_source:UTM.source,
+    utm_medium:UTM.medium,
+    utm_campaign:UTM.campaign
+  });
+  sendCAPI([ev]);
+}
+
+async function capiCustom(eventName,cd){
+  var eid=genEventId(eventName);
+  var customData=buildLeadCustomData(cd||{});
+  pixelTrackCustom(eventName,customData,eid);
+  var ud=await buildUserData({});
+  var ev=baseEvent(eventName,eid);
+  ev.user_data=ud;
+  ev.custom_data=customData;
+  sendCAPI([ev]);
+}
+
+/* ══ NEW EVENT #1 — FORM VALIDATION ERROR ═══════════════════
+   Fires when user submits with missing/invalid fields.
+   Tells you EXACTLY which field fails and how often.
+═══════════════════════════════════════════════════════════════ */
+async function trackFormValidationError(failedFields){
+  var eid=genEventId('FormValidationError');
+  ga4('form_validation_error',{
+    form_id:'orderForm',
+    failed_fields:failedFields.join(','),
+    failed_count:failedFields.length,
+    time_on_page:timeOnPage,
+    form_time_sec:formStartTime?Math.round((Date.now()-formStartTime)/1000):0
+  });
+  var ud=await buildUserData({});
+  var ev=baseEvent('FormValidationError',eid);
+  ev.user_data=ud;
+  ev.custom_data=buildLeadCustomData({
+    failed_fields:failedFields.join(','),
+    failed_count:failedFields.length,
+    value:CFG.priceUnit
+  });
+  pixelTrackCustom('FormValidationError',ev.custom_data,eid);
+  sendCAPI([ev]);
+}
+
+/* ══ NEW EVENT #2 — FORM FIELD ABANDON ══════════════════════
+   Fires on blur when a field was touched but left invalid/empty.
+   Shows funnel drop-off at field level.
+═══════════════════════════════════════════════════════════════ */
+function trackFieldAbandon(fieldId,value,wasValid){
+  if(!fieldInteracted[fieldId])return; /* only if user actually touched it */
+  var isEmpty=!value||value.trim()==='';
+  if(isEmpty||!wasValid){
+    ga4('form_field_abandon',{
+      field_name:fieldId,
+      was_empty:isEmpty,
+      was_invalid:!wasValid&&!isEmpty,
+      time_on_page:timeOnPage
+    });
+  }
+}
+
+/* ══ NEW EVENT #3 — SCROLL INDICATOR CLICK ══════════════════
+   Tracks which of the 3 scroll arrows users click.
+   Called from HTML onclick directly.
+═══════════════════════════════════════════════════════════════ */
+window.trackScrollIndicator=function(from,to,e){
+  ga4('scroll_indicator_click',{from_section:from,to_section:to,time_on_page:timeOnPage});
+  capiCustom('ScrollIndicatorClick',{from_section:from,to_section:to,value:CFG.priceUnit});
+};
+
+/* ══ NEW EVENT #4 — SECTION VISIBLE TO CAPI ═════════════════
+   Benefits and offer images — previously only GA4.
+   Now mirrors to FB CAPI for audience building.
+═══════════════════════════════════════════════════════════════ */
+var sectionVisibleFired={};
+function trackSectionVisibleCAPI(sectionId){
+  if(sectionVisibleFired[sectionId])return;
+  sectionVisibleFired[sectionId]=true;
+  var eventName=sectionId==='section3'?'BenefitsVisible':'OfferVisible';
+  ga4('section_view',{section_name:sectionId,time_on_page:timeOnPage});
+  capiCustom(eventName,{section:sectionId,time_on_page:timeOnPage,value:CFG.priceUnit});
+}
+
+/* ══ NEW EVENT #5 — PHONE FORMAT ERROR ══════════════════════
+   Tracks how often Algerian phone format fails.
+   Key insight: many users enter 9-digit or landline numbers.
+═══════════════════════════════════════════════════════════════ */
+function trackPhoneFormatError(phoneValue){
+  phoneErrorCount++;
+  ga4('phone_format_error',{
+    phone_length:phoneValue.length,
+    starts_with:phoneValue.substring(0,2),
+    error_count_session:phoneErrorCount,
+    time_on_page:timeOnPage
+  });
+}
+
+/* ══ NEW EVENT #6 — ORDER SUMMARY VISIBLE ═══════════════════
+   Fires when user sees the price total for the first time.
+   Correlation with abandon = price friction signal.
+═══════════════════════════════════════════════════════════════ */
+function trackOrderSummaryVisible(total){
+  if(orderSummaryVisibleFired)return;
+  orderSummaryVisibleFired=true;
+  ga4('order_summary_visible',{
+    total_price:total,
+    product_price:getProductPrice(currentQty),
+    delivery_price:currentDeliveryPrice,
+    quantity:currentQty,
+    delivery_type:deliveryType,
+    time_on_page:timeOnPage
+  });
+  capiCustom('OrderSummaryVisible',{
+    value:total,
+    num_items:currentQty,
+    delivery_type:deliveryType,
+    delivery_price:currentDeliveryPrice
+  });
+}
+
+/* ══ NEW EVENT #7 — DELIVERY PRICE SEEN ════════════════════
+   Fires when wilaya is selected and prices become visible.
+   Per-wilaya abandonment rate reveals price-sensitive regions.
+═══════════════════════════════════════════════════════════════ */
+function trackDeliveryPriceSeen(wilayaName,wilayaId,hPrice,dPrice){
+  if(deliveryPriceSeenFired)return;
+  deliveryPriceSeenFired=true;
+  ga4('delivery_price_seen',{
+    wilaya_name:wilayaName,
+    wilaya_id:wilayaId,
+    home_price:hPrice,
+    desk_price:dPrice,
+    time_on_page:timeOnPage
+  });
+  capiCustom('DeliveryPriceSeen',{
+    wilaya:wilayaName,
+    home_delivery_price:hPrice,
+    desk_delivery_price:dPrice,
+    value:CFG.priceUnit
+  });
+}
+
+/* ══ NEW EVENT #8 — POPUP CLOSE TIMING ══════════════════════
+   Tracks how long user spends reading the success popup.
+   Fast close = unsure; slow read = engaged post-conversion.
+═══════════════════════════════════════════════════════════════ */
+function trackPopupClose(){
+  var dwell=popupOpenTime?Math.round((Date.now()-popupOpenTime)/1000):0;
+  ga4('popup_closed',{
+    popup_type:'order_success',
+    dwell_seconds:dwell,
+    read_level:dwell<2?'instant':dwell<5?'glanced':dwell<15?'read':'deep_read'
+  });
+  capiCustom('OrderPopupClose',{
+    dwell_seconds:dwell,
+    value:CFG.priceUnit
+  });
+}
+
+/* ══ NEW EVENT #9 — BUNDLE UPSELL SEEN ══════════════════════
+   Fires when the "save X DZD" bonus tag appears (qty≥2).
+   Tracks whether upsell message is seen vs ignored.
+═══════════════════════════════════════════════════════════════ */
+function trackBundleUpsellSeen(qty,saving){
+  if(bundleUpsellSeenFired)return;
+  bundleUpsellSeenFired=true;
+  ga4('bundle_upsell_seen',{
+    quantity:qty,
+    saving_amount:saving,
+    time_on_page:timeOnPage
+  });
+  capiCustom('BundleUpsellSeen',{
+    quantity:qty,
+    saving_dzd:saving,
+    value:CFG.price2Unit*qty
+  });
+}
+
+/* ══ NEW EVENT #10 — WEB VITALS / LCP ═══════════════════════
+   Tracks Largest Contentful Paint (hero image performance).
+   Slow LCP = high bounce. Lets you correlate page speed to CVR.
+═══════════════════════════════════════════════════════════════ */
+function initWebVitals(){
+  if(!('PerformanceObserver' in window))return;
+  try{
+    var lcpObs=new PerformanceObserver(function(list){
+      var entries=list.getEntries();
+      var last=entries[entries.length-1];
+      var lcpMs=Math.round(last.startTime);
+      var rating=lcpMs<2500?'good':lcpMs<4000?'needs_improvement':'poor';
+      ga4('web_vitals',{
+        metric_name:'LCP',
+        metric_value:lcpMs,
+        metric_rating:rating,
+        element:last.element?last.element.tagName:'unknown'
+      });
+    });
+    lcpObs.observe({type:'largest-contentful-paint',buffered:true});
+  }catch(e){}
+  try{
+    var clsObs=new PerformanceObserver(function(list){
+      var clsScore=0;
+      list.getEntries().forEach(function(e){if(!e.hadRecentInput)clsScore+=e.value;});
+      if(clsScore>0){
+        ga4('web_vitals',{
+          metric_name:'CLS',
+          metric_value:parseFloat(clsScore.toFixed(4)),
+          metric_rating:clsScore<0.1?'good':clsScore<0.25?'needs_improvement':'poor'
+        });
+      }
+    });
+    clsObs.observe({type:'layout-shift',buffered:true});
+  }catch(e){}
+}
+initWebVitals();
+
+/* ══ NEW EVENT #11 — RETURN VISITOR ════════════════════════
+   Fired with PageView. IS_RETURNING already set above.
+   Enriches ALL events with returning visitor context.
+   (Applied globally via buildLeadCustomData + ga4 wrapper)
+═══════════════════════════════════════════════════════════════ */
+/* Fired as part of capiPageView below — standalone GA4 event here: */
+function trackReturnVisitor(){
+  if(IS_RETURNING){
+    ga4('return_visitor',{visit_count:VISIT_COUNT,time_since_first:'unknown'});
+    capiCustom('ReturnVisitor',{visit_count:VISIT_COUNT,value:CFG.priceUnit});
+  }
+}
+
+/* ══ UI UPDATE ══════════════════════════════════════════════ */
 function updateUI(){
   if(homePrice>0){
     document.getElementById('homePriceVal').textContent=homePrice.toLocaleString('fr-DZ')+' دج';
-    document.getElementById('homePriceDisplay').textContent=homePrice.toLocaleString('fr-DZ')+' دج';
-  }
-  if(deskPrice>0){
     document.getElementById('deskPriceVal').textContent=deskPrice.toLocaleString('fr-DZ')+' دج';
-    document.getElementById('deskPriceDisplay').textContent=deskPrice.toLocaleString('fr-DZ')+' دج';
+  }else{
+    document.getElementById('homePriceVal').textContent='---';
+    document.getElementById('deskPriceVal').textContent='---';
   }
-  if(deliveryType==='home'){currentDeliveryPrice=homePrice;document.getElementById('deliveryHome').classList.add('selected');document.getElementById('deliveryDesk').classList.remove('selected');document.getElementById('checkHome').textContent='✓';document.getElementById('checkDesk').textContent='';}else{currentDeliveryPrice=deskPrice;document.getElementById('deliveryDesk').classList.add('selected');document.getElementById('deliveryHome').classList.remove('selected');document.getElementById('checkDesk').textContent='✓';document.getElementById('checkHome').textContent='';}
+  currentDeliveryPrice=(deliveryType==='home')?homePrice:deskPrice;
+  var cardHome=document.getElementById('cardHome'),cardDesk=document.getElementById('cardDesk');
+  var cmHome=cardHome.querySelector('.check-mark'),cmDesk=cardDesk.querySelector('.check-mark');
+  if(deliveryType==='home'){
+    cardHome.classList.add('active');cardDesk.classList.remove('active');
+    if(cmHome)cmHome.textContent='✓';if(cmDesk)cmDesk.textContent='';
+  }else{
+    cardDesk.classList.add('active');cardHome.classList.remove('active');
+    if(cmDesk)cmDesk.textContent='✓';if(cmHome)cmHome.textContent='';
+  }
   document.getElementById('qtyDisplay').textContent=currentQty;
 
-  /* Bonus tag: show saving vs buying all at normal price */
   var bonusTag=document.getElementById('qtyBonusTag');
   if(currentQty>=2){
-    var savedTotal=(CFG.priceUnit * currentQty) - (CFG.price2Unit * currentQty);
+    var savedTotal=(CFG.priceUnit*currentQty)-(CFG.price2Unit*currentQty);
     document.getElementById('savingAmount').textContent=savedTotal.toLocaleString('fr-DZ')+' دج';
-    bonusTag.classList.add('show');
-  } else {
+    if(!bonusTag.classList.contains('show')){
+      bonusTag.classList.add('show');
+      trackBundleUpsellSeen(currentQty,savedTotal); /* NEW #9 */
+    }
+  }else{
     bonusTag.classList.remove('show');
   }
 
   var prodPrice=getProductPrice(currentQty);
   document.getElementById('summaryProductPrice').textContent=prodPrice.toLocaleString('fr-DZ')+' دج';
   var summCard=document.getElementById('orderSummary');
-  if(currentDeliveryPrice>0){document.getElementById('summaryDeliveryPrice').textContent=currentDeliveryPrice.toLocaleString('fr-DZ')+' دج';summCard.classList.add('has-delivery');}else{document.getElementById('summaryDeliveryPrice').textContent='0 دج';summCard.classList.remove('has-delivery');}
-  var total=getTotalPrice(currentQty,currentDeliveryPrice);
-  document.getElementById('summaryTotalPrice').textContent=total.toLocaleString('fr-DZ')+' دج';
+  if(homePrice>0){
+    document.getElementById('summaryDeliveryPrice').textContent=currentDeliveryPrice.toLocaleString('fr-DZ')+' دج';
+    var total=getTotalPrice(currentQty,currentDeliveryPrice);
+    document.getElementById('summaryTotal').textContent=total.toLocaleString('fr-DZ')+' دج';
+    summCard.classList.add('highlight');
+    trackOrderSummaryVisible(total); /* NEW #6 */
+  }else{
+    document.getElementById('summaryDeliveryPrice').textContent='-- اختر الولاية --';
+    document.getElementById('summaryTotal').textContent='---';
+    summCard.classList.remove('highlight');
+  }
   updateProgress();
 }
 
 function updateProgress(){
-  var name=document.getElementById('fullName').value.trim();
   var phone=document.getElementById('phone').value.trim();
   var wilayaV=document.getElementById('wilaya').value;
   var s1=/^(05|06|07)\d{8}$/.test(phone);
   var s2=!!wilayaV;
   var s3=homePrice>0;
-  setStep('step1','line1',s1,true);setStep('step2','line2',s2,s1);
-  if(s2){var delEl=document.getElementById('deliveryGrid');if(delEl){var cards=delEl.querySelectorAll('.delivery-card');var hasDel=false;cards.forEach(function(c){if(c.classList.contains('selected'))hasDel=true;});setStep('step3','line3',hasDel,s2);}else{setStep('step3','line3',false,s2);}}else{setStep('step3','line3',false,s2);}
+  setStep('step1','line1',s1,true);
+  setStep('step2','line2',s2,s1);
+  setStep('step3','line3',s3,s2);
+  setStep('step4',null,false,s3);
 }
-function setStep(stepId,lineId,done,prev){var el=document.getElementById(stepId);if(el){el.classList.toggle('done',!!done);el.classList.toggle('active',!done && !!prev);}
+function setStep(stepId,lineId,done,active){
+  var s=document.getElementById(stepId);if(!s)return;
+  s.classList.remove('done','active');
+  if(done)s.classList.add('done');else if(active)s.classList.add('active');
   if(lineId){var l=document.getElementById(lineId);if(l)l.classList.toggle('done',!!done);}
 }
 
 /* ══ WILAYA CHANGE ══════════════════════════════════════════ */
 document.getElementById('wilaya').addEventListener('change',function(){
   var val=this.value;
-  if(!val){homePrice=0;deskPrice=0;deliveryType='home';updateUI();return;}
-  var found=false;
-  var rows=[
-    {start:1,end:48,home:350,desk:200}, // wilayas 1-48
-    {start:49,end:58,home:400,desk:250}, // 49-58
-  ];
-  var n=parseInt(val);
-  for(var i=0;i<rows.length;i++){
-    var r=rows[i];
-    if(n>=r.start && n<=r.end){homePrice=r.home;deskPrice=r.desk;found=true;break;}
-  }
-  if(!found){homePrice=0;deskPrice=0;}
-  if(homePrice===0){deliveryType='home';document.getElementById('deliveryHome').classList.add('selected');document.getElementById('deliveryDesk').classList.remove('selected');document.getElementById('checkHome').textContent='✓';document.getElementById('checkDesk').textContent='';}
+  if(!val){homePrice=0;deskPrice=0;deliveryType='home';deliveryPriceSeenFired=false;orderSummaryVisibleFired=false;updateUI();return;}
+  var opt=this.options[this.selectedIndex];
+  homePrice=parseInt(atob(opt.getAttribute('data-h')||'MA=='))||0;
+  deskPrice=parseInt(atob(opt.getAttribute('data-d')||'MA=='))||0;
+  deliveryType='home';
+  this.classList.add('valid');this.classList.remove('error');
+  document.getElementById('wilayaErr').classList.remove('show');
+
+  trackDeliveryPriceSeen(opt.text,val,homePrice,deskPrice); /* NEW #7 */
+
+  if(!addToCartFired){addToCartFired=true;capiAddToCart(currentQty);}
   updateUI();
+  ga4('wilaya_selected',{wilaya_name:opt.text,wilaya_id:val,home_price:homePrice,desk_price:deskPrice});
 });
 
-function selectDelivery(type){
-  if(homePrice===0 && deskPrice===0){document.getElementById('deliveryErr').classList.add('show');return;}else{document.getElementById('deliveryErr').classList.remove('show');}
-  if(type==='home'){if(homePrice===0){document.getElementById('deliveryErr').classList.add('show');return;}deliveryType='home';}else{if(deskPrice===0){document.getElementById('deliveryErr').classList.add('show');return;}deliveryType='desk';}
-  document.getElementById('deliveryErr').classList.remove('show');
-  updateUI();
-  if(!formInteractionFired){formInteractionFired=true;ga4('form_interaction',{interaction_type:'delivery_select'});capiCustom('FormInteraction',{interaction_type:'delivery_select',value:SESSION_FB_PRICE});}
+document.getElementById('cardHome').addEventListener('click',function(){
+  deliveryType='home';updateUI();
+  capiCustom('DeliveryTypeSelect',{delivery_type:'home_delivery',delivery_price_dzd:homePrice});
+  ga4('delivery_type_select',{delivery_type:'home',price:homePrice});
+});
+document.getElementById('cardDesk').addEventListener('click',function(){
+  deliveryType='desk';updateUI();
+  capiCustom('DeliveryTypeSelect',{delivery_type:'desk_delivery',delivery_price_dzd:deskPrice});
+  ga4('delivery_type_select',{delivery_type:'desk',price:deskPrice});
+});
+
+window.changeQty=function(delta){
+  var n=Math.max(1,Math.min(10,currentQty+delta));
+  if(n!==currentQty){
+    currentQty=n;
+    ga4('quantity_change',{quantity:n,is_bundle:n>=2});
+    if(n>=2){capiCustom('BundleQuantitySelect',{quantity:n,is_bundle:true,value:CFG.price2Unit*n});}
+    else{capiCustom('QuantityChange',{quantity:n,value:CFG.priceUnit});}
+    orderSummaryVisibleFired=false; /* reset so new total triggers event again */
+    updateUI();
+  }
+};
+
+/* ══ FORM INTERACTION TRACKING ══════════════════════════════ */
+var formInteractionFiredCAPI=false;
+
+function trackFocus(id){
+  fieldFocusTimes[id]=Date.now();
+  fieldInteracted[id]=true;
+  if(!formStartTime)formStartTime=Date.now();
+  ga4('form_field_focus',{field_name:id});
+  if(!formInteractionFiredCAPI){
+    formInteractionFiredCAPI=true;
+    capiCustom('FormStart',{field_name:id,value:CFG.priceUnit});
+    ga4('form_start',{form_id:'orderForm'});
+  }
+}
+function trackBlur(id){
+  if(fieldFocusTimes[id])ga4('form_field_complete',{field_name:id,time_spent:Math.round((Date.now()-fieldFocusTimes[id])/1000)});
+  var el=document.getElementById(id);
+  var val=el?el.value:'';
+  var isValid=el?!el.classList.contains('error'):false;
+  trackFieldAbandon(id,val,isValid); /* NEW #2 */
   updateProgress();
 }
 
-function changeQty(delta){
-  var newQty=currentQty+delta;
-  if(newQty<1)return;
-  if(newQty>10)return;
-  currentQty=newQty;
-  updateUI();
-  if(!formInteractionFired){formInteractionFired=true;ga4('form_interaction',{interaction_type:'qty_change'});capiCustom('FormInteraction',{interaction_type:'qty_change',value:SESSION_FB_PRICE*currentQty});}
-  updateProgress();
-}
+['fullName','phone','wilaya'].forEach(function(id){
+  var el=document.getElementById(id);if(!el)return;
+  el.addEventListener('focus',function(){trackFocus(id);});
+  el.addEventListener('blur',function(){trackBlur(id);});
+  el.addEventListener('change',function(){ga4('form_field_change',{field_name:id});});
+});
 
-// VALIDATION — phone & wilaya required; name optional; baladiya ignored
+/* Phone input with enhanced error tracking */
+document.getElementById('phone').addEventListener('input',function(){
+  this.value=this.value.replace(/[^0-9]/g,'');
+  var valid=/^(05|06|07)\d{8}$/.test(this.value);
+  if(valid){
+    this.classList.add('valid');this.classList.remove('error');
+    document.getElementById('phoneErr').classList.remove('show');
+  }else if(this.value.length===10){
+    this.classList.add('error');this.classList.remove('valid');
+    document.getElementById('phoneErr').classList.add('show');
+    trackPhoneFormatError(this.value); /* NEW #5 */
+  }
+  updateProgress();
+});
+document.getElementById('fullName').addEventListener('input',function(){
+  if(this.value.trim().length>=3){this.classList.add('valid');this.classList.remove('error');document.getElementById('nameErr').classList.remove('show');}
+  updateProgress();
+});
+
+/* ══ FORM VALIDATION (with error tracking) ══════════════════ */
 function validate(){
   var ok=true;
+  var failedFields=[];
   var name=document.getElementById('fullName').value.trim();
   var phone=document.getElementById('phone').value.trim();
   var wilayaV=document.getElementById('wilaya').value;
-  // name: optional — only validate format if they typed something
   if(name.length>0&&name.length<3){
     document.getElementById('fullName').classList.add('error');
-    document.getElementById('nameErr').classList.add('show');ok=false;
-  } else {
+    document.getElementById('nameErr').classList.add('show');
+    ok=false;failedFields.push('name');
+  }else{
     document.getElementById('fullName').classList.remove('error');
     if(name.length>=3)document.getElementById('fullName').classList.add('valid');
     document.getElementById('nameErr').classList.remove('show');
   }
-  var phoneOk=/^(05|06|07)\d{8}$/.test(phone);
-  if(!phoneOk){
+  if(!/^(05|06|07)\d{8}$/.test(phone)){
     document.getElementById('phone').classList.add('error');
     document.getElementById('phoneErr').classList.add('show');
-    ok=false;
-  } else {
+    ok=false;failedFields.push('phone');
+  }else{
     document.getElementById('phone').classList.remove('error');
     document.getElementById('phone').classList.add('valid');
     document.getElementById('phoneErr').classList.remove('show');
@@ -747,80 +1346,116 @@ function validate(){
   if(!wilayaV){
     document.getElementById('wilaya').classList.add('error');
     document.getElementById('wilayaErr').classList.add('show');
-    ok=false;
-  } else {
+    ok=false;failedFields.push('wilaya');
+  }else{
     document.getElementById('wilaya').classList.remove('error');
     document.getElementById('wilaya').classList.add('valid');
     document.getElementById('wilayaErr').classList.remove('show');
   }
-  if(wilayaV && (homePrice===0 && deskPrice===0)){
-    document.getElementById('deliveryErr').classList.add('show');
-    ok=false;
-  } else {
-    document.getElementById('deliveryErr').classList.remove('show');
-  }
-  if(wilayaV && homePrice===0 && deskPrice===0){
-    document.getElementById('deliveryErr').classList.add('show');
-    ok=false;
-  }
-  if(wilayaV && !document.querySelector('.delivery-card.selected')){
-    document.getElementById('deliveryErr').classList.add('show');
-    ok=false;
-  } else {
-    if(wilayaV)document.getElementById('deliveryErr').classList.remove('show');
-  }
+  /* NEW #1 — fire validation error event with exact fields */
+  if(!ok){trackFormValidationError(failedFields);}
   return ok;
 }
 
-window.submitOrder=function(){
+/* ══ TELEGRAM ════════════════════════════════════════════════ */
+function sendTg(bot,d){
+  var dl=d.delType==='home'?'توصيل للمنزل 🏠':'توصيل للمكتب 📦';
+  var returning=IS_RETURNING?'🔄 عائد (زيارة '+VISIT_COUNT+')':'🆕 زائر جديد';
+  var msg='🛒 <b>طلب جديد - Champions League UCL Budapest 2026</b>\n\n'
+    +'👤 <b>الاسم:</b> '+d.name+'\n'
+    +'📱 <b>الهاتف:</b> <code>'+d.phone+'</code>\n'
+    +'🗺️ <b>الولاية:</b> '+d.wilaya+'\n'
+    +'📦 <b>الكمية:</b> '+d.qty+'\n'
+    +'💰 <b>سعر المنتج:</b> '+d.prodPrice.toLocaleString('fr-DZ')+' دج\n'
+    +'🚚 <b>نوع التوصيل:</b> '+dl+'\n'
+    +'📍 <b>سعر التوصيل:</b> '+d.delPrice.toLocaleString('fr-DZ')+' دج\n\n'
+    +'💵 <b>المجموع الكلي:</b> <code>'+d.total.toLocaleString('fr-DZ')+' دج</code>\n'
+    +'📅 <b>التاريخ:</b> '+d.dateStr+'\n'
+    +'🆔 <b>معرف الطلب:</b> <code>'+d.txId+'</code>\n'
+    +'📊 <b>الجهاز:</b> '+deviceType()+' | '+returning;
+  return fetch('https://api.telegram.org/bot'+bot.token+'/sendMessage',{
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({chat_id:bot.chat,text:msg.trim(),parse_mode:'HTML',disable_web_page_preview:true})
+  }).then(function(r){return r.ok;}).catch(function(){return false;});
+}
+
+/* ══ ORDER SUBMISSION ════════════════════════════════════════ */
+window.submitOrder=async function(){
   if(orderSubmitted)return;
-  if(!validate()){var firstErr=document.querySelector('.form-input.error,.form-select.error');if(firstErr)firstErr.scrollIntoView({behavior:'smooth',block:'center'});return;}
+  ga4('form_submit_attempt',{form_id:'orderForm',time_on_page:timeOnPage});
+  if(!validate()){
+    var firstErr=document.querySelector('.form-input.error,.form-select.error');
+    if(firstErr)firstErr.scrollIntoView({behavior:'smooth',block:'center'});
+    return;
+  }
   var wilayaEl=document.getElementById('wilaya');
   var wilayaText=wilayaEl.options[wilayaEl.selectedIndex].text;
-  var commune=''; // baladiya always empty — hidden from client
   var custName=document.getElementById('fullName').value.trim();
   var custPhone=document.getElementById('phone').value.trim();
   var prodPrice=getProductPrice(currentQty);
-  var orderDel=currentDeliveryPrice;
-  var total=prodPrice+orderDel;
-  var orderType=deliveryType==='home'?'توصيل للمنزل':'استلام من المكتب';
-  var dateStr=new Date().toLocaleString('fr-DZ');
-  var txId='CMD-'+Date.now().toString(36).toUpperCase()+'-'+Math.random().toString(36).substr(2,4).toUpperCase();
-  var orderQty=currentQty;
+  var total=getTotalPrice(currentQty,currentDeliveryPrice);
+  var now=new Date();
+  var dateStr=now.toLocaleDateString('fr-DZ')+' '+now.toLocaleTimeString('fr-DZ');
+  var txId='ORD_'+Date.now()+'_'+Math.random().toString(36).substr(2,7).toUpperCase();
+  var orderQty=currentQty,orderDel=currentDeliveryPrice,orderType=deliveryType;
   var formSec=formStartTime?Math.round((Date.now()-formStartTime)/1000):0;
 
-  orderSubmitted=true;
+  capiInitiateCheckout(orderQty,orderDel,custPhone,custName,wilayaText);
 
+  orderSubmitted=true;
+  popupOpenTime=Date.now(); /* for popup_close_timing NEW #8 */
   document.getElementById('popupCustomerName').textContent=custName?custName.split(' ')[0]:'عزيزنا';
   document.getElementById('popupOrderId').textContent='رقم الطلب: '+txId;
   document.getElementById('successPopup').classList.add('active');
 
-  var purFbVal=SESSION_FB_PRICE*orderQty+orderDel;
-  var icEid=genEventId('InitiateCheckout');
-  var purEid=genEventId('Purchase');
-  pixelTrack('InitiateCheckout',{content_name:CFG.productName,currency:CFG.currency,value:SESSION_FB_PRICE*orderQty+orderDel,num_items:orderQty},icEid);
-  pixelTrack('Purchase',{content_name:CFG.productName,currency:CFG.currency,value:purFbVal,transaction_id:txId,num_items:orderQty},purEid);
-  ga4('purchase',{transaction_id:txId,currency:CFG.currency,value:total,items:[{item_id:CFG.productId,item_name:CFG.productName,quantity:orderQty,price:CFG.priceUnit}]});
+  var btn=document.getElementById('submitBtn');
+  btn.disabled=true;
+  btn.innerHTML='<div><div class="submit-btn-text">✅ تم إرسال طلبك بنجاح!</div></div>';
+
+  var orderData={
+    name:custName,phone:custPhone,wilaya:wilayaText,
+    qty:orderQty,prodPrice:prodPrice,delType:orderType,
+    delPrice:orderDel,total:total,txId:txId,dateStr:dateStr,formSec:formSec
+  };
 
   (async function(){
-    var ud=await buildUserData({phone:custPhone,name:custName,state:wilayaText});
-    var icEv=baseEvent('InitiateCheckout',icEid);icEv.user_data=ud;icEv.custom_data=buildProductCustomData({value:SESSION_FB_PRICE*orderQty+orderDel,num_items:orderQty,wilaya:wilayaText,is_bundle:orderQty>=2});
-    var purEv=baseEvent('Purchase',purEid);purEv.user_data=ud;purEv.custom_data=buildProductCustomData({value:purFbVal,num_items:orderQty,order_id:txId,wilaya:wilayaText,commune:'',delivery_type:orderType,is_bundle:orderQty>=2,payment_method:'cash_on_delivery'});
-    var tgData={name:custName||'—',phone:custPhone,wilaya:wilayaText,qty:orderQty,prodPrice:prodPrice,delType:orderType,delPrice:orderDel,total:total,dateStr:dateStr,txId:txId};
-    var tgPayload={chat_id:TG.chat,text:'#طلب_جديد\n👤 الاسم: '+tgData.name+'\n📱 الهاتف: '+tgData.phone+'\n🗺️ الولاية: '+tgData.wilaya+'\n📦 الكمية: '+tgData.qty+'\n💰 سعر الكرة: '+tgData.prodPrice.toLocaleString('fr-DZ')+' دج\n🚚 التوصيل: '+tgData.delType+'\n💵 تكلفة التوصيل: '+tgData.delPrice.toLocaleString('fr-DZ')+' دج\n💲 المجموع: '+tgData.total.toLocaleString('fr-DZ')+' دج\n🕒 '+tgData.dateStr+'\n🆔 '+tgData.txId,parse_mode:'HTML'};
-    await fetch('https://api.telegram.org/bot'+TG.token+'/sendMessage',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(tgPayload)}).catch(function(){});
-    var sheetData={name:custName,phone:custPhone,wilaya:wilayaText,qty:orderQty,prodPrice:prodPrice,deliveryType:orderType,deliveryPrice:orderDel,total:total,orderId:txId,date:dateStr,commune:commune,timeOnPage:timeOnPage,formSeconds:formSec};
-    fetch(SHEET_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},body:JSON.stringify(sheetData)}).catch(function(){});
-    sendCAPI([icEv,purEv]);
-    await capiLead(custPhone,custName);
+    var sheetPayload={
+      transaction_id:txId,date:dateStr,nom:custName,phone:custPhone,
+      wilaya:wilayaText,commune:'',
+      produit:'UCL Budapest 2026 Final Ball — Size 5 — 450g',
+      prix_produit:prodPrice,quantite:orderQty,prix_total:total,
+      livraison:orderType==='home'?'A Domicile':'Point Relais',
+      prix_livraison:orderDel,
+      utm_source:UTM.source,utm_medium:UTM.medium,utm_campaign:UTM.campaign,
+      device:deviceType(),time_on_page:timeOnPage,
+      form_time_seconds:formSec,is_returning:IS_RETURNING,
+      visit_count:VISIT_COUNT,phone_errors:phoneErrorCount
+    };
+    await Promise.allSettled([
+      capiLead(orderData),
+      capiCompleteRegistration(orderData),
+      sendTg(TG1,Object.assign({},sheetPayload,orderData)),
+      sendTg(TG2,Object.assign({},sheetPayload,orderData)),
+      fetch(SHEET_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},body:JSON.stringify(sheetPayload)}).catch(function(){})
+    ]);
   })();
 
-  // Mark form as submitted
-  document.getElementById('submitBtn').disabled=true;
-  document.getElementById('submitBtn').innerHTML='✅ تم إرسال الطلب';
+  /* Reset form — but keep orderSubmitted=true to prevent re-submit */
+  document.getElementById('orderForm').reset();
+  currentQty=1;currentDeliveryPrice=0;homePrice=0;deskPrice=0;deliveryType='home';
+  addToCartFired=false;formStartTime=null;formInteractionFiredCAPI=false;
+  deliveryPriceSeenFired=false;orderSummaryVisibleFired=false;bundleUpsellSeenFired=false;
+  phoneErrorCount=0;fieldFocusTimes={};fieldInteracted={};
+  document.getElementById('qtyDisplay').textContent='1';
+  document.querySelectorAll('.form-input,.form-select').forEach(function(el){el.classList.remove('valid','error');});
+  updateUI();
 };
 
-window.closePopup=function(){document.getElementById('successPopup').classList.remove('active');ga4('popup_closed',{popup_type:'order_success'});};
+window.closePopup=function(){
+  trackPopupClose(); /* NEW #8 */
+  document.getElementById('successPopup').classList.remove('active');
+};
 document.getElementById('successPopup').addEventListener('click',function(e){if(e.target===this)window.closePopup();});
 
 /* ══ SCROLL EVENTS ══════════════════════════════════════════ */
@@ -828,16 +1463,26 @@ var _ticking=false;
 function onScroll(){
   if(_ticking)return;_ticking=true;
   requestAnimationFrame(function(){
-    var s=window.scrollY;
-    var h=document.documentElement.scrollHeight-window.innerHeight;
-    var p=Math.min(100,Math.round((s/h)*100));
-    document.getElementById('scrollProgress').style.width=p+'%';
-    var header=document.getElementById('stickyHeader');
-    if(s>150)header.classList.add('visible');else header.classList.remove('visible');
-    updateFloatBtn();
-    var maxDepth=0;
-    [25,50,75,90].forEach(function(depth){if(p>=depth && !scrollMilestonesFired[depth]){scrollMilestonesFired[depth]=true;ga4('scroll_depth',{percent:depth});capiCustom('ScrollDepth',{percent:depth,value:SESSION_FB_PRICE});}});
-    _ticking=false;
+    var st=window.pageYOffset||document.documentElement.scrollTop;
+    var dh=document.documentElement.scrollHeight-document.documentElement.clientHeight;
+    var pct=dh>0?Math.round((st/dh)*100):0;
+    document.getElementById('scrollProgress').style.width=pct+'%';
+    if(st>window.innerHeight*0.5)document.getElementById('stickyHeader').classList.add('visible');
+    else document.getElementById('stickyHeader').classList.remove('visible');
+    checkScrollMilestones(pct);updateFloatBtn();_ticking=false;
+  });
+}
+function checkScrollMilestones(pct){
+  [25,50,75,90,100].forEach(function(m){
+    if(pct>=m&&!scrollMilestonesFired[m]){
+      scrollMilestonesFired[m]=true;
+      ga4('scroll',{percent_scrolled:m,time_on_page:timeOnPage});
+      /* FIXED: 25% and 50% now also sent to CAPI (previously only GA4) */
+      if(m===25)capiCustom('ScrollDepth25',{scroll_depth:25,time_on_page:timeOnPage,value:CFG.priceUnit});
+      if(m===50)capiCustom('ScrollDepth50',{scroll_depth:50,time_on_page:timeOnPage,value:CFG.priceUnit});
+      if(m===75)capiCustom('ScrollDepth75',{scroll_depth:75,time_on_page:timeOnPage,value:CFG.priceUnit});
+      if(m===100)capiCustom('ScrollDepth100',{scroll_depth:100,time_on_page:timeOnPage,value:CFG.priceUnit});
+    }
   });
 }
 window.addEventListener('scroll',onScroll,{passive:true});
@@ -848,20 +1493,44 @@ var revObs=new IntersectionObserver(function(entries){
 },{threshold:0.05,rootMargin:'0px 0px -20px 0px'});
 document.querySelectorAll('.reveal').forEach(function(el){revObs.observe(el);});
 
+/* Section visible — NEW #4: now fires to CAPI too */
 var secObs=new IntersectionObserver(function(entries){
-  entries.forEach(function(e){if(e.isIntersecting){ga4('section_view',{section_name:e.target.id});secObs.unobserve(e.target);}});
-},{threshold:0.5});
+  entries.forEach(function(e){
+    if(e.isIntersecting){
+      trackSectionVisibleCAPI(e.target.id); /* NEW #4 — sends to CAPI + GA4 */
+      secObs.unobserve(e.target);
+    }
+  });
+},{threshold:0.3});
 ['section3','section4','cod-form'].forEach(function(id){var el=document.getElementById(id);if(el)secObs.observe(el);});
 
 /* ══ TIME ON PAGE ════════════════════════════════════════════ */
 setInterval(function(){
-  if(document.visibilityState!=='visible')return;timeOnPage++;
-  [10,20,30,60,120,180].forEach(function(s){if(timeOnPage>=s&&!topFired[s]){topFired[s]=true;ga4('time_on_page_milestone',{seconds:s});if(s===30||s===60)capiCustom('TimeOnPage',{seconds:s,value:SESSION_FB_PRICE});}});
+  if(document.visibilityState!=='visible')return;
+  timeOnPage++;
+  [10,20,30,60,120,180].forEach(function(s){
+    if(timeOnPage>=s&&!topFired[s]){
+      topFired[s]=true;
+      ga4('time_on_page_milestone',{seconds:s,form_started:formInteractionFiredCAPI,order_placed:orderSubmitted});
+      if(s===30||s===60)capiCustom('TimeOnPage',{seconds:s,value:CFG.priceUnit,form_started:formInteractionFiredCAPI?1:0});
+    }
+  });
 },1000);
 
-document.addEventListener('visibilitychange',function(){if(document.hidden){ga4('page_hidden',{time_on_page:timeOnPage});}});
-document.addEventListener('mouseleave',function(e){if(e.clientY<=0&&!exitIntentFired&&!orderSubmitted){exitIntentFired=true;ga4('exit_intent',{form_started:formInteractionFired});capiCustom('ExitIntent',{form_started:formInteractionFired?1:0,time_on_page:timeOnPage,value:SESSION_FB_PRICE});}});
-window.addEventListener('beforeunload',function(){var maxS=Math.max.apply(null,Object.keys(scrollMilestonesFired).map(Number).filter(Boolean).concat([0]));ga4('page_exit',{time_on_page:timeOnPage,scroll_depth:maxS,form_started:formInteractionFired,order_placed:orderSubmitted});});
+document.addEventListener('visibilitychange',function(){
+  ga4('page_visibility_change',{state:document.visibilityState,time_on_page:timeOnPage});
+});
+document.addEventListener('mouseleave',function(e){
+  if(e.clientY<=0&&!exitIntentFired&&!orderSubmitted){
+    exitIntentFired=true;
+    ga4('exit_intent',{form_started:formInteractionFiredCAPI,time_on_page:timeOnPage,scroll_depth:Math.max.apply(null,Object.keys(scrollMilestonesFired).map(Number).filter(Boolean).concat([0]))});
+    capiCustom('ExitIntent',{form_started:formInteractionFiredCAPI?1:0,time_on_page:timeOnPage,value:CFG.priceUnit});
+  }
+});
+window.addEventListener('beforeunload',function(){
+  var maxS=Math.max.apply(null,Object.keys(scrollMilestonesFired).map(Number).filter(Boolean).concat([0]));
+  ga4('page_exit',{time_on_page:timeOnPage,scroll_depth:maxS,form_started:formInteractionFiredCAPI,order_placed:orderSubmitted,phone_errors:phoneErrorCount});
+});
 
 /* ══ NAVIGATION HELPERS ═════════════════════════════════════ */
 window.scrollToForm=function(e){if(e)e.preventDefault();document.getElementById('cod-form').scrollIntoView({behavior:'smooth',block:'start'});};
@@ -873,38 +1542,55 @@ var _codFormObserver=new IntersectionObserver(function(entries){
   entries.forEach(function(e){_formVisible=e.isIntersecting;_applyFloatBtnState();});
 },{threshold:0.05});
 _codFormObserver.observe(document.getElementById('cod-form'));
-
 function _applyFloatBtnState(){
   var btn=document.getElementById('floatBtn');
   if(_formVisible){btn.classList.add('hidden');}
   else{btn.classList.remove('hidden');}
 }
-
 function updateFloatBtn(){
   var hb=document.getElementById('heroWrap').getBoundingClientRect().bottom;
   var btn=document.getElementById('floatBtn');
   if(!_formVisible){
-    if(hb>100){
-      if(floatBtnMode!=='scroll'){floatBtnMode='scroll';btn.innerHTML='👇 اسحب للأسفل لاكتشاف التفاصيل';btn.href='#section3';}
-    } else {
-      if(floatBtnMode!=='order'){floatBtnMode='order';btn.innerHTML='🛒 اطلب الآن — الدفع عند الاستلام';btn.href='#cod-form';}
-    }
+    if(hb>100){if(floatBtnMode!=='scroll'){floatBtnMode='scroll';btn.innerHTML='👇 اسحب للأسفل لاكتشاف التفاصيل';btn.href='#section3';}}
+    else{if(floatBtnMode!=='order'){floatBtnMode='order';btn.innerHTML='🛒 اطلب الآن — الدفع عند الاستلام';btn.href='#cod-form';}}
   }
 }
 window.handleFloatClick=function(e){if(e)e.preventDefault();if(floatBtnMode==='scroll')window.scrollToSection('section3',e);else window.scrollToForm(e);};
-document.getElementById('floatBtn').addEventListener('click',function(){ga4('cta_click',{cta_type:'floating_button',mode:floatBtnMode});capiCustom('CTAClick',{cta_type:'floating_button',cta_mode:floatBtnMode,value:SESSION_FB_PRICE});});
-document.querySelector('.sticky-btn').addEventListener('click',function(){ga4('cta_click',{cta_type:'sticky_header_button'});});
+document.getElementById('floatBtn').addEventListener('click',function(){
+  ga4('cta_click',{cta_type:'floating_button',mode:floatBtnMode,time_on_page:timeOnPage});
+  capiCustom('CTAClick',{cta_type:'floating_button',cta_mode:floatBtnMode,value:CFG.priceUnit});
+});
+document.querySelector('.sticky-btn').addEventListener('click',function(){
+  ga4('cta_click',{cta_type:'sticky_header_button',time_on_page:timeOnPage});
+  capiCustom('CTAClick',{cta_type:'sticky_header',value:CFG.priceUnit});
+});
 
-var formSecObs=new IntersectionObserver(function(entries){entries.forEach(function(e){if(e.isIntersecting){ga4('form_section_visible',{form_id:'orderForm'});capiCustom('FormSectionVisible',{value:SESSION_FB_PRICE});formSecObs.disconnect();}});},{threshold:.3});
+var formSecObs=new IntersectionObserver(function(entries){
+  entries.forEach(function(e){
+    if(e.isIntersecting){
+      ga4('form_section_visible',{form_id:'orderForm',time_on_page:timeOnPage});
+      capiCustom('FormSectionVisible',{value:CFG.priceUnit,time_on_page:timeOnPage});
+      formSecObs.disconnect();
+    }
+  });
+},{threshold:.3});
 var fEl=document.getElementById('cod-form');if(fEl)formSecObs.observe(fEl);
 
 /* ══ INIT ════════════════════════════════════════════════════ */
 updateUI();
 
-// Fire analytics events — idle so they never block rendering
+/* Fire page-level events at idle */
 requestIdleCallback
-  ? requestIdleCallback(function(){capiPageView();setTimeout(capiViewContent,2500);},{timeout:3000})
-  : setTimeout(function(){capiPageView();setTimeout(capiViewContent,2500);},500);
+  ?requestIdleCallback(function(){
+      capiPageView();
+      trackReturnVisitor(); /* NEW #11 */
+      setTimeout(capiViewContent,2500);
+    },{timeout:3000})
+  :setTimeout(function(){
+      capiPageView();
+      trackReturnVisitor(); /* NEW #11 */
+      setTimeout(capiViewContent,2500);
+    },500);
 </script>
 </body>
 </html>
