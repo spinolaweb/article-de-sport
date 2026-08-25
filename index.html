@@ -557,26 +557,16 @@ footer{background:#060d1a;color:rgba(255,255,255,.7);padding:36px 20px;text-alig
    ▸ GA4 ID: G-D2BWGMP7D8 (FIXED — was G-3NJP2JDXV6)
    ▸ FB Pixel: 1613682052670123
    ▸ CAPI: v21.0 — test event code REMOVED for production
-   ▸ 11 NEW EVENTS ADDED:
-       1.  form_validation_error     — which fields fail & how often
-       2.  form_field_abandon        — which step users drop at
-       3.  scroll_indicator_click    — hero/benefits/offer arrows
-       4.  section_visible (CAPI)    — benefits + offer to FB CAPI
-       5.  phone_format_error        — phone validation failure rate
-       6.  order_summary_visible     — price reveal engagement
-       7.  delivery_price_seen       — per-wilaya price reaction
-       8.  popup_close_timing        — post-conversion engagement
-       9.  bundle_upsell_seen        — upsell message effectiveness
-      10.  web_vitals (LCP)          — Core Web Vitals tracking
-      11.  return_visitor            — new vs returning enrichment
-   ▸ BUGS FIXED:
-       ✔ GA4 ID corrected to G-D2BWGMP7D8
-       ✔ TEST2786 removed from CAPI
-       ✔ FB Pixel script fixed (no longer deferred, fires reliably)
-       ✔ Return visitor detection added via localStorage
-       ✔ Form validation error tracking added
-       ✔ Section visible events now mirror to CAPI
-       ✔ SESSION_LEAD_VALUE no longer random — uses real product price
+   ▸ VALUE ACCURACY PASS (this update):
+       ✔ Added getCurrentEventValue() — every Pixel/CAPI event now
+         reports the REAL cart value (qty + bundle price + chosen
+         delivery), not a static placeholder.
+       ✔ Fixed AddToCart — previously always used the single-unit
+         price even at qty>=2, ignoring the bundle discount.
+       ✔ DeliveryTypeSelect / DeliveryPriceSeen now carry a real
+         "value" field (they had none, or a placeholder, before).
+       ✔ Popup-close event now reports the value of the order that
+         was actually just placed, instead of the reset default.
 ═══════════════════════════════════════════════════════════════ */
 
 /* ══ PROGRESSIVE IMAGE LOADING ══════════════════════════════ */
@@ -596,7 +586,7 @@ function initProgressiveImages(){
 }
 initProgressiveImages();
 
-/* ══ RETURN VISITOR DETECTION (NEW #11) ════════════════════ */
+/* ══ RETURN VISITOR DETECTION ═══════════════════════════════ */
 var IS_RETURNING=false;
 var VISIT_COUNT=1;
 try{
@@ -637,15 +627,13 @@ var orderSubmitted=false,formInteractionFired=false,addToCartFired=false;
 var floatBtnMode='scroll',timeOnPage=0,cachedIp=null,SESSION_START=Date.now();
 var scrollMilestonesFired={},topFired={},exitIntentFired=false,formStartTime=null;
 var SHARED_EVENT_IDS={};
-var popupOpenTime=null; /* for popup_close_timing (NEW #8) */
-var orderSummaryVisibleFired=false; /* for order_summary_visible (NEW #6) */
-var bundleUpsellSeenFired=false; /* for bundle_upsell_seen (NEW #9) */
-var deliveryPriceSeenFired=false; /* for delivery_price_seen (NEW #7) */
-var phoneErrorCount=0; /* for phone_format_error (NEW #5) */
+var popupOpenTime=null; /* for popup_close_timing */
+var lastOrderTotal=null; /* the REAL value of the order just placed, used by popup close */
+var orderSummaryVisibleFired=false;
+var bundleUpsellSeenFired=false;
+var deliveryPriceSeenFired=false;
+var phoneErrorCount=0;
 var fieldFocusTimes={},fieldInteracted={};
-
-/* FIXED: Session lead value is now the real product price, not random */
-var SESSION_LEAD_VALUE=CFG.priceUnit;
 
 /* ══ CRYPTO / HASH UTILS ════════════════════════════════════ */
 async function sha256(str){
@@ -675,6 +663,19 @@ function deviceType(){return/Mobi|Android/i.test(navigator.userAgent)?'mobile':'
 /* ══ PRICING ════════════════════════════════════════════════ */
 function getProductPrice(qty){return qty>=2?CFG.price2Unit*qty:CFG.priceUnit*qty;}
 function getTotalPrice(qty,del){return getProductPrice(qty)+del;}
+
+/* ══ REAL EVENT VALUE ════════════════════════════════════════
+   Single source of truth for "what is this event worth in DZD
+   right now". Every Pixel/CAPI call below uses this instead of
+   a hardcoded placeholder, so Meta always receives the actual
+   current cart value (product price incl. bundle discount, plus
+   delivery once a wilaya/delivery type is chosen).
+═══════════════════════════════════════════════════════════════ */
+function getCurrentEventValue(){
+  return currentDeliveryPrice>0
+    ? getTotalPrice(currentQty,currentDeliveryPrice)
+    : getProductPrice(currentQty);
+}
 
 /* ══ GA4 ════════════════════════════════════════════════════ */
 function ga4(name,params){
@@ -795,28 +796,30 @@ async function sendCAPI(events){
 
 async function capiPageView(){
   var eid=genEventId('PageView');
+  var val=getCurrentEventValue();
   pixelTrack('PageView',{},eid);
   var ud=await buildUserData({});
   var ev=baseEvent('PageView',eid);
   ev.user_data=ud;
-  ev.custom_data=buildLeadCustomData({value:CFG.priceUnit,num_items:1});
+  ev.custom_data=buildLeadCustomData({value:val,num_items:currentQty});
   sendCAPI([ev]);
   ga4('page_view',{content_name:CFG.productName,is_returning_visitor:IS_RETURNING,visit_count:VISIT_COUNT});
 }
 
 async function capiViewContent(){
   var eid=genEventId('ViewContent');
+  var val=getCurrentEventValue();
   pixelTrack('ViewContent',{
     content_ids:[CFG.productId],
     content_name:CFG.productName,
     content_type:'product',
     currency:CFG.currency,
-    value:CFG.priceUnit
+    value:val
   },eid);
   var ud=await buildUserData({});
   var ev=baseEvent('ViewContent',eid);
   ev.user_data=ud;
-  ev.custom_data=buildLeadCustomData({value:CFG.priceUnit,num_items:1});
+  ev.custom_data=buildLeadCustomData({value:val,num_items:currentQty});
   sendCAPI([ev]);
 }
 
@@ -825,18 +828,19 @@ async function capiAddToCart(qty){
   var eid=genEventId('AddToCart');
   var phone=document.getElementById('phone').value.trim();
   var name=document.getElementById('fullName').value.trim();
+  var val=getProductPrice(qty); /* FIXED: now applies the bundle price at qty>=2, was CFG.priceUnit*qty before */
   pixelTrack('AddToCart',{
     content_ids:[CFG.productId],
     content_name:CFG.productName,
     content_type:'product',
     currency:CFG.currency,
-    value:CFG.priceUnit*qty,
+    value:val,
     num_items:qty
   },eid);
   var ud=await buildUserData({phone:phone,name:name});
   var ev=baseEvent('AddToCart',eid);
   ev.user_data=ud;
-  ev.custom_data=buildLeadCustomData({value:CFG.priceUnit*qty,num_items:qty});
+  ev.custom_data=buildLeadCustomData({value:val,num_items:qty,is_bundle:qty>=2});
   sendCAPI([ev]);
 }
 
@@ -905,7 +909,7 @@ async function capiLead(orderData){
     transaction_id:orderData.txId,
     currency:CFG.currency,
     value:totalVal,
-    items:[{item_id:CFG.productId,item_name:CFG.productName,quantity:orderData.qty,price:CFG.priceUnit}]
+    items:[{item_id:CFG.productId,item_name:CFG.productName,quantity:orderData.qty,price:orderData.prodPrice/orderData.qty}]
   });
 }
 
@@ -950,10 +954,7 @@ async function capiCustom(eventName,cd){
   sendCAPI([ev]);
 }
 
-/* ══ NEW EVENT #1 — FORM VALIDATION ERROR ═══════════════════
-   Fires when user submits with missing/invalid fields.
-   Tells you EXACTLY which field fails and how often.
-═══════════════════════════════════════════════════════════════ */
+/* ══ FORM VALIDATION ERROR ═══════════════════════════════════ */
 async function trackFormValidationError(failedFields){
   var eid=genEventId('FormValidationError');
   ga4('form_validation_error',{
@@ -963,24 +964,22 @@ async function trackFormValidationError(failedFields){
     time_on_page:timeOnPage,
     form_time_sec:formStartTime?Math.round((Date.now()-formStartTime)/1000):0
   });
+  var val=getCurrentEventValue();
   var ud=await buildUserData({});
   var ev=baseEvent('FormValidationError',eid);
   ev.user_data=ud;
   ev.custom_data=buildLeadCustomData({
     failed_fields:failedFields.join(','),
     failed_count:failedFields.length,
-    value:CFG.priceUnit
+    value:val
   });
   pixelTrackCustom('FormValidationError',ev.custom_data,eid);
   sendCAPI([ev]);
 }
 
-/* ══ NEW EVENT #2 — FORM FIELD ABANDON ══════════════════════
-   Fires on blur when a field was touched but left invalid/empty.
-   Shows funnel drop-off at field level.
-═══════════════════════════════════════════════════════════════ */
+/* ══ FORM FIELD ABANDON ══════════════════════════════════════ */
 function trackFieldAbandon(fieldId,value,wasValid){
-  if(!fieldInteracted[fieldId])return; /* only if user actually touched it */
+  if(!fieldInteracted[fieldId])return;
   var isEmpty=!value||value.trim()==='';
   if(isEmpty||!wasValid){
     ga4('form_field_abandon',{
@@ -992,32 +991,23 @@ function trackFieldAbandon(fieldId,value,wasValid){
   }
 }
 
-/* ══ NEW EVENT #3 — SCROLL INDICATOR CLICK ══════════════════
-   Tracks which of the 3 scroll arrows users click.
-   Called from HTML onclick directly.
-═══════════════════════════════════════════════════════════════ */
+/* ══ SCROLL INDICATOR CLICK ══════════════════════════════════ */
 window.trackScrollIndicator=function(from,to,e){
   ga4('scroll_indicator_click',{from_section:from,to_section:to,time_on_page:timeOnPage});
-  capiCustom('ScrollIndicatorClick',{from_section:from,to_section:to,value:CFG.priceUnit});
+  capiCustom('ScrollIndicatorClick',{from_section:from,to_section:to,value:getCurrentEventValue()});
 };
 
-/* ══ NEW EVENT #4 — SECTION VISIBLE TO CAPI ═════════════════
-   Benefits and offer images — previously only GA4.
-   Now mirrors to FB CAPI for audience building.
-═══════════════════════════════════════════════════════════════ */
+/* ══ SECTION VISIBLE TO CAPI ═════════════════════════════════ */
 var sectionVisibleFired={};
 function trackSectionVisibleCAPI(sectionId){
   if(sectionVisibleFired[sectionId])return;
   sectionVisibleFired[sectionId]=true;
   var eventName=sectionId==='section3'?'BenefitsVisible':'OfferVisible';
   ga4('section_view',{section_name:sectionId,time_on_page:timeOnPage});
-  capiCustom(eventName,{section:sectionId,time_on_page:timeOnPage,value:CFG.priceUnit});
+  capiCustom(eventName,{section:sectionId,time_on_page:timeOnPage,value:getCurrentEventValue()});
 }
 
-/* ══ NEW EVENT #5 — PHONE FORMAT ERROR ══════════════════════
-   Tracks how often Algerian phone format fails.
-   Key insight: many users enter 9-digit or landline numbers.
-═══════════════════════════════════════════════════════════════ */
+/* ══ PHONE FORMAT ERROR ══════════════════════════════════════ */
 function trackPhoneFormatError(phoneValue){
   phoneErrorCount++;
   ga4('phone_format_error',{
@@ -1028,10 +1018,7 @@ function trackPhoneFormatError(phoneValue){
   });
 }
 
-/* ══ NEW EVENT #6 — ORDER SUMMARY VISIBLE ═══════════════════
-   Fires when user sees the price total for the first time.
-   Correlation with abandon = price friction signal.
-═══════════════════════════════════════════════════════════════ */
+/* ══ ORDER SUMMARY VISIBLE ═══════════════════════════════════ */
 function trackOrderSummaryVisible(total){
   if(orderSummaryVisibleFired)return;
   orderSummaryVisibleFired=true;
@@ -1051,13 +1038,12 @@ function trackOrderSummaryVisible(total){
   });
 }
 
-/* ══ NEW EVENT #7 — DELIVERY PRICE SEEN ════════════════════
-   Fires when wilaya is selected and prices become visible.
-   Per-wilaya abandonment rate reveals price-sensitive regions.
-═══════════════════════════════════════════════════════════════ */
+/* ══ DELIVERY PRICE SEEN ═════════════════════════════════════ */
 function trackDeliveryPriceSeen(wilayaName,wilayaId,hPrice,dPrice){
   if(deliveryPriceSeenFired)return;
   deliveryPriceSeenFired=true;
+  /* Default delivery type is "home" at this point, so the real value is product + home delivery */
+  var val=getTotalPrice(currentQty,hPrice);
   ga4('delivery_price_seen',{
     wilaya_name:wilayaName,
     wilaya_id:wilayaId,
@@ -1069,16 +1055,14 @@ function trackDeliveryPriceSeen(wilayaName,wilayaId,hPrice,dPrice){
     wilaya:wilayaName,
     home_delivery_price:hPrice,
     desk_delivery_price:dPrice,
-    value:CFG.priceUnit
+    value:val
   });
 }
 
-/* ══ NEW EVENT #8 — POPUP CLOSE TIMING ══════════════════════
-   Tracks how long user spends reading the success popup.
-   Fast close = unsure; slow read = engaged post-conversion.
-═══════════════════════════════════════════════════════════════ */
+/* ══ POPUP CLOSE TIMING ══════════════════════════════════════ */
 function trackPopupClose(){
   var dwell=popupOpenTime?Math.round((Date.now()-popupOpenTime)/1000):0;
+  var val=lastOrderTotal!==null?lastOrderTotal:getCurrentEventValue();
   ga4('popup_closed',{
     popup_type:'order_success',
     dwell_seconds:dwell,
@@ -1086,14 +1070,11 @@ function trackPopupClose(){
   });
   capiCustom('OrderPopupClose',{
     dwell_seconds:dwell,
-    value:CFG.priceUnit
+    value:val
   });
 }
 
-/* ══ NEW EVENT #9 — BUNDLE UPSELL SEEN ══════════════════════
-   Fires when the "save X DZD" bonus tag appears (qty≥2).
-   Tracks whether upsell message is seen vs ignored.
-═══════════════════════════════════════════════════════════════ */
+/* ══ BUNDLE UPSELL SEEN ══════════════════════════════════════ */
 function trackBundleUpsellSeen(qty,saving){
   if(bundleUpsellSeenFired)return;
   bundleUpsellSeenFired=true;
@@ -1105,14 +1086,11 @@ function trackBundleUpsellSeen(qty,saving){
   capiCustom('BundleUpsellSeen',{
     quantity:qty,
     saving_dzd:saving,
-    value:CFG.price2Unit*qty
+    value:getProductPrice(qty)
   });
 }
 
-/* ══ NEW EVENT #10 — WEB VITALS / LCP ═══════════════════════
-   Tracks Largest Contentful Paint (hero image performance).
-   Slow LCP = high bounce. Lets you correlate page speed to CVR.
-═══════════════════════════════════════════════════════════════ */
+/* ══ WEB VITALS / LCP ═══════════════════════════════════════ */
 function initWebVitals(){
   if(!('PerformanceObserver' in window))return;
   try{
@@ -1147,16 +1125,11 @@ function initWebVitals(){
 }
 initWebVitals();
 
-/* ══ NEW EVENT #11 — RETURN VISITOR ════════════════════════
-   Fired with PageView. IS_RETURNING already set above.
-   Enriches ALL events with returning visitor context.
-   (Applied globally via buildLeadCustomData + ga4 wrapper)
-═══════════════════════════════════════════════════════════════ */
-/* Fired as part of capiPageView below — standalone GA4 event here: */
+/* ══ RETURN VISITOR ══════════════════════════════════════════ */
 function trackReturnVisitor(){
   if(IS_RETURNING){
     ga4('return_visitor',{visit_count:VISIT_COUNT,time_since_first:'unknown'});
-    capiCustom('ReturnVisitor',{visit_count:VISIT_COUNT,value:CFG.priceUnit});
+    capiCustom('ReturnVisitor',{visit_count:VISIT_COUNT,value:getCurrentEventValue()});
   }
 }
 
@@ -1187,7 +1160,7 @@ function updateUI(){
     document.getElementById('savingAmount').textContent=savedTotal.toLocaleString('fr-DZ')+' دج';
     if(!bonusTag.classList.contains('show')){
       bonusTag.classList.add('show');
-      trackBundleUpsellSeen(currentQty,savedTotal); /* NEW #9 */
+      trackBundleUpsellSeen(currentQty,savedTotal);
     }
   }else{
     bonusTag.classList.remove('show');
@@ -1201,7 +1174,7 @@ function updateUI(){
     var total=getTotalPrice(currentQty,currentDeliveryPrice);
     document.getElementById('summaryTotal').textContent=total.toLocaleString('fr-DZ')+' دج';
     summCard.classList.add('highlight');
-    trackOrderSummaryVisible(total); /* NEW #6 */
+    trackOrderSummaryVisible(total);
   }else{
     document.getElementById('summaryDeliveryPrice').textContent='-- اختر الولاية --';
     document.getElementById('summaryTotal').textContent='---';
@@ -1239,7 +1212,7 @@ document.getElementById('wilaya').addEventListener('change',function(){
   this.classList.add('valid');this.classList.remove('error');
   document.getElementById('wilayaErr').classList.remove('show');
 
-  trackDeliveryPriceSeen(opt.text,val,homePrice,deskPrice); /* NEW #7 */
+  trackDeliveryPriceSeen(opt.text,val,homePrice,deskPrice);
 
   if(!addToCartFired){addToCartFired=true;capiAddToCart(currentQty);}
   updateUI();
@@ -1248,12 +1221,12 @@ document.getElementById('wilaya').addEventListener('change',function(){
 
 document.getElementById('cardHome').addEventListener('click',function(){
   deliveryType='home';updateUI();
-  capiCustom('DeliveryTypeSelect',{delivery_type:'home_delivery',delivery_price_dzd:homePrice});
+  capiCustom('DeliveryTypeSelect',{delivery_type:'home_delivery',delivery_price_dzd:homePrice,value:getTotalPrice(currentQty,homePrice)});
   ga4('delivery_type_select',{delivery_type:'home',price:homePrice});
 });
 document.getElementById('cardDesk').addEventListener('click',function(){
   deliveryType='desk';updateUI();
-  capiCustom('DeliveryTypeSelect',{delivery_type:'desk_delivery',delivery_price_dzd:deskPrice});
+  capiCustom('DeliveryTypeSelect',{delivery_type:'desk_delivery',delivery_price_dzd:deskPrice,value:getTotalPrice(currentQty,deskPrice)});
   ga4('delivery_type_select',{delivery_type:'desk',price:deskPrice});
 });
 
@@ -1262,9 +1235,9 @@ window.changeQty=function(delta){
   if(n!==currentQty){
     currentQty=n;
     ga4('quantity_change',{quantity:n,is_bundle:n>=2});
-    if(n>=2){capiCustom('BundleQuantitySelect',{quantity:n,is_bundle:true,value:CFG.price2Unit*n});}
-    else{capiCustom('QuantityChange',{quantity:n,value:CFG.priceUnit});}
-    orderSummaryVisibleFired=false; /* reset so new total triggers event again */
+    if(n>=2){capiCustom('BundleQuantitySelect',{quantity:n,is_bundle:true,value:getProductPrice(n)});}
+    else{capiCustom('QuantityChange',{quantity:n,value:getProductPrice(n)});}
+    orderSummaryVisibleFired=false;
     updateUI();
   }
 };
@@ -1279,7 +1252,7 @@ function trackFocus(id){
   ga4('form_field_focus',{field_name:id});
   if(!formInteractionFiredCAPI){
     formInteractionFiredCAPI=true;
-    capiCustom('FormStart',{field_name:id,value:CFG.priceUnit});
+    capiCustom('FormStart',{field_name:id,value:getCurrentEventValue()});
     ga4('form_start',{form_id:'orderForm'});
   }
 }
@@ -1288,7 +1261,7 @@ function trackBlur(id){
   var el=document.getElementById(id);
   var val=el?el.value:'';
   var isValid=el?!el.classList.contains('error'):false;
-  trackFieldAbandon(id,val,isValid); /* NEW #2 */
+  trackFieldAbandon(id,val,isValid);
   updateProgress();
 }
 
@@ -1309,7 +1282,7 @@ document.getElementById('phone').addEventListener('input',function(){
   }else if(this.value.length===10){
     this.classList.add('error');this.classList.remove('valid');
     document.getElementById('phoneErr').classList.add('show');
-    trackPhoneFormatError(this.value); /* NEW #5 */
+    trackPhoneFormatError(this.value);
   }
   updateProgress();
 });
@@ -1352,7 +1325,6 @@ function validate(){
     document.getElementById('wilaya').classList.add('valid');
     document.getElementById('wilayaErr').classList.remove('show');
   }
-  /* NEW #1 — fire validation error event with exact fields */
   if(!ok){trackFormValidationError(failedFields);}
   return ok;
 }
@@ -1404,7 +1376,8 @@ window.submitOrder=async function(){
   capiInitiateCheckout(orderQty,orderDel,custPhone,custName,wilayaText);
 
   orderSubmitted=true;
-  popupOpenTime=Date.now(); /* for popup_close_timing NEW #8 */
+  popupOpenTime=Date.now();
+  lastOrderTotal=total; /* remember the real order value for popup_close, before qty/delivery reset */
   document.getElementById('popupCustomerName').textContent=custName?custName.split(' ')[0]:'عزيزنا';
   document.getElementById('popupOrderId').textContent='رقم الطلب: '+txId;
   document.getElementById('successPopup').classList.add('active');
@@ -1453,7 +1426,7 @@ window.submitOrder=async function(){
 };
 
 window.closePopup=function(){
-  trackPopupClose(); /* NEW #8 */
+  trackPopupClose();
   document.getElementById('successPopup').classList.remove('active');
 };
 document.getElementById('successPopup').addEventListener('click',function(e){if(e.target===this)window.closePopup();});
@@ -1477,11 +1450,11 @@ function checkScrollMilestones(pct){
     if(pct>=m&&!scrollMilestonesFired[m]){
       scrollMilestonesFired[m]=true;
       ga4('scroll',{percent_scrolled:m,time_on_page:timeOnPage});
-      /* FIXED: 25% and 50% now also sent to CAPI (previously only GA4) */
-      if(m===25)capiCustom('ScrollDepth25',{scroll_depth:25,time_on_page:timeOnPage,value:CFG.priceUnit});
-      if(m===50)capiCustom('ScrollDepth50',{scroll_depth:50,time_on_page:timeOnPage,value:CFG.priceUnit});
-      if(m===75)capiCustom('ScrollDepth75',{scroll_depth:75,time_on_page:timeOnPage,value:CFG.priceUnit});
-      if(m===100)capiCustom('ScrollDepth100',{scroll_depth:100,time_on_page:timeOnPage,value:CFG.priceUnit});
+      var v=getCurrentEventValue();
+      if(m===25)capiCustom('ScrollDepth25',{scroll_depth:25,time_on_page:timeOnPage,value:v});
+      if(m===50)capiCustom('ScrollDepth50',{scroll_depth:50,time_on_page:timeOnPage,value:v});
+      if(m===75)capiCustom('ScrollDepth75',{scroll_depth:75,time_on_page:timeOnPage,value:v});
+      if(m===100)capiCustom('ScrollDepth100',{scroll_depth:100,time_on_page:timeOnPage,value:v});
     }
   });
 }
@@ -1493,11 +1466,11 @@ var revObs=new IntersectionObserver(function(entries){
 },{threshold:0.05,rootMargin:'0px 0px -20px 0px'});
 document.querySelectorAll('.reveal').forEach(function(el){revObs.observe(el);});
 
-/* Section visible — NEW #4: now fires to CAPI too */
+/* Section visible — mirrors to CAPI too */
 var secObs=new IntersectionObserver(function(entries){
   entries.forEach(function(e){
     if(e.isIntersecting){
-      trackSectionVisibleCAPI(e.target.id); /* NEW #4 — sends to CAPI + GA4 */
+      trackSectionVisibleCAPI(e.target.id);
       secObs.unobserve(e.target);
     }
   });
@@ -1512,7 +1485,7 @@ setInterval(function(){
     if(timeOnPage>=s&&!topFired[s]){
       topFired[s]=true;
       ga4('time_on_page_milestone',{seconds:s,form_started:formInteractionFiredCAPI,order_placed:orderSubmitted});
-      if(s===30||s===60)capiCustom('TimeOnPage',{seconds:s,value:CFG.priceUnit,form_started:formInteractionFiredCAPI?1:0});
+      if(s===30||s===60)capiCustom('TimeOnPage',{seconds:s,value:getCurrentEventValue(),form_started:formInteractionFiredCAPI?1:0});
     }
   });
 },1000);
@@ -1524,7 +1497,7 @@ document.addEventListener('mouseleave',function(e){
   if(e.clientY<=0&&!exitIntentFired&&!orderSubmitted){
     exitIntentFired=true;
     ga4('exit_intent',{form_started:formInteractionFiredCAPI,time_on_page:timeOnPage,scroll_depth:Math.max.apply(null,Object.keys(scrollMilestonesFired).map(Number).filter(Boolean).concat([0]))});
-    capiCustom('ExitIntent',{form_started:formInteractionFiredCAPI?1:0,time_on_page:timeOnPage,value:CFG.priceUnit});
+    capiCustom('ExitIntent',{form_started:formInteractionFiredCAPI?1:0,time_on_page:timeOnPage,value:getCurrentEventValue()});
   }
 });
 window.addEventListener('beforeunload',function(){
@@ -1558,18 +1531,18 @@ function updateFloatBtn(){
 window.handleFloatClick=function(e){if(e)e.preventDefault();if(floatBtnMode==='scroll')window.scrollToSection('section3',e);else window.scrollToForm(e);};
 document.getElementById('floatBtn').addEventListener('click',function(){
   ga4('cta_click',{cta_type:'floating_button',mode:floatBtnMode,time_on_page:timeOnPage});
-  capiCustom('CTAClick',{cta_type:'floating_button',cta_mode:floatBtnMode,value:CFG.priceUnit});
+  capiCustom('CTAClick',{cta_type:'floating_button',cta_mode:floatBtnMode,value:getCurrentEventValue()});
 });
 document.querySelector('.sticky-btn').addEventListener('click',function(){
   ga4('cta_click',{cta_type:'sticky_header_button',time_on_page:timeOnPage});
-  capiCustom('CTAClick',{cta_type:'sticky_header',value:CFG.priceUnit});
+  capiCustom('CTAClick',{cta_type:'sticky_header',value:getCurrentEventValue()});
 });
 
 var formSecObs=new IntersectionObserver(function(entries){
   entries.forEach(function(e){
     if(e.isIntersecting){
       ga4('form_section_visible',{form_id:'orderForm',time_on_page:timeOnPage});
-      capiCustom('FormSectionVisible',{value:CFG.priceUnit,time_on_page:timeOnPage});
+      capiCustom('FormSectionVisible',{value:getCurrentEventValue(),time_on_page:timeOnPage});
       formSecObs.disconnect();
     }
   });
@@ -1583,12 +1556,12 @@ updateUI();
 requestIdleCallback
   ?requestIdleCallback(function(){
       capiPageView();
-      trackReturnVisitor(); /* NEW #11 */
+      trackReturnVisitor();
       setTimeout(capiViewContent,2500);
     },{timeout:3000})
   :setTimeout(function(){
       capiPageView();
-      trackReturnVisitor(); /* NEW #11 */
+      trackReturnVisitor();
       setTimeout(capiViewContent,2500);
     },500);
 </script>
